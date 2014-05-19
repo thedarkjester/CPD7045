@@ -1,6 +1,6 @@
 ﻿using System;
+using Aps.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ApsDomain;
 
 namespace DomainUnitTests
 {
