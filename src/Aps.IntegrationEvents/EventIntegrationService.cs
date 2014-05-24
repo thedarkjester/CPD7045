@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using Aps.IntegrationEvents.Serialization;
 using Caliburn.Micro;
 
 namespace Aps.IntegrationEvents
@@ -11,11 +12,15 @@ namespace Aps.IntegrationEvents
     public class EventIntegrationService
     {
         private readonly IEventAggregator eventAggregator;
+        private readonly BinaryEventSerializer eventSerializer;
+        private readonly BinaryEventDeSerializer binaryEventDeSerializer;
         private readonly List<string> subscriptions;
 
-        public EventIntegrationService(IEventAggregator eventAggregator)
+        public EventIntegrationService(IEventAggregator eventAggregator, BinaryEventSerializer eventSerializer,BinaryEventDeSerializer binaryEventDeSerializer)
         {
             this.eventAggregator = eventAggregator;
+            this.eventSerializer = eventSerializer;
+            this.binaryEventDeSerializer = binaryEventDeSerializer;
             this.eventAggregator.Subscribe(this);
 
             subscriptions = new List<string>();
@@ -44,33 +49,16 @@ namespace Aps.IntegrationEvents
         {
             //get type name for someone to search on
             var messageType = message.GetType().FullName;
-
-            byte[] data;
-            var binarySerializer = new BinaryFormatter();
-            using (var ms = new MemoryStream())
-            {
-                binarySerializer.Serialize(ms, message);
-                data = ms.ToArray();
-            }
-           
-            Type types = Type.GetType(messageType);
-
-            using (var ms = new MemoryStream(data))
-            {
-                if (types != null)
-                {
-                    var ab = binarySerializer.Deserialize(ms);
-                }
-            }
-
+            
             // serialize data from the message
-
+            byte[] data = eventSerializer.SerializeMessage(message);
             // store in the DB for someone to pick up serializing the data based on the type
         }
 
     }
 
-   [Serializable]
+   
+    [Serializable]
     public class ScrapeSessionFailedEvent
     {
         Guid ScrapeSessionId { get; set; }

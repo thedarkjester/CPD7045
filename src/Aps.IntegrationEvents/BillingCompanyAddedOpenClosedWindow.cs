@@ -7,13 +7,15 @@ using Seterlund.CodeGuard;
 
 namespace Aps.IntegrationEvents
 {
+    [Serializable]
     public class BillingCompanyAddedOpenClosedWindow
     {
-        public Guid BillingCompanyId { get; private set; }
-        public DateTime StartDate { get; private set; }
-        public DateTime EndDate { get; private set; }
-        public bool IsOpen { get; private set; }
-        public int ConcurrentScrapingLimit { get; private set; }
+
+        public Guid BillingCompanyId { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public bool IsOpen { get; set; }
+        public int ConcurrentScrapingLimit { get; set; }
 
         private BillingCompanyAddedOpenClosedWindow()
         {

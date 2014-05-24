@@ -1,6 +1,7 @@
 ﻿using System;
 using Aps.BillingCompanies;
 using Aps.IntegrationEvents;
+using Aps.IntegrationEvents.Serialization;
 using Autofac;
 using Caliburn.Micro;
 using Aps.Customer;
@@ -24,6 +25,8 @@ namespace Aps.Core
             builder.RegisterType<CustomerRepository>().As<CustomerRepository>().InstancePerDependency();
             builder.RegisterType<BillingCompanyRepository>().As<BillingCompanyRepository>().InstancePerDependency();
             builder.RegisterType<SchedulingEngine>().As<SchedulingEngine>().InstancePerDependency();
+            builder.RegisterType<BinaryEventSerializer>().As<BinaryEventSerializer>().InstancePerDependency();
+            builder.RegisterType<BinaryEventDeSerializer>().As<BinaryEventDeSerializer>().InstancePerDependency();
 
             Container = builder.Build();
 

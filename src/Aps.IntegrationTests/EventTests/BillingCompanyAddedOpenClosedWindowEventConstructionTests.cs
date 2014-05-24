@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Aps.IntegrationTests.EventTests
 {
     [TestClass]
-    public class IntegrationEventConstructionTests
+    public class BillingCompanyAddedOpenClosedWindowEventConstructionTests
     {
         // default valid variables
         private DateTime startDate;

@@ -50,7 +50,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="EventTests\IntegrationEventConstructionTests.cs" />
+    <Compile Include="EventTests\BillingCompanyAddedOpenClosedWindowEventConstructionTests.cs" />
+    <Compile Include="EventTests\BillingCompanyAddedOpenClosedWindowEventSerializationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +59,9 @@
       <Project>{78059759-BF3D-471D-B88B-CD3AA1EC101B}</Project>
       <Name>Aps.IntegrationEvents</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SerializationTests\" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

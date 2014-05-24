@@ -1,5 +1,5 @@
 ﻿using Aps.BillingCompanies;
-using Aps.Core.DomainEvents;
+using Aps.Core.InternalEvents;
 using Aps.Customer;
 using Aps.IntegrationEvents;
 using Caliburn.Micro;
