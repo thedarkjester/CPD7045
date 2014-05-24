@@ -7,8 +7,7 @@ namespace Aps.IntegrationTests.EventTests
     [TestClass]
     public class IntegrationEventConstructionTests
     {
-
-        //arrange
+        // default valid variables
         private DateTime startDate;
         private DateTime endDate;
         private bool isOpen;
@@ -28,7 +27,7 @@ namespace Aps.IntegrationTests.EventTests
 
         [ExpectedException(typeof(ArgumentException))]
         [TestMethod]
-        public void WhenConstructionOfBillingCompanyAddedOpenClosedWindowEvent_EmptyGuidParameterIsInvalid_ExceptionIsThrown()
+        public void Given_A_BillingCompanyAddedOpenClosedWindowEvent_When_The_GuidParameterIsInvalid_ExceptionIsThrown()
         {
             //arrange
             billingCompanyId = Guid.Empty;
@@ -42,7 +41,7 @@ namespace Aps.IntegrationTests.EventTests
 
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         [TestMethod]
-        public void WhenConstructionOfBillingCompanyAddedOpenClosedWindowEvent_IsOpenAndScrapingLimitCombinationIsInvalid_ExceptionIsThrown()
+        public void Given_A_BillingCompanyAddedOpenClosedWindowEvent_When_The_IsOpenAndScrapingLimitCombinationIsInvalid_ExceptionIsThrown()
         {
             //arrange ( you should be able to scrape if the window is open )
             isOpen = true;
@@ -57,7 +56,7 @@ namespace Aps.IntegrationTests.EventTests
 
         [ExpectedException(typeof(ArgumentException))]
         [TestMethod]
-        public void WhenConstructionOfBillingCompanyAddedOpenClosedWindowEvent_StartDatePastTenseIsInvalid_ExceptionIsThrown()
+        public void Given_A_BillingCompanyAddedOpenClosedWindowEvent_When_The_StartDatePastTenseIsInvalid_ExceptionIsThrown()
         {
             //arrange ( you should be able to scrape if the window is open )
             startDate = startDate.AddDays(-2);
@@ -71,7 +70,7 @@ namespace Aps.IntegrationTests.EventTests
 
         [ExpectedException(typeof(ArgumentException))]
         [TestMethod]
-        public void WhenConstructionOfBillingCompanyAddedOpenClosedWindowEvent_EndDatePastTenseIsInvalid_ExceptionIsThrown()
+        public void Given_A_BillingCompanyAddedOpenClosedWindowEvent_When_The_EndDatePastTenseIsInvalid_ExceptionIsThrown()
         {
             //arrange ( you should be able to scrape if the window is open )
             endDate = endDate.AddDays(-2);
@@ -85,7 +84,7 @@ namespace Aps.IntegrationTests.EventTests
 
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         [TestMethod]
-        public void WhenConstructionOfBillingCompanyAddedOpenClosedWindowEvent_StartDateIsLessThanEndDate_ExceptionIsThrown()
+        public void Given_A_BillingCompanyAddedOpenClosedWindowEvent_When_The_StartDateIsLessThanEndDate_ExceptionIsThrown()
         {
             //arrange ( you should be able to scrape if the window is open )
             endDate = endDate.AddDays(2);
@@ -100,7 +99,7 @@ namespace Aps.IntegrationTests.EventTests
 
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         [TestMethod]
-        public void WhenConstructionOfBillingCompanyAddedOpenClosedWindowEvent_StartDateIsLessThanEndDateInLowestGranularity_ExceptionIsThrown()
+        public void Given_A_BillingCompanyAddedOpenClosedWindowEvent_When_The_StartDateIsLessThanEndDateInLowestGranularity_ExceptionIsThrown()
         {
             //arrange ( you should be able to scrape if the window is open )
             endDate = endDate.AddMilliseconds(2);

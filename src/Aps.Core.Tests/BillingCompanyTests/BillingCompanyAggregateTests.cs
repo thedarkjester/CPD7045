@@ -2,12 +2,11 @@
 using System.Linq;
 using Aps.BillingCompanies;
 using Aps.BillingCompanies.Aggregates;
-using Aps.Customer;
 using Autofac;
 using Caliburn.Micro;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Aps.Core.Tests.BillingCompanyTests
+namespace Aps.Shared.Tests.BillingCompanyTests
 {
     [TestClass]
     public class BillingCompanyAggregateTests
@@ -32,7 +31,7 @@ namespace Aps.Core.Tests.BillingCompanyTests
             // arrange ( repository and depenency injection done )
 
             // act
-            BillingCompanies.Aggregates.BillingCompany billingCompany = container.Resolve<BillingCompanyRepository>().GetNewBillingCompany();
+            BillingCompany billingCompany = container.Resolve<BillingCompanyRepository>().GetNewBillingCompany();
 
             // assert
             Assert.IsTrue(billingCompany.Id != Guid.Empty);

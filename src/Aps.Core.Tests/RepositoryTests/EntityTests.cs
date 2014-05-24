@@ -4,7 +4,7 @@ using Autofac;
 using Caliburn.Micro;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Aps.Core.Tests.EntityTesting
+namespace Aps.Shared.Tests.RepositoryTests
 {
     [TestClass]
     public class EntityTests

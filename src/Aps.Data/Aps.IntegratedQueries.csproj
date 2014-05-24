@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{78059759-BF3D-471D-B88B-CD3AA1EC101B}</ProjectGuid>
+    <ProjectGuid>{29C571E6-99EB-45B2-994D-5777E7898BD8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Aps.IntegrationEvents</RootNamespace>
-    <AssemblyName>Aps.IntegrationEvents</AssemblyName>
+    <RootNamespace>Aps.IntegratedQueries</RootNamespace>
+    <AssemblyName>Aps.IntegratedQueries</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,13 +30,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Seterlund.CodeGuard">
-      <HintPath>..\Aps.Core\bin\Debug\Seterlund.CodeGuard.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,15 +39,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BillingCompanyAddedOpenClosedWindow.cs" />
-    <Compile Include="EventIntegrationService.cs" />
+    <Compile Include="Customer\CustomerByIdQuery.cs" />
+    <Compile Include="Customer\CustomerDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Aps.DomainBase\Aps.DomainBase.csproj">
-      <Project>{16D706F7-AF2A-4838-AC14-8BC0607173CC}</Project>
-      <Name>Aps.DomainBase</Name>
+    <ProjectReference Include="..\Aps.Customer\Aps.Customer.csproj">
+      <Project>{D3540939-6FEA-41F8-BA61-335EC08EC7CE}</Project>
+      <Name>Aps.Customer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BillingCompany\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,7 +1,7 @@
 ﻿using System;
 using Aps.BillingCompanies;
+using Aps.IntegrationEvents;
 using Autofac;
-using Autofac.Core;
 using Caliburn.Micro;
 using Aps.Customer;
 
@@ -13,20 +13,24 @@ namespace Aps.Core
 
         static void Main(string[] args)
         {
-            var builder = new ContainerBuilder();
+            // construct the dependency injection builder that when built, will structure and "know"
+            // the dependency hierarchy/chains
 
-            // Usually you're only interested in exposing the type
-            // via its interface:
-            builder.RegisterType<EventAggregator>().As<IEventAggregator>();
-            builder.RegisterType<CustomerRepository>().As<CustomerRepository>();
-            builder.RegisterType<BillingCompanyRepository>().As<BillingCompanyRepository>();
-            builder.RegisterType<SchedulingEngine>().As<SchedulingEngine>();
-            
+            ContainerBuilder builder = new ContainerBuilder();
+
+            builder.RegisterType<EventIntegrationService>().As<EventIntegrationService>().SingleInstance();
+            builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
+
+            builder.RegisterType<CustomerRepository>().As<CustomerRepository>().InstancePerDependency();
+            builder.RegisterType<BillingCompanyRepository>().As<BillingCompanyRepository>().InstancePerDependency();
+            builder.RegisterType<SchedulingEngine>().As<SchedulingEngine>().InstancePerDependency();
+
             Container = builder.Build();
 
-            var customer = Container.Resolve<CustomerRepository>().GetNewCustomer();
+            var schedulingEngine = Container.Resolve<SchedulingEngine>();
+            schedulingEngine.Start();
 
             Console.ReadLine();
         }
-        }
+    }
 }
