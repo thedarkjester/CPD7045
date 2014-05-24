@@ -1,8 +1,7 @@
 ﻿using System;
-using Aps.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace DomainUnitTests
+namespace Aps.Core.Tests
 {
     [TestClass]
     public class SampleTest
