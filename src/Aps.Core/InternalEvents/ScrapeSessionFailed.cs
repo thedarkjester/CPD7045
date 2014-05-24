@@ -1,4 +1,4 @@
-﻿namespace Aps.Core.DomainEvents
+﻿namespace Aps.Core.InternalEvents
 {
     public class ScrapeSessionFailed
     {
