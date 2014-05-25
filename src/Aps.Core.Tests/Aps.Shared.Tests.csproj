@@ -57,6 +57,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="BillingCompanyTests\BillingCompanyAggregateTests.cs" />
+    <Compile Include="BillingCompanyTests\BillingCompanyValueObjectTests.cs" />
     <Compile Include="RepositoryTests\EntityTests.cs" />
     <Compile Include="SampleTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
