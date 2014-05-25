@@ -11,6 +11,8 @@
     <AssemblyName>Aps.IntegrationEvents</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Seterlund.CodeGuard">
-      <HintPath>..\Aps.Core\bin\Debug\Seterlund.CodeGuard.dll</HintPath>
+      <HintPath>..\packages\Seterlund.CodeGuard.2.3.4\lib\net40\Seterlund.CodeGuard.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Activities" />
@@ -45,6 +47,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventIntegrationRepositoryFake.cs" />
+    <Compile Include="Queries\BillingCompanyQueries\BillingCompanyBillingLifeCycleByCompanyIdQuery.cs" />
+    <Compile Include="Queries\BillingCompanyQueries\BillingCompanyScrapingUrlQuery.cs" />
+    <Compile Include="Queries\BillingCompanyQueries\Dtos\BillingCompanyScrapingUrlDto.cs" />
+    <Compile Include="Queries\BillingCompanyQueries\Dtos\BillingCompanyBillingLifeCycleDto.cs" />
+    <Compile Include="Queries\BillingCompanyQueries\BillingCompanyByIdQuery.cs" />
+    <Compile Include="Queries\BillingCompanyQueries\Dtos\BillingCompanyDto.cs" />
     <Compile Include="Queries\Events\GetLatestEventsBySubScribedEventTypeQuery.cs" />
     <Compile Include="Events\BillingCompanyAddedOpenClosedWindow.cs" />
     <Compile Include="EventIntegrationService.cs" />
@@ -55,6 +63,10 @@
     <Compile Include="Serialization\BinaryEventSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Aps.BillingCompany\Aps.BillingCompanies.csproj">
+      <Project>{2B24072A-26C9-4A39-82E6-CABF65C1E0A8}</Project>
+      <Name>Aps.BillingCompanies</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Aps.Customer\Aps.Customer.csproj">
       <Project>{D3540939-6FEA-41F8-BA61-335EC08EC7CE}</Project>
       <Name>Aps.Customer</Name>
@@ -65,9 +77,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Queries\BillingCompany\" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

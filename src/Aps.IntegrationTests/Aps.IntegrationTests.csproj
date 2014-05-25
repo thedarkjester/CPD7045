@@ -59,10 +59,19 @@
     <Compile Include="EventTests\BillingCompanyAddedOpenClosedWindowEventSerializationTests.cs" />
     <Compile Include="EventTests\IntegrationEventConstructionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueryTests\LatestEventsByNamespaceQueryConstructionTests.cs" />
+    <Compile Include="QueryTests\Events\LatestEventsByNamespaceQueryConstructionTests.cs" />
+    <Compile Include="QueryTests\BillingCompanies\BillingCompanyQueries.cs" />
     <Compile Include="RepositoryTests\EventIntegrationRepositoryTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Aps.BillingCompany\Aps.BillingCompanies.csproj">
+      <Project>{2B24072A-26C9-4A39-82E6-CABF65C1E0A8}</Project>
+      <Name>Aps.BillingCompanies</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Aps.DomainBase\Aps.DomainBase.csproj">
+      <Project>{16D706F7-AF2A-4838-AC14-8BC0607173CC}</Project>
+      <Name>Aps.DomainBase</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Aps.IntegrationEvents\Aps.Integration.csproj">
       <Project>{78059759-BF3D-471D-B88B-CD3AA1EC101B}</Project>
       <Name>Aps.Integration</Name>

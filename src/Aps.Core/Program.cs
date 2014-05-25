@@ -2,6 +2,7 @@
 using Aps.BillingCompanies;
 using Aps.BillingCompanies.Aggregates;
 using Aps.IntegrationEvents;
+using Aps.IntegrationEvents.Queries.BillingCompanyQueries;
 using Aps.IntegrationEvents.Queries.Events;
 using Aps.IntegrationEvents.Serialization;
 using Autofac;
@@ -34,16 +35,17 @@ namespace Aps.Core
 
             builder.RegisterType<CustomerRepositoryFake>().As<CustomerRepositoryFake>().InstancePerDependency();
             builder.RegisterType<BillingCompanyRepositoryFake>().As<BillingCompanyRepositoryFake>().InstancePerDependency();
-
+          
             RegisterIntegrationDependencies(builder);
 
             Container = builder.Build();
         }
 
-        private static void StartMainApplication()
+        private static void RegisterQueries(ContainerBuilder builder)
         {
-            var schedulingEngine = Container.Resolve<SchedulingEngine>();
-            schedulingEngine.Start();
+            builder.RegisterType<BillingCompanyByIdQuery>().As<BillingCompanyByIdQuery>();
+            builder.RegisterType<BillingCompanyBillingLifeCycleByCompanyIdQuery>().As<BillingCompanyBillingLifeCycleByCompanyIdQuery>();
+            builder.RegisterType<BillingCompanyScrapingUrlQuery>().As<BillingCompanyScrapingUrlQuery>();
         }
 
         private static void RegisterIntegrationDependencies(ContainerBuilder builder)
@@ -55,6 +57,16 @@ namespace Aps.Core
             builder.RegisterType<GetLatestEventsBySubScribedEventTypeQuery>()
                    .As<GetLatestEventsBySubScribedEventTypeQuery>()
                    .InstancePerDependency();
+
+            RegisterQueries(builder);
         }
+
+        private static void StartMainApplication()
+        {
+            var schedulingEngine = Container.Resolve<SchedulingEngine>();
+            schedulingEngine.Start();
+        }
+
+    
     }
 }

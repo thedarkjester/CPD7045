@@ -10,11 +10,11 @@ namespace Aps.BillingCompanies.Aggregates
         private readonly IEventAggregator eventAggregator;
         private readonly List<OpenClosedWindow> openClosedWindows;
         private readonly List<ScrapingErrorRetryConfiguration> scrapingErrorRetryConfigurations;
-
         private BillingLifeCycle billingLifeCycle;
         private ScrapingLoadManagementConfiguration scrapingLoadManagementConfiguration;
         private BillingCompanyType billingCompanyType;
         private BillingCompanyScrapingUrl billingCompanyScrapingUrl;
+        private BillingCompanyName billingCompanyName;
 
         public IEnumerable<OpenClosedWindow> OpenClosedWindows { get { return openClosedWindows; } }
         public IEnumerable<ScrapingErrorRetryConfiguration> ScrapingErrorRetryConfigurations { get { return scrapingErrorRetryConfigurations; } }
@@ -22,6 +22,11 @@ namespace Aps.BillingCompanies.Aggregates
         public BillingLifeCycle BillingLifeCycle
         {
             get { return this.billingLifeCycle; }
+        }
+
+        public BillingCompanyName BillingCompanyName
+        {
+            get { return this.billingCompanyName; }
         }
 
         public ScrapingLoadManagementConfiguration ScrapingLoadManagementConfiguration
@@ -39,11 +44,20 @@ namespace Aps.BillingCompanies.Aggregates
             get { return this.billingCompanyScrapingUrl; }
         }
 
-        public IEventAggregator EventAggregator { get; set; }
-
-        public BillingCompany(IEventAggregator eventAggregator)
+        private BillingCompany()
         {
+            
+        }
+
+        public BillingCompany(IEventAggregator eventAggregator, BillingCompanyName companyName, BillingCompanyType companyType, BillingCompanyScrapingUrl companyScrapingUrl)
+        {
+            this.billingCompanyName = companyName;
+            this.billingCompanyType = companyType;
+            this.billingCompanyScrapingUrl = companyScrapingUrl;
+
             this.eventAggregator = eventAggregator;
+            this.eventAggregator.Subscribe(this);
+
             this.openClosedWindows = new List<OpenClosedWindow>();
             this.scrapingErrorRetryConfigurations = new List<ScrapingErrorRetryConfiguration>();
         }
@@ -67,6 +81,13 @@ namespace Aps.BillingCompanies.Aggregates
             // validation of action
 
             this.billingCompanyType = companyType;
+        }
+
+        public void SetBillingCompanyName(BillingCompanyName companyName)
+        {
+            // validation of action
+
+            this.billingCompanyName = companyName;
         }
 
         public void SetBillingCompanyUrl(BillingCompanyScrapingUrl scrapingUrl)

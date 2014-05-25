@@ -1,4 +1,6 @@
-﻿namespace Aps.BillingCompanies.ValueObjects
+﻿using Seterlund.CodeGuard;
+
+namespace Aps.BillingCompanies.ValueObjects
 {
     public class BillingLifeCycle
     {
@@ -13,6 +15,8 @@
 
         public BillingLifeCycle(int daysPerBillingCycle, int leadTimeInterval, int retryInterval)
         {
+            Guard.That(daysPerBillingCycle).IsGreaterThan(0);
+
             RetryInterval = retryInterval;
             LeadTimeInterval = leadTimeInterval;
             DaysPerBillingCycle = daysPerBillingCycle;

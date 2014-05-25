@@ -47,6 +47,7 @@
     <Compile Include="Aggregates\BillingCompany.cs" />
     <Compile Include="BillingCompanyRepositoryFake.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValueObjects\BillingCompanyName.cs" />
     <Compile Include="ValueObjects\BillingCompanyScrapingUrl.cs" />
     <Compile Include="ValueObjects\BillingCompanyType.cs" />
     <Compile Include="ValueObjects\BillingLifeCycle.cs" />

@@ -12,6 +12,11 @@ namespace Aps.BillingCompanies.ValueObjects
 
         }
 
+         public string ScrapingUrl
+         {
+             get { return url; }
+         }
+
         public BillingCompanyScrapingUrl(string url)
         {
             Guard.That(url).IsNotEmpty();

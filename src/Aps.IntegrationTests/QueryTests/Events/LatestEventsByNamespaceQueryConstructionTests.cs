@@ -2,7 +2,7 @@
 using Aps.IntegrationEvents.Queries.Events;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Aps.IntegrationTests.QueryTests
+namespace Aps.IntegrationTests.QueryTests.Events
 {
     [TestClass]
     public class LatestEventsByNamespaceQueryConstructionTests
