@@ -3,16 +3,16 @@ using Seterlund.CodeGuard;
 
 namespace Aps.BillingCompanies.ValueObjects
 {
-    public class BillingCompanyUrl
+    public class BillingCompanyScrapingUrl
     {
         private readonly string url;
 
-        protected BillingCompanyUrl()
+        protected BillingCompanyScrapingUrl()
         {
 
         }
 
-        public BillingCompanyUrl(string url)
+        public BillingCompanyScrapingUrl(string url)
         {
             Guard.That(url).IsNotEmpty();
             Guard.That(url).IsTrue(s => s.IndexOf("http://", System.StringComparison.InvariantCultureIgnoreCase) == -1, "https is missing");
@@ -35,9 +35,9 @@ namespace Aps.BillingCompanies.ValueObjects
             }
         }
 
-        public BillingCompanyUrl ChangeUrl(string newUrl)
+        public BillingCompanyScrapingUrl ChangeUrl(string newUrl)
         {
-            return new BillingCompanyUrl(newUrl);
+            return new BillingCompanyScrapingUrl(newUrl);
         }
 
         public override string ToString()

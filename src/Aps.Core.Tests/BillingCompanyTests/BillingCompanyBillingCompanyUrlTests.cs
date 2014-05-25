@@ -23,7 +23,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             url = "";
 
             //act
-            var billingCompanyUrl = new BillingCompanyUrl(url);
+            var billingCompanyUrl = new BillingCompanyScrapingUrl(url);
 
             //assert
             //exception attribute
@@ -37,7 +37,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             url = "http://www.google.com";
 
             //act
-            var billingCompanyUrl = new BillingCompanyUrl(url);
+            var billingCompanyUrl = new BillingCompanyScrapingUrl(url);
 
             //assert
             //exception attribute
@@ -51,7 +51,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             url = "s.com";
 
             //act
-            var billingCompanyUrl = new BillingCompanyUrl(url);
+            var billingCompanyUrl = new BillingCompanyScrapingUrl(url);
 
             //assert
             //exception attribute
@@ -64,7 +64,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             url = "https://www.google.com";
 
             //act
-            var billingCompanyUrl = new BillingCompanyUrl(url);
+            var billingCompanyUrl = new BillingCompanyScrapingUrl(url);
 
             //assert
             Assert.IsTrue(billingCompanyUrl.ToString() == "https://www.google.com");
@@ -75,7 +75,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
         {
             //arrange
             url = "https://www.google.com";
-            var billingCompanyUrl = new BillingCompanyUrl(url);
+            var billingCompanyUrl = new BillingCompanyScrapingUrl(url);
 
             //act
 
