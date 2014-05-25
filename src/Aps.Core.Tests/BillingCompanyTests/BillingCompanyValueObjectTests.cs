@@ -69,5 +69,20 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             //assert
             Assert.IsTrue(billingCompanyUrl.ToString() == "https://www.google.com");
         }
+
+        [TestMethod]
+        public void GivenABillingCompanyUrl_SettingItsValue_ChangesItsIntance()
+        {
+            //arrange
+            url = "https://www.google.com";
+            var billingCompanyUrl = new BillingCompanyUrl(url);
+
+            //act
+
+            var billingCompanyUrl2 = billingCompanyUrl.ChangeUrl("https://www.google.com");
+
+            //assert
+            Assert.IsTrue(billingCompanyUrl2 != billingCompanyUrl);
+        }
     }
 }
