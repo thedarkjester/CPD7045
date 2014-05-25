@@ -7,6 +7,11 @@ namespace Aps.BillingCompanies.ValueObjects
     {
         private readonly string url;
 
+        protected BillingCompanyUrl()
+        {
+
+        }
+
         public BillingCompanyUrl(string url)
         {
             Guard.That(url).IsNotEmpty();

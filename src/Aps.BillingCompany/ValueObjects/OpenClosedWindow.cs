@@ -9,7 +9,7 @@ namespace Aps.BillingCompanies.ValueObjects
         public bool IsOpen { get; private set; }
         public int ConcurrentScrapingLimit { get; private set; }
 
-        private OpenClosedWindow()
+        protected OpenClosedWindow()
         {
             
         }
