@@ -1,4 +1,5 @@
 using System;
+using Aps.BillingCompanies;
 using Aps.Customer;
 using Autofac;
 using Caliburn.Micro;
@@ -19,6 +20,7 @@ namespace Aps.Shared.Tests.RepositoryTests
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>();
             builder.RegisterType<CustomerRepositoryFake>().As<CustomerRepositoryFake>();
+            builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>();
 
             container = builder.Build();
 

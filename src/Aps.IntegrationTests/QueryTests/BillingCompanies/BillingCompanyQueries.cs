@@ -30,6 +30,7 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>();
             builder.RegisterType<BillingCompanyRepositoryFake>().As<BillingCompanyRepositoryFake>().SingleInstance();
+            builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>().SingleInstance();
             builder.RegisterType<BillingCompanyByIdQuery>().As<BillingCompanyByIdQuery>();
             builder.RegisterType<BillingCompanyBillingLifeCycleByCompanyIdQuery>().As<BillingCompanyBillingLifeCycleByCompanyIdQuery>();
             builder.RegisterType<BillingCompanyScrapingUrlQuery>().As<BillingCompanyScrapingUrlQuery>();

@@ -13,10 +13,12 @@ namespace Aps.BillingCompanies
         private readonly List<BillingCompany> billingCompanies;
 
         private readonly IEventAggregator eventAggregator;
+        private readonly BillingCompanyCreator billingCompanyCreator;
 
-        public BillingCompanyRepositoryFake(IEventAggregator eventAggregator)
+        public BillingCompanyRepositoryFake(IEventAggregator eventAggregator,BillingCompanyCreator billingCompanyCreator)
         {
             this.eventAggregator = eventAggregator;
+            this.billingCompanyCreator = billingCompanyCreator;
             this.billingCompanies = new List<BillingCompany>();
         }
 
@@ -32,7 +34,7 @@ namespace Aps.BillingCompanies
             Guard.That(billingCompanyType).IsNotNull();
             Guard.That(billingCompanyScrapingUrl).IsNotNull();
 
-            return new BillingCompany(eventAggregator, billingCompanyName, billingCompanyType, billingCompanyScrapingUrl);
+            return  this.billingCompanyCreator.GetNewBillingCompany(billingCompanyName, billingCompanyType, billingCompanyScrapingUrl);
         }
 
         public BillingCompany GetBillingCompanyById(Guid id)
