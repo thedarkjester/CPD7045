@@ -9,29 +9,28 @@ namespace Aps.Core
     public class SchedulingEngine : IHandle<ScrapeSessionFailed>,IHandle<BillingCompanyAddedOpenClosedWindow>
     {
         private readonly IEventAggregator eventAggregator;
-        private readonly CustomerRepository customerRepository;
-        private readonly BillingCompanyRepository billingCompanyRepository;
+        private readonly CustomerRepositoryFake customerRepositoryFake;
+        private readonly BillingCompanyRepositoryFake billingCompanyRepositoryFake;
         private readonly EventIntegrationService messageSendAndReceiver;
 
-        public SchedulingEngine(IEventAggregator eventAggregator, CustomerRepository customerRepository, BillingCompanyRepository billingCompanyRepository, EventIntegrationService messageSendAndReceiver)
+        public SchedulingEngine(IEventAggregator eventAggregator, CustomerRepositoryFake customerRepositoryFake, BillingCompanyRepositoryFake billingCompanyRepositoryFake, EventIntegrationService messageSendAndReceiver)
         {
             this.eventAggregator = eventAggregator;
             this.eventAggregator.Subscribe(this);
 
-            this.customerRepository = customerRepository;
-            this.billingCompanyRepository = billingCompanyRepository;
+            this.customerRepositoryFake = customerRepositoryFake;
+            this.billingCompanyRepositoryFake = billingCompanyRepositoryFake;
             this.messageSendAndReceiver = messageSendAndReceiver;
         }
 
         public void Start()
         {
-            //messageSendAndReceiver.Subscribe(typeof(NewCustomerBillingCompanyAccount).FullName);
-            messageSendAndReceiver.Subscribe(typeof(BillingCompanyAddedOpenClosedWindow).FullName);
+            //messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(NewCustomerBillingCompanyAccount).FullName);
+            messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(BillingCompanyAddedOpenClosedWindow).FullName);
 
             var session = new ScrapeSession();
 
             // every so often look for scrape sessions that are valid ( retry or otherwise )
-
             Scrape();
         }
 

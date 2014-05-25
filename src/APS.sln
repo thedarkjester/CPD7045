@@ -26,11 +26,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{FD9F6591
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.DomainBase", "Aps.DomainBase\Aps.DomainBase.csproj", "{16D706F7-AF2A-4838-AC14-8BC0607173CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.IntegrationEvents", "Aps.IntegrationEvents\Aps.IntegrationEvents.csproj", "{78059759-BF3D-471D-B88B-CD3AA1EC101B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.Integration", "Aps.IntegrationEvents\Aps.Integration.csproj", "{78059759-BF3D-471D-B88B-CD3AA1EC101B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.IntegrationTests", "Aps.IntegrationTests\Aps.IntegrationTests.csproj", "{70CBA3C5-ED0A-4A71-98EF-B89498A56191}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.IntegratedQueries", "Aps.Data\Aps.IntegratedQueries.csproj", "{29C571E6-99EB-45B2-994D-5777E7898BD8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,10 +76,6 @@ Global
 		{70CBA3C5-ED0A-4A71-98EF-B89498A56191}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70CBA3C5-ED0A-4A71-98EF-B89498A56191}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70CBA3C5-ED0A-4A71-98EF-B89498A56191}.Release|Any CPU.Build.0 = Release|Any CPU
-		{29C571E6-99EB-45B2-994D-5777E7898BD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{29C571E6-99EB-45B2-994D-5777E7898BD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{29C571E6-99EB-45B2-994D-5777E7898BD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{29C571E6-99EB-45B2-994D-5777E7898BD8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

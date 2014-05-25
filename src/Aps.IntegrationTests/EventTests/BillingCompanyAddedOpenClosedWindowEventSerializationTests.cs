@@ -69,13 +69,12 @@ namespace Aps.IntegrationTests.EventTests
             var deserializedMessage = eventDeSerializer.DeSerializeMessage(serializedEvent);
 
             //assert
-
-            // all properties can be written and read
             PropertyInfo[] properties = billingCompanyAddedOpenClosedWindow.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
             foreach (var propertyInfo in properties)
             {
                 var inValue = GetPropValue(billingCompanyAddedOpenClosedWindow, propertyInfo.Name);
                 var outValue = GetPropValue(deserializedMessage, propertyInfo.Name);
+
                 Assert.IsTrue(inValue.Equals(outValue),propertyInfo.Name + " does not match");
             }
         }

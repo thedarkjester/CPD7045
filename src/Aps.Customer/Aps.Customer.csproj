@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregates\Customer.cs" />
-    <Compile Include="CustomerRepository.cs" />
+    <Compile Include="CustomerRepositoryFake.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

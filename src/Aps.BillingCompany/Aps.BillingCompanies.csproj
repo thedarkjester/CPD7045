@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregates\BillingCompany.cs" />
-    <Compile Include="BillingCompanyRepository.cs" />
+    <Compile Include="BillingCompanyRepositoryFake.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValueObjects\OpenClosedWindow.cs" />
   </ItemGroup>

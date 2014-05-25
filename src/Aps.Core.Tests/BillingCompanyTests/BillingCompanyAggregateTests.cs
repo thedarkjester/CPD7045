@@ -20,7 +20,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             var builder = new ContainerBuilder();
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>();
-            builder.RegisterType<BillingCompanyRepository>().As<BillingCompanyRepository>();
+            builder.RegisterType<BillingCompanyRepositoryFake>().As<BillingCompanyRepositoryFake>();
 
             container = builder.Build(); 
         }
@@ -31,7 +31,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             // arrange ( repository and depenency injection done )
 
             // act
-            BillingCompany billingCompany = container.Resolve<BillingCompanyRepository>().GetNewBillingCompany();
+            BillingCompany billingCompany = container.Resolve<BillingCompanyRepositoryFake>().GetNewBillingCompany();
 
             // assert
             Assert.IsTrue(billingCompany.Id != Guid.Empty);
@@ -43,12 +43,11 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             // arrange ( repository and depenency injection done )
 
             // act
-            BillingCompany billingCompany = container.Resolve<BillingCompanyRepository>().GetNewBillingCompany();
+            BillingCompany billingCompany = container.Resolve<BillingCompanyRepositoryFake>().GetNewBillingCompany();
 
             // assert
             Assert.IsTrue(billingCompany.OpenClosedWindows != null);
             Assert.IsTrue(!billingCompany.OpenClosedWindows.Any());
         }
-
     }
 }

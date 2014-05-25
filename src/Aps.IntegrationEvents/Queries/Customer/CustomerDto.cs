@@ -1,4 +1,4 @@
-namespace Aps.IntegratedQueries.Customer
+namespace Aps.IntegrationEvents.Queries.Customer
 {
     public class CustomerDto    
     {

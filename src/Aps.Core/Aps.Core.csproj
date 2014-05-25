@@ -78,9 +78,9 @@
       <Project>{16D706F7-AF2A-4838-AC14-8BC0607173CC}</Project>
       <Name>Aps.DomainBase</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Aps.IntegrationEvents\Aps.IntegrationEvents.csproj">
+    <ProjectReference Include="..\Aps.IntegrationEvents\Aps.Integration.csproj">
       <Project>{78059759-BF3D-471D-B88B-CD3AA1EC101B}</Project>
-      <Name>Aps.IntegrationEvents</Name>
+      <Name>Aps.Integration</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

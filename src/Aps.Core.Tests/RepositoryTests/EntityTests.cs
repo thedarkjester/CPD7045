@@ -18,12 +18,12 @@ namespace Aps.Shared.Tests.RepositoryTests
             var builder = new ContainerBuilder();
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>();
-            builder.RegisterType<CustomerRepository>().As<CustomerRepository>();
+            builder.RegisterType<CustomerRepositoryFake>().As<CustomerRepositoryFake>();
 
             container = builder.Build();
 
             // act
-            var customer = container.Resolve<CustomerRepository>().GetNewCustomer();
+            var customer = container.Resolve<CustomerRepositoryFake>().GetNewCustomer();
 
             // assert
             Assert.IsTrue(customer.Id != Guid.Empty);
