@@ -56,6 +56,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="BillingCompanyTests\BillingCompanyAddedOpenClosedWindowEventConstructionTests.cs" />
     <Compile Include="BillingCompanyTests\BillingCompanyAggregateTests.cs" />
     <Compile Include="BillingCompanyTests\BillingCompanyBillingCompanyUrlTests.cs" />
     <Compile Include="BillingCompanyTests\BillingCompanyLifeCycleTests.cs" />
