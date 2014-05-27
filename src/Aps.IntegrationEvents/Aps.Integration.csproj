@@ -52,12 +52,16 @@
     <Compile Include="Queries\BillingCompanyQueries\AllBillingCompaniesQuery.cs" />
     <Compile Include="Queries\BillingCompanyQueries\BillingCompanyBillingLifeCycleByCompanyIdQuery.cs" />
     <Compile Include="Queries\BillingCompanyQueries\BillingCompanyOpenClosedWindowsQuery.cs" />
+    <Compile Include="Queries\BillingCompanyQueries\BillingCompanyScrapingLoadManagementConfigurationQuery.cs" />
     <Compile Include="Queries\BillingCompanyQueries\BillingCompanyScrapingUrlQuery.cs" />
+    <Compile Include="Queries\BillingCompanyQueries\Dtos\BillingCompanyScrapingLoadManagementConfigurationDto.cs" />
     <Compile Include="Queries\BillingCompanyQueries\Dtos\BillingCompanyScrapingUrlDto.cs" />
     <Compile Include="Queries\BillingCompanyQueries\Dtos\BillingCompanyBillingLifeCycleDto.cs" />
     <Compile Include="Queries\BillingCompanyQueries\BillingCompanyByIdQuery.cs" />
     <Compile Include="Queries\BillingCompanyQueries\Dtos\BillingCompanyDto.cs" />
     <Compile Include="Queries\BillingCompanyQueries\Dtos\OpenClosedWindowDto.cs" />
+    <Compile Include="Queries\BillingCompanyQueries\Dtos\ScrapingErrorRetryConfigurationDto.cs" />
+    <Compile Include="Queries\BillingCompanyQueries\ScrapingErrorRetryConfigurationQuery.cs" />
     <Compile Include="Queries\Events\GetLatestEventsBySubScribedEventTypeQuery.cs" />
     <Compile Include="Events\BillingCompanyAddedOpenClosedWindow.cs" />
     <Compile Include="EventIntegrationService.cs" />

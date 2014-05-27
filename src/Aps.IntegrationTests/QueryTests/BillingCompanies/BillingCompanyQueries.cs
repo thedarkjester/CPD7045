@@ -38,6 +38,8 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
             builder.RegisterType<BillingCompanyScrapingUrlQuery>().As<BillingCompanyScrapingUrlQuery>();
             builder.RegisterType<AllBillingCompaniesQuery>().As<AllBillingCompaniesQuery>();
             builder.RegisterType<BillingCompanyOpenClosedWindowsQuery>().As<BillingCompanyOpenClosedWindowsQuery>();
+            builder.RegisterType<ScrapingErrorRetryConfigurationQuery>().As<ScrapingErrorRetryConfigurationQuery>();
+            builder.RegisterType<BillingCompanyScrapingLoadManagementConfigurationQuery>().As<BillingCompanyScrapingLoadManagementConfigurationQuery>();
 
             container = builder.Build();
         }
@@ -77,7 +79,7 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
             //arrange
             BillingCompanyRepositoryFake repository = container.Resolve<BillingCompanyRepositoryFake>();
 
-            var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType,companyUrl);
+            var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
 
             repository.StoreBillingCompany(newBillingCompany);
 
@@ -190,23 +192,23 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
             IEnumerable<BillingCompanyDto> billingCompanies = query.GetAllBillingCompanies();
 
             //assert
-            Assert.IsTrue(billingCompanies.Count()==3);
+            Assert.IsTrue(billingCompanies.Count() == 3);
         }
 
         [TestMethod]
-        public void Given_A_BillingCompany_When_QueryingOpenClosedWindiws_RepositoryReturns_AllWindows()
+        public void Given_A_BillingCompany_When_QueryingOpenClosedWindows_RepositoryReturns_AllWindows()
         {
             //arrange
             BillingCompanyRepositoryFake repository = container.Resolve<BillingCompanyRepositoryFake>();
 
             var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
 
-            newBillingCompany.AddOpenClosedWindow(new OpenClosedWindow(DateTime.Now.AddHours(1), DateTime.Now.AddHours(2),true,2));
-            newBillingCompany.AddOpenClosedWindow(new OpenClosedWindow(DateTime.Now.AddHours(3), DateTime.Now.AddHours(4),false,2));
-            newBillingCompany.AddOpenClosedWindow(new OpenClosedWindow(DateTime.Now.AddHours(5), DateTime.Now.AddHours(6),false,2));
+            newBillingCompany.AddOpenClosedWindow(new OpenClosedWindow(DateTime.Now.AddHours(1), DateTime.Now.AddHours(2), true, 2));
+            newBillingCompany.AddOpenClosedWindow(new OpenClosedWindow(DateTime.Now.AddHours(3), DateTime.Now.AddHours(4), false, 2));
+            newBillingCompany.AddOpenClosedWindow(new OpenClosedWindow(DateTime.Now.AddHours(5), DateTime.Now.AddHours(6), false, 2));
 
             repository.StoreBillingCompany(newBillingCompany);
-            
+
 
             //act
             BillingCompanyOpenClosedWindowsQuery query = container.Resolve<BillingCompanyOpenClosedWindowsQuery>();
@@ -215,6 +217,50 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
 
             //assert
             Assert.IsTrue(billingCompanies.Count() == 3);
+        }
+
+        [TestMethod]
+        public void Given_A_BillingCompany_When_QueryingRetryConfigurations_RepositoryReturns_AllConfigurations()
+        {
+            //arrange
+            BillingCompanyRepositoryFake repository = container.Resolve<BillingCompanyRepositoryFake>();
+
+            var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
+
+            newBillingCompany.AddScrapingErrorRetryConfiguration(new ScrapingErrorRetryConfiguration(1, 1));
+            newBillingCompany.AddScrapingErrorRetryConfiguration(new ScrapingErrorRetryConfiguration(2, 1));
+            newBillingCompany.AddScrapingErrorRetryConfiguration(new ScrapingErrorRetryConfiguration(3, 1));
+
+            repository.StoreBillingCompany(newBillingCompany);
+
+            //act
+            ScrapingErrorRetryConfigurationQuery query = container.Resolve<ScrapingErrorRetryConfigurationQuery>();
+
+            IEnumerable<ScrapingErrorRetryConfigurationDto> billingCompanies = query.GetAllScrapingErrorRetryConfigurations(newBillingCompany.Id);
+
+            //assert
+            Assert.IsTrue(billingCompanies.Count() == 3);
+        }
+
+        [TestMethod]
+        public void Given_A_BillingCompany_When_QueryingRetryConfigurations_RepositoryReturns_ScrapingLoadManagementConfiguration()
+        {
+            //arrange
+            BillingCompanyRepositoryFake repository = container.Resolve<BillingCompanyRepositoryFake>();
+
+            var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
+
+            newBillingCompany.SetScrapingLoadManagementConfiguration(new ScrapingLoadManagementConfiguration(5));
+
+            repository.StoreBillingCompany(newBillingCompany);
+
+            //act
+            BillingCompanyScrapingLoadManagementConfigurationQuery query = container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>();
+
+            BillingCompanyScrapingLoadManagementConfigurationDto companyScrapingLoadManagementConfiguration = query.GetBillingCompanyScrapingLoadManagementConfigurationById(newBillingCompany.Id);
+
+            //assert
+            Assert.IsTrue(companyScrapingLoadManagementConfiguration.ConcurrentScrapes == 5);
         }
     }
 }
