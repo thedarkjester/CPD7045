@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Aps.BillingCompanies.ValueObjects;
 using Aps.DomainBase;
 using Caliburn.Micro;
@@ -113,6 +115,10 @@ namespace Aps.BillingCompanies.Aggregates
         public void AddScrapingErrorRetryConfiguration(ScrapingErrorRetryConfiguration scrapingErrorRetryConfiguration)
         {
             // validation of action
+            if (scrapingErrorRetryConfigurations.Any(x => x.ResponseCode == scrapingErrorRetryConfiguration.ResponseCode))
+            {
+                throw new InvalidOperationException("Duplicate Error Code Configuration Exists");
+            }
 
             this.scrapingErrorRetryConfigurations.Add(scrapingErrorRetryConfiguration);
         }
