@@ -47,6 +47,8 @@ namespace Aps.Core
             builder.RegisterType<BillingCompanyByIdQuery>().As<BillingCompanyByIdQuery>();
             builder.RegisterType<BillingCompanyBillingLifeCycleByCompanyIdQuery>().As<BillingCompanyBillingLifeCycleByCompanyIdQuery>();
             builder.RegisterType<BillingCompanyScrapingUrlQuery>().As<BillingCompanyScrapingUrlQuery>();
+            builder.RegisterType<AllBillingCompaniesQuery>().As<AllBillingCompaniesQuery>();
+            builder.RegisterType<BillingCompanyOpenClosedWindowsQuery>().As<BillingCompanyOpenClosedWindowsQuery>();
         }
 
         private static void RegisterIntegrationDependencies(ContainerBuilder builder)
