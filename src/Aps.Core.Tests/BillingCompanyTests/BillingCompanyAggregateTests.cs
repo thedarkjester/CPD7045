@@ -104,46 +104,5 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             // expected exception
         }
 
-        [TestMethod]
-        public void Given_An_AddScrapingErrorRetryConfiguration_When_AddingToTheBillingCompany_TheItemsInsideIncrease()
-        {
-            //arrange
-            BillingCompany billingCompany = container.Resolve<BillingCompanyRepositoryFake>().GetNewBillingCompany(companyName, companyType, companyUrl);
-
-            //act
-            billingCompany.AddScrapingErrorRetryConfiguration(new ScrapingErrorRetryConfiguration(0,2));
-
-            //assert
-            Assert.IsTrue(billingCompany.ScrapingErrorRetryConfigurations.Count() == 1);
-        }
-
-        [TestMethod]
-        public void Given_Multiple_AddScrapingErrorRetryConfiguration_When_AddingToTheBillingCompany_TheItemsInsideIncrease()
-        {
-            //arrange
-            BillingCompany billingCompany = container.Resolve<BillingCompanyRepositoryFake>().GetNewBillingCompany(companyName, companyType, companyUrl);
-
-            //act
-            billingCompany.AddScrapingErrorRetryConfiguration(new ScrapingErrorRetryConfiguration(0, 2));
-            billingCompany.AddScrapingErrorRetryConfiguration(new ScrapingErrorRetryConfiguration(1, 2));
-
-            //assert
-            Assert.IsTrue(billingCompany.ScrapingErrorRetryConfigurations.Count() == 2);
-        }
-
-        [ExpectedException(typeof(InvalidOperationException), "Duplicate Error Code Configuration Exists")]
-        [TestMethod]
-        public void Given_DuplicateErrorCodesOn_AddScrapingErrorRetryConfigurations_When_AddingToTheBillingCompany_ExceptionIsThrown()
-        {
-            //arrange
-            BillingCompany billingCompany = container.Resolve<BillingCompanyRepositoryFake>().GetNewBillingCompany(companyName, companyType, companyUrl);
-
-            //act
-            billingCompany.AddScrapingErrorRetryConfiguration(new ScrapingErrorRetryConfiguration(0, 2));
-            billingCompany.AddScrapingErrorRetryConfiguration(new ScrapingErrorRetryConfiguration(0, 2));
-
-            //assert
-            //Exception Expected
-        }
     }
 }

@@ -61,8 +61,10 @@
     <Compile Include="BillingCompanyTests\BillingCompanyBillingCompanyUrlTests.cs" />
     <Compile Include="BillingCompanyTests\BillingCompanyLifeCycleTests.cs" />
     <Compile Include="BillingCompanyTests\BillingCompanyNameTests.cs" />
+    <Compile Include="BillingCompanyTests\BillingCompanyOpenClosedWindowTests.cs" />
     <Compile Include="BillingCompanyTests\ScrapingErrorRetryConfigurationTests.cs" />
     <Compile Include="BillingCompanyTests\ScrapingLoadManagementConfigurationTests.cs" />
+    <Compile Include="BillingCompanyTests\BillingCompanyScrapingConfigurationTests.cs" />
     <Compile Include="RepositoryTests\EntityTests.cs" />
     <Compile Include="SampleTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
