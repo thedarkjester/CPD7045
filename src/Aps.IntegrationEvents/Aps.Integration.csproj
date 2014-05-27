@@ -7,8 +7,8 @@
     <ProjectGuid>{78059759-BF3D-471D-B88B-CD3AA1EC101B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Aps.IntegrationEvents</RootNamespace>
-    <AssemblyName>Aps.IntegrationEvents</AssemblyName>
+    <RootNamespace>Aps.Integration</RootNamespace>
+    <AssemblyName>Aps.Integration</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -60,6 +60,7 @@
     <Compile Include="Queries\Customer\CustomerByIdQuery.cs" />
     <Compile Include="Queries\Customer\CustomerDto.cs" />
     <Compile Include="Events\IntegrationEvent.cs" />
+    <Compile Include="Events\ScrapeSessionFailedEvent.cs" />
     <Compile Include="Serialization\BinaryEventSerializer.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,9 +1,9 @@
 ﻿using System;
 using Aps.BillingCompanies;
 using Aps.BillingCompanies.Aggregates;
-using Aps.IntegrationEvents.Queries.BillingCompanyQueries.Dtos;
+using Aps.Integration.Queries.BillingCompanyQueries.Dtos;
 
-namespace Aps.IntegrationEvents.Queries.BillingCompanyQueries
+namespace Aps.Integration.Queries.BillingCompanyQueries
 {
     public class BillingCompanyScrapingUrlQuery
     {

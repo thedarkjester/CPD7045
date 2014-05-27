@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Seterlund.CodeGuard;
 
-namespace Aps.IntegrationEvents
+namespace Aps.Integration
 {
     [Serializable]
     public class BillingCompanyAddedOpenClosedWindow

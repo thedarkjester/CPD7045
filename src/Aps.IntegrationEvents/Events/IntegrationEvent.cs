@@ -1,13 +1,15 @@
+using System;
 using Seterlund.CodeGuard;
 
-namespace Aps.IntegrationEvents.Events
+namespace Aps.Integration.Events
 {
     public class IntegrationEvent
     {
         private int rowVersion;
         private readonly string nameSpaceName;
         private readonly byte[] serializedEvent;
-       
+        DateTime occuredDate;
+
         public byte[] SerializedEvent
         {
             get { return serializedEvent; }
@@ -23,6 +25,13 @@ namespace Aps.IntegrationEvents.Events
             get { return rowVersion; }
         }
 
+        public DateTime OccuredDate {
+            get
+            {
+                return occuredDate;
+            }
+        }
+
         private IntegrationEvent()
         {
 
@@ -36,7 +45,10 @@ namespace Aps.IntegrationEvents.Events
 
             this.nameSpaceName = nameSpaceName;
             this.serializedEvent = serializedEvent;
+            occuredDate = DateTime.UtcNow;
         }
+
+   
 
         public void SetRowVersion(int version)
         {

@@ -1,10 +1,10 @@
 ﻿using System;
 using Aps.BillingCompanies;
 using Aps.BillingCompanies.Aggregates;
-using Aps.IntegrationEvents;
-using Aps.IntegrationEvents.Queries.BillingCompanyQueries;
-using Aps.IntegrationEvents.Queries.Events;
-using Aps.IntegrationEvents.Serialization;
+using Aps.Integration;
+using Aps.Integration.Queries.BillingCompanyQueries;
+using Aps.Integration.Queries.Events;
+using Aps.Integration.Serialization;
 using Autofac;
 using Caliburn.Micro;
 using Aps.Customer;

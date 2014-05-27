@@ -2,8 +2,8 @@
 using System.Linq;
 using Aps.BillingCompanies;
 using Aps.BillingCompanies.ValueObjects;
-using Aps.IntegrationEvents.Queries.BillingCompanyQueries;
-using Aps.IntegrationEvents.Queries.BillingCompanyQueries.Dtos;
+using Aps.Integration.Queries.BillingCompanyQueries;
+using Aps.Integration.Queries.BillingCompanyQueries.Dtos;
 using Autofac;
 using Caliburn.Micro;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

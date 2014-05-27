@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace Aps.IntegrationEvents.Serialization
+namespace Aps.Integration.Serialization
 {
     public class BinaryEventSerializer
     {
