@@ -65,6 +65,7 @@
     <Compile Include="BillingCompanyTests\ScrapingErrorRetryConfigurationTests.cs" />
     <Compile Include="BillingCompanyTests\ScrapingLoadManagementConfigurationTests.cs" />
     <Compile Include="BillingCompanyTests\BillingCompanyScrapingConfigurationTests.cs" />
+    <Compile Include="CoreTests\CreatingANewScrapingObjectTest.cs" />
     <Compile Include="RepositoryTests\EntityTests.cs" />
     <Compile Include="SampleTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
