@@ -1,5 +1,5 @@
 ﻿using System;
-using Aps.Customer;
+using Aps.ApsCustomer;
 
 namespace Aps.Integration.Queries.Customer
 {

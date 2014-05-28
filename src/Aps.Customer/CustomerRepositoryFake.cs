@@ -1,6 +1,7 @@
-﻿using Caliburn.Micro;
+﻿using Aps.ApsCustomer.Aggregates;
+using Caliburn.Micro;
 
-namespace Aps.Customer
+namespace Aps.ApsCustomer
 {
     public class CustomerRepositoryFake
     {
@@ -11,9 +12,14 @@ namespace Aps.Customer
             this.eventAggregator = eventAggregator;
         }
 
-        public Aggregates.Customer GetNewCustomer()
+        public Customer GetNewCustomer()
         {
-            return Aggregates.Customer.CreateCustomer(eventAggregator);
+            return Customer.CreateCustomer(eventAggregator);
+        }
+
+        public Customer GetCustomerById()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -8,7 +8,7 @@ using Aps.Integration.Queries.Events;
 using Aps.Integration.Serialization;
 using Autofac;
 using Caliburn.Micro;
-using Aps.Customer;
+using Aps.ApsCustomer;
 
 namespace Aps.Core
 {
@@ -37,7 +37,7 @@ namespace Aps.Core
             builder.RegisterType<CustomerRepositoryFake>().As<CustomerRepositoryFake>().InstancePerDependency();
             builder.RegisterType<BillingCompanyRepositoryFake>().As<BillingCompanyRepositoryFake>().InstancePerDependency();
             builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>().InstancePerDependency();
-            builder.RegisterType<AccountStatementService>().As<AccountStatementService>().InstancePerDependency();
+            builder.RegisterType<AccountStatementBuilder>().As<AccountStatementBuilder>().InstancePerDependency();
           
             RegisterIntegrationDependencies(builder);
 

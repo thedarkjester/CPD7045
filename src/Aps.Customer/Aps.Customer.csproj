@@ -7,8 +7,8 @@
     <ProjectGuid>{D3540939-6FEA-41F8-BA61-335EC08EC7CE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Aps.Customer</RootNamespace>
-    <AssemblyName>Aps.Customer</AssemblyName>
+    <RootNamespace>Aps.ApsCustomer</RootNamespace>
+    <AssemblyName>Aps.ApsCustomer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>

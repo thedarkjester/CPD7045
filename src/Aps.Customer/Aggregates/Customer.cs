@@ -1,7 +1,7 @@
 ﻿using Aps.DomainBase;
 using Caliburn.Micro;
 
-namespace Aps.Customer.Aggregates
+namespace Aps.ApsCustomer.Aggregates
 {
     public class Customer : Aggregate
     {

@@ -1,6 +1,6 @@
 using System;
 using Aps.BillingCompanies;
-using Aps.Customer;
+using Aps.ApsCustomer;
 using Autofac;
 using Caliburn.Micro;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
