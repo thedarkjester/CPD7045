@@ -17,9 +17,9 @@ namespace Aps.Shared.Tests.AccountStatementTests
         public void Setup()
         {
             statementTransactions = new List<AccountStatementTransaction>();
-            billingCompanyDetails = new BillingCompanyDetails();
-            customerDetails = new CustomerDetails();
-            statementDate = new StatementDate();
+            billingCompanyDetails = new BillingCompanyDetails(Guid.NewGuid(),"test");
+            customerDetails = new CustomerDetails(Guid.NewGuid(),"customername");
+            statementDate = new StatementDate(DateTime.UtcNow);
 
             statementTransactions.Add(new AccountStatementTransaction(10M,0M,"test transaction",100M));
         }

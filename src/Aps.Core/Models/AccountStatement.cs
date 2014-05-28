@@ -5,7 +5,7 @@ using Seterlund.CodeGuard;
 
 namespace Aps.Core.Models
 {
-    public class AccountStatement 
+    public class AccountStatement : Entity
     {
         private readonly List<AccountStatementTransaction> statementTransactions;
 
@@ -14,7 +14,8 @@ namespace Aps.Core.Models
         private BillingCompanyDetails billingCompanyDetails;
         private StatementDate statementDate;
 
-        public AccountStatement(CustomerDetails customerDetails, BillingCompanyDetails billingCompanyDetails ,StatementDate statementDate, List<AccountStatementTransaction> statementTransactions)
+        public AccountStatement(CustomerDetails customerDetails, BillingCompanyDetails billingCompanyDetails ,
+            StatementDate statementDate, List<AccountStatementTransaction> statementTransactions)
         {
             Guard.That(statementTransactions).IsNotNull();
             Guard.That(statementTransactions).IsTrue(x => x.Count > 0, "Count is == 0");
