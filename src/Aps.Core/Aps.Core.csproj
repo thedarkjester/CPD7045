@@ -65,10 +65,7 @@
     <Compile Include="InternalEvents\ScrapeSessionFailed.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SchedulingEngine.cs" />
-    <Compile Include="ScrapingObject.cs" />
-    <Compile Include="ScrapingObjectCreator.cs" />
-    <Compile Include="ScrapingObjectRepositoryFake.cs" />
-    <Compile Include="Services\AccountStatementBuilder.cs" />
+    <Compile Include="Services\AccountStatementComposer.cs" />
     <Compile Include="TestConstructor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
