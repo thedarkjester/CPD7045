@@ -9,51 +9,68 @@ using Aps.Customers;
 using Aps.IntegrationEvents;
 using Caliburn.Micro;
 using Seterlund.CodeGuard;
+using Aps.Integration.EnumTypes;
+using Aps.Integration.Queries.CustomerQueries;
+using Aps.Integration.Queries.CustomerQueries.Dtos;
+using Aps.Integration;
+using Aps.IntegrationEvents.Events;
+
 
 namespace Aps.Core
 {
     public class FailureHandler
     {
-        
-        public FailureHandler()
+        private readonly EventIntegrationService eventIntegrationService;
+        private readonly IEventAggregator eventAggregator;
+        private readonly CustomerByIdQuery customerByIdQuery;
+
+        public FailureHandler(IEventAggregator eventAggregator, CustomerByIdQuery customerByIdQuery, EventIntegrationService eventIntegrationService)
         {
+            this.eventAggregator = eventAggregator;
+            this.customerByIdQuery = customerByIdQuery;
+            this.eventIntegrationService = eventIntegrationService;
         }
 
-        public void ProcessNewFailure(Guid CustomerId, Guid BillingCompanyId, int ErrorNum)
+        public void ProcessNewFailure(Guid customerId, Guid billingCompanyId, ScrapingErrorResponseCodes errorNum)
         {
-            Guard.That(CustomerId).IsNotEmpty();
-            Guard.That(BillingCompanyId).IsNotEmpty();
-            //Guard.That(ErrorNum).IsNot??
-
+            Guard.That(customerId).IsNotEmpty();
+            Guard.That(billingCompanyId).IsNotEmpty();
+            
             string emailBody;
             string emailSubject;
             string customerEmail;
+            eventIntegrationService.Publish(new CustomerScrapeSessionFailed(customerId, errorNum)); 
 
-            switch (ErrorNum)
+            CustomerDto customer = customerByIdQuery.GetCustomerById(customerId);
+            //Do billing compnay.... 
+
+            switch (errorNum)
             {
-
-                // Invalid Credentials Error
-                case 0:
-
-                    // Change Customer Status to Inactive
+                
+                case ScrapingErrorResponseCodes.Unknown:
+                case ScrapingErrorResponseCodes.UnhandledDataCondition:
+                case ScrapingErrorResponseCodes.BrokenScript:
+                    // Change Customer Status to Trying 
                     // Find out how to send an event to the customer to change status
-                    // Notify customer via email
-                    emailSubject = "Invalid Credentials on ??? "; // how do I get a billing company name here?
-                    emailBody = "Hi,\n Your credentials were invalid on the {0} website.\n Please Action. \n Regards, \nAPS Team"; // add company to {0}
+                    // Notify Production Support
+                    customerEmail = "Support@APS.co.za";
+                    emailSubject = "Broken Script - Please Investigate."; // how do I get a billing company name here?
+                    emailBody = "Hi\nBroken Script - Please investigate.";
                     break;
 
+
                 // Invalid Credentials Error
-                case 1:
+                case ScrapingErrorResponseCodes.InvalidCredentials:
 
                     // Change Customer Status to Inactive
                     // Find out how to send an event to the customer to change status
                     // Notify customer via email
                     emailSubject = "Invalid Credentials on ??? "; // how do I get a billing company name here?
-                    emailBody = "Hi,\n Your credentials were invalid on the {0} website.\n Please Action. \n Regards, \nAPS Team"; // add company to {0}
+                   // emailBody = string.Format("Hi,{0} Your credentials were invalid on the {1} website.{0} Please Action. {0} Regards, {0}APS Team", Environment.NewLine, billingCompany.name); 
                     break;
 
                 // Not signed up for e-Billing
-                case 2:
+                case ScrapingErrorResponseCodes.CustomerNotSignedUpForEBilling:
 
                     // Change Customer Status to Inactive
                     // Find out how to send an event to the customer to change status
@@ -63,7 +80,7 @@ namespace Aps.Core
                     break;
 
                 // Billing Company action required
-                case 3:
+                case ScrapingErrorResponseCodes.ActionRequiredbyBillingCompanyWebsite:
 
                     // Change Customer Status to Inactive
                     // Find out how to send an event to the customer to change status
@@ -73,7 +90,7 @@ namespace Aps.Core
                     break;
 
                 // Billing Company site down - Unscheduled maintenance
-                case 4:
+                case ScrapingErrorResponseCodes.BillingCompanySiteDown:
 
                     // Change Customer Status to Trying
                     // Find out how to send an event to the customer to change status
@@ -82,7 +99,7 @@ namespace Aps.Core
                     break;
 
                 // Error Page Encountered
-                case 5:
+                case ScrapingErrorResponseCodes.ErrorPageEncountered:
 
                     // Change Customer Status to Trying
                     // Find out how to send an event to the customer to change status
@@ -90,27 +107,7 @@ namespace Aps.Core
                     // How do I delay the scraper? send an event?
                     break;
 
-                // Broken Script - Site Changed
-                case 6:
 
-                    // Change Customer Status to Trying 
-                    // Find out how to send an event to the customer to change status
-                    // Notify Production Support
-                    customerEmail = "Support@APS.co.za";
-                    emailSubject = "Broken Script - Site Changed"; // how do I get a billing company name here?
-                    emailBody = "HiBroken Script - Site Changed";
-                    break;
-
-                // Broken Script - Unhandled Data Condition
-                case 7:
-                    
-                    // Change Customer Status to Trying
-                    // Find out how to send an event to the customer to change status
-                    // Notify Production Support
-                    customerEmail = "Support@APS.co.za";
-                    emailSubject = "Broken Script - Unhandled Data Condition"; // how do I get a billing company name here?
-                    emailBody = "Broken Script - Unhandled Data Condition";
-                    break;
             }
 
         }

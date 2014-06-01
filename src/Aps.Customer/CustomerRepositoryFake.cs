@@ -14,8 +14,7 @@ namespace Aps.Customers
 
         private readonly IEventAggregator eventAggregator;
         private readonly CustomerCreator customerCreator;
-
-
+        
         public CustomerRepositoryFake(IEventAggregator eventAggregator, CustomerCreator customerCreator)
         {
             this.eventAggregator = eventAggregator;

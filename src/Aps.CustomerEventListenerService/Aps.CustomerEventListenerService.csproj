@@ -4,17 +4,18 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{78059759-BF3D-471D-B88B-CD3AA1EC101B}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{FA0DFFC0-71EB-4421-AE05-3E9BDC339E31}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Aps.Integration</RootNamespace>
-    <AssemblyName>Aps.Integration</AssemblyName>
+    <RootNamespace>Aps.CustomerEventListenerService</RootNamespace>
+    <AssemblyName>Aps.CustomerEventListenerService</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,6 +25,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,65 +34,45 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.3.4.0\lib\net40\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="Seterlund.CodeGuard">
       <HintPath>..\packages\Seterlund.CodeGuard.2.3.4\lib\net40\Seterlund.CodeGuard.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Topshelf">
+      <HintPath>..\packages\Topshelf.3.1.3\lib\net40-full\Topshelf.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EnumTypes\ScrapingErrorResponseCodes.cs" />
-    <Compile Include="EnumTypes\ServiceProviderTypes.cs" />
-    <Compile Include="EventIntegrationRepositoryFake.cs" />
-    <Compile Include="Events\CustomerScrapeSessionFailed.cs" />
-    <Compile Include="Events\AccountStatementGenerated.cs" />
-    <Compile Include="Queries\BillingCompanyQueries\AllBillingCompaniesQuery.cs" />
-    <Compile Include="Queries\BillingCompanyQueries\BillingCompanyBillingLifeCycleByCompanyIdQuery.cs" />
-    <Compile Include="Queries\BillingCompanyQueries\BillingCompanyOpenClosedWindowsQuery.cs" />
-    <Compile Include="Queries\BillingCompanyQueries\BillingCompanyScrapingLoadManagementConfigurationQuery.cs" />
-    <Compile Include="Queries\BillingCompanyQueries\BillingCompanyScrapingUrlQuery.cs" />
-    <Compile Include="Queries\BillingCompanyQueries\Dtos\BillingCompanyScrapingLoadManagementConfigurationDto.cs" />
-    <Compile Include="Queries\BillingCompanyQueries\Dtos\BillingCompanyScrapingUrlDto.cs" />
-    <Compile Include="Queries\BillingCompanyQueries\Dtos\BillingCompanyBillingLifeCycleDto.cs" />
-    <Compile Include="Queries\BillingCompanyQueries\BillingCompanyByIdQuery.cs" />
-    <Compile Include="Queries\BillingCompanyQueries\Dtos\BillingCompanyDto.cs" />
-    <Compile Include="Queries\CustomerQueries\Dtos\CustomerChangeStatusDto.cs" />
-    <Compile Include="Queries\BillingCompanyQueries\Dtos\OpenClosedWindowDto.cs" />
-    <Compile Include="Queries\BillingCompanyQueries\Dtos\ScrapingErrorRetryConfigurationDto.cs" />
-    <Compile Include="Queries\BillingCompanyQueries\ScrapingErrorRetryConfigurationQuery.cs" />
-    <Compile Include="Queries\Events\GetLatestEventsBySubScribedEventTypeQuery.cs" />
-    <Compile Include="Events\BillingCompanyAddedOpenClosedWindow.cs" />
-    <Compile Include="EventIntegrationService.cs" />
+    <Compile Include="CustomerService.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Queries\CustomerQueries\CustomerByIdQuery.cs" />
-    <Compile Include="Queries\CustomerQueries\Dtos\CustomerDto.cs" />
-    <Compile Include="Events\IntegrationEvent.cs" />
-    <Compile Include="Events\ScrapeSessionFailedEvent.cs" />
-    <Compile Include="Serialization\BinaryEventSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Aps.BillingCompany\Aps.BillingCompanies.csproj">
-      <Project>{2B24072A-26C9-4A39-82E6-CABF65C1E0A8}</Project>
-      <Name>Aps.BillingCompanies</Name>
-    </ProjectReference>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Aps.Customer\Aps.Customers.csproj">
-      <Project>{D3540939-6FEA-41F8-BA61-335EC08EC7CE}</Project>
+      <Project>{d3540939-6fea-41f8-ba61-335ec08ec7ce}</Project>
       <Name>Aps.Customers</Name>
     </ProjectReference>
     <ProjectReference Include="..\Aps.DomainBase\Aps.DomainBase.csproj">
-      <Project>{16D706F7-AF2A-4838-AC14-8BC0607173CC}</Project>
+      <Project>{16d706f7-af2a-4838-ac14-8bc0607173cc}</Project>
       <Name>Aps.DomainBase</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\Aps.IntegrationEvents\Aps.Integration.csproj">
+      <Project>{78059759-bf3d-471d-b88b-cd3aa1ec101b}</Project>
+      <Name>Aps.Integration</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

@@ -50,11 +50,9 @@ namespace Aps.Integration
                     IEnumerable<IntegrationEvent> events = eventIntegrationRepositoryFake.GetLatestEvents(currentProcessedEvent, subscription);
                     DispatchEventsInProcess(events);
                 }
-                
+
                 Thread.Sleep(60000);
             }
-
-
         }
 
         private void DispatchEventsInProcess(IEnumerable<IntegrationEvent> events)
@@ -63,6 +61,12 @@ namespace Aps.Integration
             {
                 var deserializedEvent = binaryEventDeSerializer.DeSerializeMessage(integrationEvent.SerializedEvent);
                 eventAggregator.Publish(deserializedEvent);
+
+                if (integrationEvent.RowVersion > currentProcessedEvent)
+                {
+                    currentProcessedEvent = integrationEvent.RowVersion;
+                    // store somewhere for future persistence so we don't reload events each time we start the instance.
+                }
             }
         }
 

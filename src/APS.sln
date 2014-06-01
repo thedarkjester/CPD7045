@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.Integration", "Aps.Inte
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.IntegrationTests", "Aps.IntegrationTests\Aps.IntegrationTests.csproj", "{70CBA3C5-ED0A-4A71-98EF-B89498A56191}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.CustomerEventListenerService", "Aps.CustomerEventListenerService\Aps.CustomerEventListenerService.csproj", "{FA0DFFC0-71EB-4421-AE05-3E9BDC339E31}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +78,10 @@ Global
 		{70CBA3C5-ED0A-4A71-98EF-B89498A56191}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70CBA3C5-ED0A-4A71-98EF-B89498A56191}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70CBA3C5-ED0A-4A71-98EF-B89498A56191}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA0DFFC0-71EB-4421-AE05-3E9BDC339E31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA0DFFC0-71EB-4421-AE05-3E9BDC339E31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA0DFFC0-71EB-4421-AE05-3E9BDC339E31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA0DFFC0-71EB-4421-AE05-3E9BDC339E31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
