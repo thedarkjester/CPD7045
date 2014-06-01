@@ -8,8 +8,6 @@ namespace Aps.Core.Models
     public class AccountStatement : Entity
     {
         private readonly List<AccountStatementTransaction> statementTransactions;
-
-        private List<AccountStatementTransaction> lineitems;
         private CustomerDetails customerDetails;
         private BillingCompanyDetails billingCompanyDetails;
         private StatementDate statementDate;

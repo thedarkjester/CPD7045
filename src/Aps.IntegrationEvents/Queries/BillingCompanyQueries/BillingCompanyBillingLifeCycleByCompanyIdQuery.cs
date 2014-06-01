@@ -1,7 +1,6 @@
 ﻿using System;
 using Aps.BillingCompanies.Aggregates;
 using Aps.BillingCompanies;
-using Aps.BillingCompanies.Aggregates;
 using Aps.Integration.Queries.BillingCompanyQueries.Dtos;
 
 namespace Aps.Integration.Queries.BillingCompanyQueries
