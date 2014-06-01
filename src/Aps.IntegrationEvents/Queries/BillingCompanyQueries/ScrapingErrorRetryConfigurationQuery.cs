@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Aps.BillingCompanies;
 using Aps.BillingCompanies.Aggregates;
 using Aps.BillingCompanies.ValueObjects;
+using Aps.Integration.EnumTypes;
 using Aps.Integration.Queries.BillingCompanyQueries.Dtos;
 
 namespace Aps.Integration.Queries.BillingCompanyQueries
@@ -20,8 +21,8 @@ namespace Aps.Integration.Queries.BillingCompanyQueries
         {
             var retryConfigurationDto = new ScrapingErrorRetryConfigurationDto
                 {
-                    ResponseCode = retryConfiguration.ResponseCode,
-                    NumberOfRetries = retryConfiguration.RetryInterval
+                    ResponseCode =  (ScrapingErrorResponseCodes)retryConfiguration.ResponseCode,
+                    RetryInterval = retryConfiguration.RetryInterval
                 };
 
             return retryConfigurationDto;
