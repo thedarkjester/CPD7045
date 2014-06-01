@@ -1,4 +1,5 @@
 ﻿using System;
+using Aps.BillingCompanies.Aggregates;
 using Aps.BillingCompanies;
 using Aps.IntegrationEvents.Queries.BillingCompanyQueries.Dtos;
 
@@ -15,7 +16,7 @@ namespace Aps.IntegrationEvents.Queries.BillingCompanyQueries
 
         public BillingCompanyBillingLifeCycleDto GetBillingCompanyBillingLifeCycleByCompanyId(Guid id)
         {
-            BillingCompanies.Aggregates.BillingCompany billingCompany = billingCompanyRepository.GetBillingCompanyById(id);
+            BillingCompany billingCompany = billingCompanyRepository.GetBillingCompanyById(id);
 
             if (billingCompany == null)
             {

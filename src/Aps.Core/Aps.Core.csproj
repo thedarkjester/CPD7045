@@ -56,6 +56,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmailMessage.cs" />
+    <Compile Include="FailureHandler.cs" />
     <Compile Include="InternalEvents\ScrapeSessionFailed.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SchedulingEngine.cs" />
@@ -70,9 +72,9 @@
       <Project>{2b24072a-26c9-4a39-82e6-cabf65c1e0a8}</Project>
       <Name>Aps.BillingCompanies</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Aps.Customer\Aps.Customer.csproj">
+    <ProjectReference Include="..\Aps.Customer\Aps.Customers.csproj">
       <Project>{D3540939-6FEA-41F8-BA61-335EC08EC7CE}</Project>
-      <Name>Aps.Customer</Name>
+      <Name>Aps.Customers</Name>
     </ProjectReference>
     <ProjectReference Include="..\Aps.DomainBase\Aps.DomainBase.csproj">
       <Project>{16D706F7-AF2A-4838-AC14-8BC0607173CC}</Project>

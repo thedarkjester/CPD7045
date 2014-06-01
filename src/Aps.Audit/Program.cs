@@ -1,6 +1,6 @@
 ﻿using System;
 using Aps.BillingCompanies;
-using Aps.Customer;
+using Aps.Customers;
 using Aps.IntegrationEvents;
 using Aps.IntegrationEvents.Queries.Events;
 using Aps.IntegrationEvents.Serialization;

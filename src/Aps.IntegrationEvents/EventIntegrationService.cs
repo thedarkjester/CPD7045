@@ -58,10 +58,6 @@ namespace Aps.IntegrationEvents
             }
 
 
-            // for each in subscription list check DB
-            // if event valid
-
-            //eventAggregator.Publish(DeserializedEventData);
         }
 
         private void DispatchEventsInProcess(IEnumerable<IntegrationEvent> events)
