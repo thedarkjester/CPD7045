@@ -5,7 +5,7 @@ namespace Aps.BillingCompanies.ValueObjects
     public class ScrapingErrorRetryConfiguration
     {
         public int ResponseCode { get; private set; }
-        public int NumberOfRetries { get; private set; }
+        public int RetryInterval { get; private set; }
 
         protected ScrapingErrorRetryConfiguration()
         {
@@ -17,7 +17,7 @@ namespace Aps.BillingCompanies.ValueObjects
             Guard.That(responseCode).IsGreaterThan(-1);
             Guard.That(numberOfRetries).IsGreaterThan(0);
 
-            NumberOfRetries = numberOfRetries;
+            RetryInterval = numberOfRetries;
             ResponseCode = responseCode;
         }
     }

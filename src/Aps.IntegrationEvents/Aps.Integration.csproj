@@ -76,10 +76,6 @@
     <Compile Include="Serialization\BinaryEventSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Aps.BillingCompany\Aps.BillingCompanies.csproj">
-      <Project>{2B24072A-26C9-4A39-82E6-CABF65C1E0A8}</Project>
-      <Name>Aps.BillingCompanies</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Aps.Customer\Aps.Customers.csproj">
       <Project>{D3540939-6FEA-41F8-BA61-335EC08EC7CE}</Project>
       <Name>Aps.Customers</Name>
