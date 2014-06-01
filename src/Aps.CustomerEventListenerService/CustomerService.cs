@@ -48,11 +48,9 @@ namespace Aps.CustomerEventListenerService
         {
             while (true)
             {
-                Console.Write("test");
-                Thread.Sleep(10000);
+                Console.WriteLine("Waiting for EventAggregator Events");
+                Thread.Sleep(1000);
             }
-
         }
-
     }
 }

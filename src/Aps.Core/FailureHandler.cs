@@ -39,7 +39,7 @@ namespace Aps.Core
             string emailBody;
             string emailSubject;
             string customerEmail;
-            eventIntegrationService.Publish(new CustomerScrapeSessionFailed(customerId, errorNum)); 
+            //eventIntegrationService.Publish(new CustomerScrapeSessionFailed(customerId, errorNum)); 
 
             CustomerDto customer = customerByIdQuery.GetCustomerById(customerId);
             //Do billing compnay.... 

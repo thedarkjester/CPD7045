@@ -1,4 +1,5 @@
-﻿using System.Activities.Expressions;
+﻿using System;
+using System.Activities.Expressions;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
@@ -51,7 +52,9 @@ namespace Aps.Integration
                     DispatchEventsInProcess(events);
                 }
 
-                Thread.Sleep(60000);
+                Console.WriteLine("Getting External Events");
+
+                Thread.Sleep(2500);
             }
         }
 
