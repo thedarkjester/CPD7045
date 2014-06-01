@@ -15,7 +15,7 @@ namespace Aps.Customers
         private readonly IEventAggregator eventAggregator;
         private readonly CustomerCreator customerCreator;
 
-        
+
         public CustomerRepositoryFake(IEventAggregator eventAggregator, CustomerCreator customerCreator)
         {
             this.eventAggregator = eventAggregator;
@@ -29,9 +29,22 @@ namespace Aps.Customers
             this.customers.Add(customer);
         }
 
-        public Aggregates.Customer GetNewCustomer()
+        public Customer GetNewCustomer(CustomerFirstName customerFirstName, CustomerLastName customerLastName, CustomerEmailAddress customerEmailAddress, 
+                                                  CustomerTelephone customerTelephone, CustomerAPSUsername customerAPSUsername, CustomerAPSPassword customerAPSPassword)
         {
-            return Aggregates.Customer.CreateCustomer(eventAggregator);
+            Guard.That(customerFirstName).IsNotNull();
+            Guard.That(customerLastName).IsNotNull();
+            Guard.That(customerEmailAddress).IsNotNull();
+            Guard.That(customerTelephone).IsNotNull();
+            Guard.That(customerAPSUsername).IsNotNull();
+            Guard.That(customerAPSPassword).IsNotNull();
+
+            return this.customerCreator.GetNewCustomer(customerFirstName, customerLastName, customerEmailAddress, customerTelephone, customerAPSUsername, customerAPSPassword);
+        }
+
+        public Customer GetCustomerById(Guid id)
+        {
+            return this.customers.FirstOrDefault(x => x.Id == id);
         }
     }
 }

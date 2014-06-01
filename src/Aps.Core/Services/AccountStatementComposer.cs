@@ -7,8 +7,9 @@ using Aps.Core.Models;
 using Aps.Integration;
 using Aps.Integration.Queries.BillingCompanyQueries;
 using Aps.Integration.Queries.BillingCompanyQueries.Dtos;
-using Aps.Integration.Queries.Customer;
+using Aps.Integration.Queries.CustomerQueries;
 using Caliburn.Micro;
+using Aps.Integration.Queries.CustomerQueries.Dtos;
 
 namespace Aps.Core.Services
 {
@@ -106,7 +107,7 @@ namespace Aps.Core.Services
         {
             CustomerDto customerDto = customerByIdQuery.GetCustomerById(customerId);
 
-            return new CustomerDetails(customerId, string.Format("{0} {1}", customerDto.CustomerFirstName, customerDto.CustomerSurname));
+            return new CustomerDetails(customerId, string.Format("{0} {1}", customerDto.FirstName, customerDto.LastName));
         }
     }
 }

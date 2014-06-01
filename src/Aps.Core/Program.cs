@@ -8,7 +8,7 @@ using Aps.Integration.Queries.Events;
 using Aps.Integration.Serialization;
 using Autofac;
 using Caliburn.Micro;
-using Aps.ApsCustomer;
+using Aps.Customers;
 
 namespace Aps.Core
 {
