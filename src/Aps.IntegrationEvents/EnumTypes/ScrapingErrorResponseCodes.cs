@@ -15,7 +15,9 @@ namespace Aps.Integration.EnumTypes
         BillingCompanySiteDown = 4,
         [Description("Error Page Encountered")]
         ErrorPageEncountered = 5,
-        [Description("Broken Script")]
-        BrokenScript = 6
+        [Description("Broken Script - Site Changed")]
+        BrokenScript = 6,
+        [Description("Broken Script - Unhandled Data Condition")]
+        UnhandledDataCondition = 7
     }
 }
