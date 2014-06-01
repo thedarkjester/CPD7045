@@ -1,20 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Aps.BillingCompanies;
-using Aps.Core.InternalEvents;
-using Aps.Customers;
 using Aps.Integration;
 using Caliburn.Micro;
 using Seterlund.CodeGuard;
 using Aps.Integration.EnumTypes;
 using Aps.Integration.Queries.CustomerQueries;
 using Aps.Integration.Queries.CustomerQueries.Dtos;
-using Aps.Integration;
 using Aps.Integration.Events;
-
 
 namespace Aps.Core
 {
