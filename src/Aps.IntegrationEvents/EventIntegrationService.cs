@@ -53,6 +53,8 @@ namespace Aps.Integration
                 
                 Thread.Sleep(60000);
             }
+
+
         }
 
         private void DispatchEventsInProcess(IEnumerable<IntegrationEvent> events)

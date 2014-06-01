@@ -49,6 +49,7 @@
     <Compile Include="EnumTypes\ScrapingErrorResponseCodes.cs" />
     <Compile Include="EnumTypes\ServiceProviderTypes.cs" />
     <Compile Include="EventIntegrationRepositoryFake.cs" />
+    <Compile Include="Events\ScrapeSessionFailed.cs" />
     <Compile Include="Events\AccountStatementGenerated.cs" />
     <Compile Include="Queries\BillingCompanyQueries\AllBillingCompaniesQuery.cs" />
     <Compile Include="Queries\BillingCompanyQueries\BillingCompanyBillingLifeCycleByCompanyIdQuery.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="Queries\BillingCompanyQueries\Dtos\BillingCompanyBillingLifeCycleDto.cs" />
     <Compile Include="Queries\BillingCompanyQueries\BillingCompanyByIdQuery.cs" />
     <Compile Include="Queries\BillingCompanyQueries\Dtos\BillingCompanyDto.cs" />
+    <Compile Include="Queries\CustomerQueries\Dtos\CustomerChangeStatusDto.cs" />
     <Compile Include="Queries\BillingCompanyQueries\Dtos\OpenClosedWindowDto.cs" />
     <Compile Include="Queries\BillingCompanyQueries\Dtos\ScrapingErrorRetryConfigurationDto.cs" />
     <Compile Include="Queries\BillingCompanyQueries\ScrapingErrorRetryConfigurationQuery.cs" />
@@ -67,8 +69,8 @@
     <Compile Include="Events\BillingCompanyAddedOpenClosedWindow.cs" />
     <Compile Include="EventIntegrationService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Queries\Customer\CustomerByIdQuery.cs" />
-    <Compile Include="Queries\Customer\CustomerDto.cs" />
+    <Compile Include="Queries\CustomerQueries\CustomerByIdQuery.cs" />
+    <Compile Include="Queries\CustomerQueries\Dtos\CustomerDto.cs" />
     <Compile Include="Events\IntegrationEvent.cs" />
     <Compile Include="Events\ScrapeSessionFailedEvent.cs" />
     <Compile Include="Serialization\BinaryEventSerializer.cs" />
@@ -78,9 +80,9 @@
       <Project>{2B24072A-26C9-4A39-82E6-CABF65C1E0A8}</Project>
       <Name>Aps.BillingCompanies</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Aps.Customer\Aps.Customer.csproj">
+    <ProjectReference Include="..\Aps.Customer\Aps.Customers.csproj">
       <Project>{D3540939-6FEA-41F8-BA61-335EC08EC7CE}</Project>
-      <Name>Aps.Customer</Name>
+      <Name>Aps.Customers</Name>
     </ProjectReference>
     <ProjectReference Include="..\Aps.DomainBase\Aps.DomainBase.csproj">
       <Project>{16D706F7-AF2A-4838-AC14-8BC0607173CC}</Project>

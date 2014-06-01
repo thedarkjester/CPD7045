@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.Shared.Tests", "Aps.Cor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.BillingCompanies", "Aps.BillingCompany\Aps.BillingCompanies.csproj", "{2B24072A-26C9-4A39-82E6-CABF65C1E0A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.Customer", "Aps.Customer\Aps.Customer.csproj", "{D3540939-6FEA-41F8-BA61-335EC08EC7CE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.Customers", "Aps.Customer\Aps.Customers.csproj", "{D3540939-6FEA-41F8-BA61-335EC08EC7CE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.Audit", "Aps.Audit\Aps.Audit.csproj", "{4C31EE2C-579F-4C8A-B6A2-658AE0D2D0AB}"
 EndProject

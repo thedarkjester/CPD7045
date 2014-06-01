@@ -10,6 +10,7 @@ namespace Aps.BillingCompanies.Aggregates
     public class BillingCompany : Aggregate
     {
         private readonly IEventAggregator eventAggregator;
+
         private readonly List<OpenClosedWindow> openClosedWindows;
         private readonly List<ScrapingErrorRetryConfiguration> scrapingErrorRetryConfigurations;
         private BillingLifeCycle billingLifeCycle;
