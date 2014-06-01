@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aps.IntegrationEvents.Events
+namespace Aps.Integration.Events
 {
     [Serializable]
     public class CustomerScrapeSessionFailed
