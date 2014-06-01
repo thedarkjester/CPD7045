@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Aps.IntegrationEvents.Events;
+using Aps.Integration.Events;
 
-namespace Aps.IntegrationEvents
+namespace Aps.Integration
 {
     // currently this is not talking to a DB and a temporary list is used for testing
     // is effectively A Fake.
@@ -12,25 +12,25 @@ namespace Aps.IntegrationEvents
 
         public EventIntegrationRepositoryFake()
         {
-            this.events = new List<IntegrationEvent>();
+            events = new List<IntegrationEvent>();
         }
 
         public void StoreEvent(IntegrationEvent integrationEvent)
         {
-            this.events.Add(integrationEvent);
+            events.Add(integrationEvent);
 
             // currently used to fake out the database rowversioning
-            integrationEvent.SetRowVersion(this.events.Count);
+            integrationEvent.SetRowVersion(events.Count);
         }
 
         public IEnumerable<IntegrationEvent> GetAllEvents()
         {
-            return this.events;
+            return events;
         }
 
         public IEnumerable<IntegrationEvent> GetLatestEvents(int currentProcessedEvent, string nameSpaceName)
         {
-            List<IntegrationEvent> returnedEvents = this.events.Where(x => x.NameSpaceName == nameSpaceName && x.RowVersion > currentProcessedEvent).ToList();
+            List<IntegrationEvent> returnedEvents = events.Where(x => x.NameSpaceName == nameSpaceName && x.RowVersion > currentProcessedEvent).ToList();
 
             return returnedEvents;
         }

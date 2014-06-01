@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Aps.BillingCompanies.ValueObjects;
 using Aps.DomainBase;
 using Caliburn.Micro;
@@ -47,7 +49,7 @@ namespace Aps.BillingCompanies.Aggregates
 
         private BillingCompany()
         {
-            
+
         }
 
         public BillingCompany(IEventAggregator eventAggregator, BillingCompanyName companyName, BillingCompanyType companyType, BillingCompanyScrapingUrl companyScrapingUrl)
@@ -99,9 +101,26 @@ namespace Aps.BillingCompanies.Aggregates
 
         public void AddOpenClosedWindow(OpenClosedWindow openClosedWindow)
         {
+            GuardAgainstOverlappingOpenClosedWindows(openClosedWindow);
             // validation of action
 
             this.openClosedWindows.Add(openClosedWindow);
+        }
+
+        private void GuardAgainstOverlappingOpenClosedWindows(OpenClosedWindow openClosedWindow)
+        {
+            foreach (var existingWindow in openClosedWindows)
+            {
+                if (openClosedWindow.StartDate.Between(existingWindow.StartDate, existingWindow.EndDate))
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+
+                if (openClosedWindow.EndDate.Between(existingWindow.StartDate, existingWindow.EndDate))
+                {
+                    throw new ArgumentOutOfRangeException();
+                }  
+            }
         }
 
         public void RemoveOpenClosedWindow(OpenClosedWindow openClosedWindow)
@@ -114,6 +133,10 @@ namespace Aps.BillingCompanies.Aggregates
         public void AddScrapingErrorRetryConfiguration(ScrapingErrorRetryConfiguration scrapingErrorRetryConfiguration)
         {
             // validation of action
+            if (scrapingErrorRetryConfigurations.Any(x => x.ResponseCode == scrapingErrorRetryConfiguration.ResponseCode))
+            {
+                throw new InvalidOperationException("Duplicate Error Code Configuration Exists");
+            }
 
             this.scrapingErrorRetryConfigurations.Add(scrapingErrorRetryConfiguration);
         }
@@ -121,8 +144,18 @@ namespace Aps.BillingCompanies.Aggregates
         public void RemoveScrapingErrorRetryConfiguration(ScrapingErrorRetryConfiguration scrapingErrorRetryConfiguration)
         {
             // validation of action
+            if (scrapingErrorRetryConfigurations.Contains(scrapingErrorRetryConfiguration))
+            {
+                this.scrapingErrorRetryConfigurations.Remove(scrapingErrorRetryConfiguration);
+            }
+        }
+    }
 
-            this.scrapingErrorRetryConfigurations.Remove(scrapingErrorRetryConfiguration);
+    public static class TestExtensions
+    {
+        public static bool Between(this DateTime input, DateTime date1, DateTime date2)
+        {
+            return (input > date1 && input < date2);
         }
     }
 }

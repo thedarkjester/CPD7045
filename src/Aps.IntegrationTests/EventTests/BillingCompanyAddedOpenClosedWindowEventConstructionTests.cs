@@ -1,5 +1,5 @@
 ﻿using System;
-using Aps.IntegrationEvents;
+using Aps.Integration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Aps.IntegrationTests.EventTests

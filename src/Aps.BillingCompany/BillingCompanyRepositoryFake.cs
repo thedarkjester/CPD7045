@@ -28,7 +28,7 @@ namespace Aps.BillingCompanies
             this.billingCompanies.Add(billingCompany);
         }
 
-        public BillingCompany GetNewBillingCompany(BillingCompanyName billingCompanyName,BillingCompanyType billingCompanyType,BillingCompanyScrapingUrl billingCompanyScrapingUrl)
+        public BillingCompany BuildNewBillingCompany(BillingCompanyName billingCompanyName,BillingCompanyType billingCompanyType,BillingCompanyScrapingUrl billingCompanyScrapingUrl)
         {
             Guard.That(billingCompanyName).IsNotNull();
             Guard.That(billingCompanyType).IsNotNull();
@@ -40,6 +40,11 @@ namespace Aps.BillingCompanies
         public BillingCompany GetBillingCompanyById(Guid id)
         {
             return this.billingCompanies.FirstOrDefault(x => x.Id == id);
+        }
+
+        public IEnumerable<BillingCompany> GetAllBillingCompanies()
+        {
+            return billingCompanies;
         }
     }
 }

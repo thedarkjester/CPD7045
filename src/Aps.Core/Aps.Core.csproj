@@ -56,11 +56,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\StatementFields.cs" />
+    <Compile Include="Models\AccountStatement.cs" />
+    <Compile Include="Models\AccountStatementTransaction.cs" />
+    <Compile Include="Models\BillingCompanyDetails.cs" />
+    <Compile Include="Models\CustomerDetails.cs" />
+    <Compile Include="Models\StatementDate.cs" />
     <Compile Include="EmailMessage.cs" />
     <Compile Include="FailureHandler.cs" />
     <Compile Include="InternalEvents\ScrapeSessionFailed.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SchedulingEngine.cs" />
+    <Compile Include="ScrapingObject.cs" />
+    <Compile Include="ScrapingObjectCreator.cs" />
+    <Compile Include="ScrapingObjectRepositoryFake.cs" />
+    <Compile Include="Services\AccountStatementComposer.cs" />
     <Compile Include="TestConstructor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -84,6 +94,13 @@
       <Project>{78059759-BF3D-471D-B88B-CD3AA1EC101B}</Project>
       <Name>Aps.Integration</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Entities\" />
+    <Folder Include="ValueObjects\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

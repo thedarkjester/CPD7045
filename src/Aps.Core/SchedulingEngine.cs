@@ -2,6 +2,8 @@
 using Aps.Core.InternalEvents;
 using Aps.Customers;
 using Aps.IntegrationEvents;
+using Aps.ApsCustomer;
+using Aps.Integration;
 using Caliburn.Micro;
 
 namespace Aps.Core

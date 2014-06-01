@@ -1,16 +1,15 @@
-﻿using System;
-using System.Activities.Expressions;
+﻿using System.Activities.Expressions;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Threading.Tasks;
-using Aps.IntegrationEvents.Events;
-using Aps.IntegrationEvents.Serialization;
+using Aps.Integration.Events;
+using Aps.Integration.Serialization;
 using Caliburn.Micro;
 
-namespace Aps.IntegrationEvents
+namespace Aps.Integration
 {
     public class EventIntegrationService
     {
@@ -46,8 +45,6 @@ namespace Aps.IntegrationEvents
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                // every so often look for events
-
                 foreach (var subscription in subscriptions)
                 {
                     IEnumerable<IntegrationEvent> events = eventIntegrationRepositoryFake.GetLatestEvents(currentProcessedEvent, subscription);
@@ -87,14 +84,5 @@ namespace Aps.IntegrationEvents
             eventIntegrationRepositoryFake.StoreEvent(new IntegrationEvent(messageType, data));
         }
 
-    }
-
-
-    [Serializable]
-    public class ScrapeSessionFailedEvent
-    {
-        Guid ScrapeSessionId { get; set; }
-
-        string FailureReason { get; set; }
     }
 }
