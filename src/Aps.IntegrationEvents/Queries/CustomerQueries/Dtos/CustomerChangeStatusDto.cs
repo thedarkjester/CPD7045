@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Aps.IntegrationEvents.Queries.CustomerQueries.Dtos
+namespace Aps.Integration.Queries.CustomerQueries.Dtos
 {
     public class CustomerChangeStatusDto
     {

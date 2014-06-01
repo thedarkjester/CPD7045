@@ -1,9 +1,9 @@
 ﻿using System;
 using Aps.Customers;
 using Aps.Customers.Aggregates;
-using Aps.IntegrationEvents.Queries.CustomerQueries.Dtos;
+using Aps.Integration.Queries.CustomerQueries.Dtos;
 
-namespace Aps.IntegrationEvents.Queries.CustomerQueries
+namespace Aps.Integration.Queries.CustomerQueries
 {
     public class CustomerByIdQuery
     {
