@@ -21,7 +21,7 @@ namespace Aps.Integration.Queries.BillingCompanyQueries
             var retryConfigurationDto = new ScrapingErrorRetryConfigurationDto
                 {
                     ResponseCode = retryConfiguration.ResponseCode,
-                    NumberOfRetries = retryConfiguration.NumberOfRetries
+                    NumberOfRetries = retryConfiguration.RetryInterval
                 };
 
             return retryConfigurationDto;

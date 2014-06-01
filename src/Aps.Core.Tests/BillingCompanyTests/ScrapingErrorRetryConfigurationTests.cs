@@ -49,7 +49,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             ScrapingErrorRetryConfiguration configuration = new ScrapingErrorRetryConfiguration(responseCode, numberOfRetries);
 
             //assert
-            Assert.IsTrue(configuration.NumberOfRetries == 1);
+            Assert.IsTrue(configuration.RetryInterval == 1);
             Assert.IsTrue(configuration.ResponseCode == 0);
             ;
         }
