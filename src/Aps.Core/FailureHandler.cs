@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 using Aps.BillingCompanies;
 using Aps.Core.InternalEvents;
 using Aps.Customers;
-using Aps.IntegrationEvents;
+using Aps.Integration;
 using Caliburn.Micro;
 using Seterlund.CodeGuard;
 using Aps.Integration.EnumTypes;
 using Aps.Integration.Queries.CustomerQueries;
 using Aps.Integration.Queries.CustomerQueries.Dtos;
 using Aps.Integration;
-using Aps.IntegrationEvents.Events;
+using Aps.Integration.Events;
 
 
 namespace Aps.Core

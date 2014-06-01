@@ -2,7 +2,7 @@
 using Aps.Customers.Aggregates;
 using Aps.Integration;
 using Aps.Integration.Events;
-using Aps.IntegrationEvents.Events;
+using Aps.Integration.Events;
 using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
