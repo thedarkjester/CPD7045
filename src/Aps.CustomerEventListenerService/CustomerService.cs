@@ -1,15 +1,9 @@
 ﻿using Aps.Customers;
-using Aps.Customers.Aggregates;
 using Aps.Integration;
-using Aps.Integration.Events;
 using Aps.Integration.Events;
 using Caliburn.Micro;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Aps.CustomerEventListenerService
 {

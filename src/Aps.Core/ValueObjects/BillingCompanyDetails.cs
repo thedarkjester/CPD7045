@@ -1,7 +1,7 @@
 ﻿using System;
 using Seterlund.CodeGuard;
 
-namespace Aps.Core.Models
+namespace Aps.Core.ValueObjects
 {
     public class BillingCompanyDetails
     {

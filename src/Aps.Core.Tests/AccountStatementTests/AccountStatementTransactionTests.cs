@@ -1,5 +1,5 @@
 ﻿using System;
-using Aps.Core.Models;
+using Aps.Core.ValueObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Aps.Shared.Tests.AccountStatementTests

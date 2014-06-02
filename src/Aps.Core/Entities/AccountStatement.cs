@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Aps.Core.ValueObjects;
 using Aps.DomainBase;
 using Seterlund.CodeGuard;
 
-namespace Aps.Core.Models
+namespace Aps.Core.Entities
 {
     public class AccountStatement : Entity
     {
@@ -27,4 +27,6 @@ namespace Aps.Core.Models
             this.statementTransactions = statementTransactions;
         }
     }
+
+
 }

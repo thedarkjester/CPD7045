@@ -79,7 +79,7 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
             //arrange
             BillingCompanyRepositoryFake repository = container.Resolve<BillingCompanyRepositoryFake>();
 
-            var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
+            var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl,true);
 
             repository.StoreBillingCompany(newBillingCompany);
 
@@ -92,6 +92,7 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
             Assert.IsTrue(billingCompany != null);
             Assert.IsTrue(billingCompany.Url == newBillingCompany.BillingCompanyScrapingUrl.ScrapingUrl);
             Assert.IsTrue(billingCompany.Id == newBillingCompany.Id);
+            Assert.IsTrue(billingCompany.CrossCheckScrapeEnabled);
         }
 
         [TestMethod]

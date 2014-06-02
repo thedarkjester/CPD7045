@@ -33,7 +33,8 @@ namespace Aps.Integration.Queries.BillingCompanyQueries
             var billingCompanyDto = new BillingCompanyScrapingUrlDto
                 {
                     Id = billingCompany.Id,
-                    Url = billingCompany.BillingCompanyScrapingUrl.ScrapingUrl
+                    Url = billingCompany.BillingCompanyScrapingUrl.ScrapingUrl,
+                    CrossCheckScrapeEnabled = billingCompany.CrossCheckScrapeEnabled
                 };
 
             return billingCompanyDto;

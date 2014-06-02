@@ -14,13 +14,13 @@ namespace Aps.BillingCompanies
             this.eventAggregator = eventAggregator;
         }
 
-        public BillingCompany GetNewBillingCompany(BillingCompanyName billingCompanyName, BillingCompanyType billingCompanyType, BillingCompanyScrapingUrl billingCompanyScrapingUrl)
+        public BillingCompany GetNewBillingCompany(BillingCompanyName billingCompanyName, BillingCompanyType billingCompanyType, BillingCompanyScrapingUrl billingCompanyScrapingUrl,bool crossCheckScrapeEnabled)
         {
             Guard.That(billingCompanyName).IsNotNull();
             Guard.That(billingCompanyType).IsNotNull();
             Guard.That(billingCompanyScrapingUrl).IsNotNull();
 
-            return new BillingCompany(eventAggregator, billingCompanyName, billingCompanyType, billingCompanyScrapingUrl);
+            return new BillingCompany(eventAggregator, billingCompanyName, billingCompanyType, billingCompanyScrapingUrl, crossCheckScrapeEnabled);
         }
     }
 }

@@ -18,6 +18,7 @@ namespace Aps.BillingCompanies.Aggregates
         private BillingCompanyType billingCompanyType;
         private BillingCompanyScrapingUrl billingCompanyScrapingUrl;
         private BillingCompanyName billingCompanyName;
+        private bool crossCheckScrapeEnabled;
 
         public IEnumerable<OpenClosedWindow> OpenClosedWindows { get { return openClosedWindows; } }
         public IEnumerable<ScrapingErrorRetryConfiguration> ScrapingErrorRetryConfigurations { get { return scrapingErrorRetryConfigurations; } }
@@ -25,6 +26,10 @@ namespace Aps.BillingCompanies.Aggregates
         public BillingLifeCycle BillingLifeCycle
         {
             get { return this.billingLifeCycle; }
+        }
+        public bool CrossCheckScrapeEnabled
+        {
+            get { return this.crossCheckScrapeEnabled; }
         }
 
         public BillingCompanyName BillingCompanyName
@@ -52,11 +57,12 @@ namespace Aps.BillingCompanies.Aggregates
 
         }
 
-        public BillingCompany(IEventAggregator eventAggregator, BillingCompanyName companyName, BillingCompanyType companyType, BillingCompanyScrapingUrl companyScrapingUrl)
+        public BillingCompany(IEventAggregator eventAggregator, BillingCompanyName companyName, BillingCompanyType companyType, BillingCompanyScrapingUrl companyScrapingUrl, bool crossCheckScrapeEnabled)
         {
             this.billingCompanyName = companyName;
             this.billingCompanyType = companyType;
             this.billingCompanyScrapingUrl = companyScrapingUrl;
+            this.crossCheckScrapeEnabled = crossCheckScrapeEnabled;
 
             this.eventAggregator = eventAggregator;
             this.eventAggregator.Subscribe(this);
@@ -148,14 +154,6 @@ namespace Aps.BillingCompanies.Aggregates
             {
                 this.scrapingErrorRetryConfigurations.Remove(scrapingErrorRetryConfiguration);
             }
-        }
-    }
-
-    public static class TestExtensions
-    {
-        public static bool Between(this DateTime input, DateTime date1, DateTime date2)
-        {
-            return (input > date1 && input < date2);
         }
     }
 }

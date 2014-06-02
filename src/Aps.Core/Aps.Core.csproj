@@ -57,11 +57,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\StatementFields.cs" />
-    <Compile Include="Models\AccountStatement.cs" />
-    <Compile Include="Models\AccountStatementTransaction.cs" />
-    <Compile Include="Models\BillingCompanyDetails.cs" />
-    <Compile Include="Models\CustomerDetails.cs" />
-    <Compile Include="Models\StatementDate.cs" />
+    <Compile Include="Entities\AccountStatement.cs" />
+    <Compile Include="ValueObjects\AccountStatementTransaction.cs" />
+    <Compile Include="ValueObjects\BillingCompanyDetails.cs" />
+    <Compile Include="ValueObjects\CustomerDetails.cs" />
+    <Compile Include="ValueObjects\StatementDate.cs" />
     <Compile Include="EmailMessage.cs" />
     <Compile Include="FailureHandler.cs" />
     <Compile Include="InternalEvents\ScrapeSessionFailed.cs" />
@@ -95,10 +95,7 @@
       <Name>Aps.Integration</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Entities\" />
-    <Folder Include="ValueObjects\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>

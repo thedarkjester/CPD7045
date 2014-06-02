@@ -28,13 +28,13 @@ namespace Aps.BillingCompanies
             this.billingCompanies.Add(billingCompany);
         }
 
-        public BillingCompany BuildNewBillingCompany(BillingCompanyName billingCompanyName,BillingCompanyType billingCompanyType,BillingCompanyScrapingUrl billingCompanyScrapingUrl)
+        public BillingCompany BuildNewBillingCompany(BillingCompanyName billingCompanyName, BillingCompanyType billingCompanyType, BillingCompanyScrapingUrl billingCompanyScrapingUrl, bool crossCheckScrapeEnabled = false)
         {
             Guard.That(billingCompanyName).IsNotNull();
             Guard.That(billingCompanyType).IsNotNull();
             Guard.That(billingCompanyScrapingUrl).IsNotNull();
 
-            return  this.billingCompanyCreator.GetNewBillingCompany(billingCompanyName, billingCompanyType, billingCompanyScrapingUrl);
+            return this.billingCompanyCreator.GetNewBillingCompany(billingCompanyName, billingCompanyType, billingCompanyScrapingUrl, crossCheckScrapeEnabled);
         }
 
         public BillingCompany GetBillingCompanyById(Guid id)
