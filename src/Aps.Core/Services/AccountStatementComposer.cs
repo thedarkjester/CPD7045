@@ -35,10 +35,57 @@ namespace Aps.Core.Services
             BillingCompanyDetails billingCompanyDetails = GetBillingCompanyDetails(billingCompanyId);
             StatementDate statementDate = GetStatementDate(fieldValues);
             List<AccountStatementTransaction> statementTransactions = BuildStatementTransactionsFromFieldValues(fieldValues);
+            List<AccountLineDetails> accountLineDetails = BuildAccountLineDetailsFieldValues(fieldValues);
 
-            var accountStatement = new AccountStatement(customerDetails, billingCompanyDetails, statementDate, statementTransactions);
+            var accountStatement = new AccountStatement(customerDetails, billingCompanyDetails, statementDate, statementTransactions, accountLineDetails);
 
             return accountStatement;
+        }
+
+        private List<AccountLineDetails> BuildAccountLineDetailsFieldValues(List<KeyValuePair<string, object>> fieldValues)
+        {
+            List<AccountLineDetails> accountLineDetails = new List<AccountLineDetails>();
+
+            foreach (var keyValuePair in fieldValues)
+            {
+                AccountLineDetails accountLineDetail = BuildAccountLineDetail(keyValuePair);
+                if (accountLineDetail != null)
+                {
+                    accountLineDetails.Add(accountLineDetail);
+                }
+            }
+
+            return accountLineDetails;
+        }
+
+        private AccountLineDetails BuildAccountLineDetail(KeyValuePair<string, object> keyValuePair)
+        {
+            if (KeyIsLineDetail(keyValuePair.Key))
+            {
+                return new AccountLineDetails(keyValuePair.Key, keyValuePair.Value.ToString());
+            }
+
+            return null;
+        }
+
+        private bool KeyIsLineDetail(string key)
+        {
+            if (StatementFields.TransactionFields.ToList().Contains(key))
+            {
+                return false;
+            }
+
+            if (StatementFields.HeaderFields.ToList().Contains(key))
+            {
+                return false;
+            }
+
+            if (StatementFields.HeaderFields.ToList().Contains(key))
+            {
+                return false;
+            }
+
+            return false;
         }
 
         private List<AccountStatementTransaction> BuildStatementTransactionsFromFieldValues(List<KeyValuePair<string, object>> fieldValues)

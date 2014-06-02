@@ -47,6 +47,7 @@
     <Compile Include="AccountStatementRepositoryFake.cs" />
     <Compile Include="Entities\AccountStatement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValueObjects\AccountLineDetails.cs" />
     <Compile Include="ValueObjects\AccountStatementTransaction.cs" />
     <Compile Include="ValueObjects\BillingCompanyDetails.cs" />
     <Compile Include="ValueObjects\CustomerDetails.cs" />

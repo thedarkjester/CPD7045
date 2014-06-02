@@ -10,6 +10,7 @@ namespace Aps.Shared.Tests.AccountStatementTests
     public class AccountStatementConstructionTests
     {
         private List<AccountStatementTransaction> statementTransactions;
+        private List<AccountLineDetails> accountLineDetails;
         private BillingCompanyDetails billingCompanyDetails;
         private CustomerDetails customerDetails;
         private StatementDate statementDate;
@@ -18,6 +19,7 @@ namespace Aps.Shared.Tests.AccountStatementTests
         public void Setup()
         {
             statementTransactions = new List<AccountStatementTransaction>();
+            accountLineDetails = new List<AccountLineDetails>();
             billingCompanyDetails = new BillingCompanyDetails(Guid.NewGuid(),"test");
             customerDetails = new CustomerDetails(Guid.NewGuid(),"customername");
             statementDate = new StatementDate(DateTime.UtcNow);
@@ -33,7 +35,7 @@ namespace Aps.Shared.Tests.AccountStatementTests
             statementTransactions = null;
 
             //act
-            var accountStatement = new AccountStatement(customerDetails,billingCompanyDetails,statementDate,statementTransactions);
+            var accountStatement = new AccountStatement(customerDetails,billingCompanyDetails,statementDate,statementTransactions,accountLineDetails);
 
             //assert
             //Exception expected
@@ -47,7 +49,7 @@ namespace Aps.Shared.Tests.AccountStatementTests
             statementTransactions = new List<AccountStatementTransaction>();
 
             //act
-            var accountStatement = new AccountStatement(customerDetails, billingCompanyDetails, statementDate, statementTransactions);
+            var accountStatement = new AccountStatement(customerDetails, billingCompanyDetails, statementDate, statementTransactions, accountLineDetails);
 
             //assert
             //Exception expected
@@ -61,7 +63,7 @@ namespace Aps.Shared.Tests.AccountStatementTests
             customerDetails = null;
 
             //act
-            var accountStatement = new AccountStatement(customerDetails, billingCompanyDetails, statementDate, statementTransactions);
+            var accountStatement = new AccountStatement(customerDetails, billingCompanyDetails, statementDate, statementTransactions, accountLineDetails);
 
             //assert
             //Exception expected
@@ -75,7 +77,7 @@ namespace Aps.Shared.Tests.AccountStatementTests
             billingCompanyDetails = null;
 
             //act
-            var accountStatement = new AccountStatement(customerDetails, billingCompanyDetails, statementDate, statementTransactions);
+            var accountStatement = new AccountStatement(customerDetails, billingCompanyDetails, statementDate, statementTransactions, accountLineDetails);
 
             //assert
             //Exception expected
@@ -89,7 +91,7 @@ namespace Aps.Shared.Tests.AccountStatementTests
             statementDate = null;
 
             //act
-            var accountStatement = new AccountStatement(customerDetails, billingCompanyDetails, statementDate, statementTransactions);
+            var accountStatement = new AccountStatement(customerDetails, billingCompanyDetails, statementDate, statementTransactions, accountLineDetails);
 
             //assert
             //Exception expected

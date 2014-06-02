@@ -45,7 +45,7 @@ namespace Aps.Core.Constants
         {
             AddTransactionFields();
             AddConsumptionFields();
-            AddNoticiationFields();
+            AddNotificationFields();
             AddHeaderFields();
             AddNonTransactionalFinancialFields();
         }
@@ -57,7 +57,6 @@ namespace Aps.Core.Constants
             headerFields.Add("Statement date");
             headerFields.Add("Statement number");
             headerFields.Add("Statement month");
-
         }
 
         private static void AddNonTransactionalFinancialFields()
@@ -70,7 +69,7 @@ namespace Aps.Core.Constants
             nonTransactionalFinancialFields.Add("VAT amount");
         }
 
-        private static void AddNoticiationFields()
+        private static void AddNotificationFields()
         {
             notificationFields.Add("Card type");
             notificationFields.Add("Interest rate");
@@ -92,6 +91,7 @@ namespace Aps.Core.Constants
 
         private static void AddTransactionFields()
         {
+            transactionFields.Add("Opening balance");
             transactionFields.Add("Electricity charges");
             transactionFields.Add("Gas charges");
             transactionFields.Add("Water charges");
@@ -101,7 +101,6 @@ namespace Aps.Core.Constants
             transactionFields.Add("Call charges");
             transactionFields.Add("Discount");
             transactionFields.Add("Payment received");
-            transactionFields.Add("Opening balance");
         }
     }
 }
