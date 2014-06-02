@@ -1,9 +1,9 @@
 ﻿using System;
 using Seterlund.CodeGuard;
 
-namespace Aps.Core.ValueObjects
+namespace Aps.Integration.Queries.Statements.Dtos
 {
-    public class BillingCompanyDetails
+    public class BillingCompanyDetailsDto
     {
         private readonly Guid billingCompanyId;
         private readonly string companyName;
@@ -17,7 +17,7 @@ namespace Aps.Core.ValueObjects
             get { return billingCompanyId; }
         }
 
-        public BillingCompanyDetails(Guid billingCompanyId, string companyName)
+        public BillingCompanyDetailsDto(Guid billingCompanyId, string companyName)
         {
             Guard.That(billingCompanyId).IsNotEmpty();
             Guard.That(companyName).IsNotEmpty();
@@ -26,7 +26,5 @@ namespace Aps.Core.ValueObjects
             this.billingCompanyId = billingCompanyId;
             this.companyName = companyName;
         }
-
-      
     }
 }

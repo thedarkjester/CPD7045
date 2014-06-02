@@ -1,6 +1,6 @@
 ﻿using Seterlund.CodeGuard;
 
-namespace Aps.Core.ValueObjects
+namespace Aps.AccountStatements.ValueObjects
 {
     public class AccountStatementTransaction
     {

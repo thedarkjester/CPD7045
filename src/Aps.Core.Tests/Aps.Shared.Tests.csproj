@@ -75,6 +75,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Aps.AccountStatements\Aps.AccountStatements.csproj">
+      <Project>{1A25129B-BCD3-4C55-B5F8-48F1DE6206AE}</Project>
+      <Name>Aps.AccountStatements</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Aps.BillingCompany\Aps.BillingCompanies.csproj">
       <Project>{2B24072A-26C9-4A39-82E6-CABF65C1E0A8}</Project>
       <Name>Aps.BillingCompanies</Name>

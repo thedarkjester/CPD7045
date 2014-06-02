@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Aps.AccountStatements.Entities;
+using Aps.AccountStatements.ValueObjects;
 using Aps.Core.Constants;
-using Aps.Core.Entities;
-using Aps.Core.ValueObjects;
 using Aps.Integration;
 using Aps.Integration.Queries.BillingCompanyQueries;
 using Aps.Integration.Queries.BillingCompanyQueries.Dtos;
 using Aps.Integration.Queries.CustomerQueries;
-using Caliburn.Micro;
 using Aps.Integration.Queries.CustomerQueries.Dtos;
+using Caliburn.Micro;
 
 namespace Aps.Core.Services
 {

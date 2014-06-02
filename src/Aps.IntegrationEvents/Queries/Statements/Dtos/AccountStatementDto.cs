@@ -1,19 +1,18 @@
 ﻿using System.Collections.Generic;
-using Aps.Core.ValueObjects;
-using Aps.DomainBase;
 using Seterlund.CodeGuard;
 
-namespace Aps.Core.Entities
+namespace Aps.Integration.Queries.Statements.Dtos
 {
-    public class AccountStatement : Entity
+    public class AccountStatementDto
     {
-        private readonly List<AccountStatementTransaction> statementTransactions;
-        private CustomerDetails customerDetails;
-        private BillingCompanyDetails billingCompanyDetails;
-        private StatementDate statementDate;
+        private readonly List<AccountStatementTransactionDto> statementTransactions;
+        private CustomerDetailsDto customerDetails;
+        private BillingCompanyDetailsDto billingCompanyDetails;
+        private StatementDateDto statementDate;
 
-        public AccountStatement(CustomerDetails customerDetails, BillingCompanyDetails billingCompanyDetails ,
-            StatementDate statementDate, List<AccountStatementTransaction> statementTransactions)
+        public AccountStatementDto(CustomerDetailsDto customerDetails, BillingCompanyDetailsDto billingCompanyDetails,
+
+            StatementDateDto statementDate, List<AccountStatementTransactionDto> statementTransactions)
         {
             Guard.That(statementTransactions).IsNotNull();
             Guard.That(statementTransactions).IsTrue(x => x.Count > 0, "Count is == 0");
@@ -27,6 +26,4 @@ namespace Aps.Core.Entities
             this.statementTransactions = statementTransactions;
         }
     }
-
-
 }

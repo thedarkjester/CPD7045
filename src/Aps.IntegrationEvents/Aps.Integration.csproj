@@ -73,9 +73,19 @@
     <Compile Include="Queries\CustomerQueries\Dtos\CustomerDto.cs" />
     <Compile Include="Events\IntegrationEvent.cs" />
     <Compile Include="Events\ScrapeSessionFailedEvent.cs" />
+    <Compile Include="Queries\Statements\GetAccountStatementByIdQuery.cs" />
+    <Compile Include="Queries\Statements\Dtos\AccountStatementDto.cs" />
+    <Compile Include="Queries\Statements\Dtos\AccountStatementTransactionDto.cs" />
+    <Compile Include="Queries\Statements\Dtos\BillingCompanyDetailsDto.cs" />
+    <Compile Include="Queries\Statements\Dtos\CustomerDetailsDto.cs" />
+    <Compile Include="Queries\Statements\Dtos\StatementDateDto.cs" />
     <Compile Include="Serialization\BinaryEventSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Aps.AccountStatements\Aps.AccountStatements.csproj">
+      <Project>{1A25129B-BCD3-4C55-B5F8-48F1DE6206AE}</Project>
+      <Name>Aps.AccountStatements</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Aps.BillingCompany\Aps.BillingCompanies.csproj">
       <Project>{2b24072a-26c9-4a39-82e6-cabf65c1e0a8}</Project>
       <Name>Aps.BillingCompanies</Name>
@@ -91,6 +101,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

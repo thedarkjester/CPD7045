@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Aps.Core.Entities;
-using Aps.Core.ValueObjects;
+using Aps.AccountStatements.Entities;
+using Aps.AccountStatements.ValueObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Aps.Shared.Tests.AccountStatementTests

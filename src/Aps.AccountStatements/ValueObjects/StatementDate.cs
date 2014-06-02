@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Aps.Core.ValueObjects
+namespace Aps.AccountStatements.ValueObjects
 {
     public class StatementDate
     {

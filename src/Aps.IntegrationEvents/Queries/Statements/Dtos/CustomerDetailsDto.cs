@@ -1,14 +1,14 @@
 ﻿using System;
 using Seterlund.CodeGuard;
 
-namespace Aps.Core.ValueObjects
+namespace Aps.Integration.Queries.Statements.Dtos
 {
-    public class CustomerDetails
+    public class CustomerDetailsDto
     {
         public Guid CustomerId { get; private set; }
         public string CustomerName { get; private set; }
 
-        public CustomerDetails(Guid customerId, string customerName)
+        public CustomerDetailsDto(Guid customerId, string customerName)
         {
             Guard.That(customerName).IsNotNull();
             Guard.That(customerName).IsNotEmpty();

@@ -28,7 +28,7 @@ namespace Aps.CustomerEventListenerService
 
         public void Handle(CustomerScrapeSessionFailed message)
         {
-           // Customer customer = customerRepository.GetCustomerById();
+           // Customer customer = customerRepository.GetAccountStatement();
           //  customer.SetStatus();
         }
 
