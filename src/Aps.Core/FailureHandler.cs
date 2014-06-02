@@ -26,18 +26,22 @@ namespace Aps.Core
         {
             Guard.That(customerId).IsNotEmpty();
             Guard.That(billingCompanyId).IsNotEmpty();
-            
+
             string emailBody;
             string emailSubject;
             string customerEmail;
-            eventIntegrationService.Publish(new CustomerScrapeSessionFailed(customerId, billingCompanyId, errorNum)); 
+
+            CustomerScrapeSessionFailed errorEvent = new CustomerScrapeSessionFailed(customerId, billingCompanyId, errorNum);
+            
+            eventAggregator.Publish(errorEvent);
+            eventIntegrationService.Publish(errorEvent);
 
             CustomerDto customer = customerByIdQuery.GetCustomerById(customerId);
             //Do billing compnay.... 
 
             switch (errorNum)
             {
-                
+
                 case ScrapingErrorResponseCodes.Unknown:
                 case ScrapingErrorResponseCodes.UnhandledDataCondition:
                 case ScrapingErrorResponseCodes.BrokenScript:
@@ -57,7 +61,7 @@ namespace Aps.Core
                     // Find out how to send an event to the customer to change status
                     // Notify customer via email
                     emailSubject = "Invalid Credentials on ??? "; // how do I get a billing company name here?
-                   // emailBody = string.Format("Hi,{0} Your credentials were invalid on the {1} website.{0} Please Action. {0} Regards, {0}APS Team", Environment.NewLine, billingCompany.name); 
+                    // emailBody = string.Format("Hi,{0} Your credentials were invalid on the {1} website.{0} Please Action. {0} Regards, {0}APS Team", Environment.NewLine, billingCompany.name); 
                     break;
 
                 // Not signed up for e-Billing
