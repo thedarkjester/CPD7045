@@ -60,10 +60,11 @@
     <Compile Include="BillingCompanyTests\BillingCompanyBillingCompanyUrlTests.cs" />
     <Compile Include="BillingCompanyTests\BillingCompanyLifeCycleTests.cs" />
     <Compile Include="BillingCompanyTests\BillingCompanyNameTests.cs" />
-    <Compile Include="InterpreterTests\UnitTest1.cs" />
+    <Compile Include="InterpreterTests\ScrapeSessionDataInterpreterTests.cs" />
     <Compile Include="RepositoryTests\EntityTests.cs" />
     <Compile Include="SampleTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ValidatorTests\ScrapeSessionDataValidatorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aps.BillingCompany\Aps.BillingCompanies.csproj">

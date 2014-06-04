@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Aps.Core
 {
-    public class ScrapeSession
+    public class ScrapeSessionData
     {
         public string Url { get; set; }
 

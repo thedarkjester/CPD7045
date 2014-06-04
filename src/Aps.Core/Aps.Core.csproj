@@ -61,9 +61,14 @@
     <Compile Include="KeyValuePair.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SchedulingEngine.cs" />
-    <Compile Include="ScrapeSession.cs" />
+    <Compile Include="ScrapeSessionData.cs" />
     <Compile Include="TestConstructor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validation\IValidationResults.cs" />
+    <Compile Include="Validation\ScrapeSessionDataValidator.cs" />
+    <Compile Include="Validation\ValidationResult.cs" />
+    <Compile Include="Validation\ValidationResults.cs" />
+    <Compile Include="Validation\Validator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
