@@ -7,7 +7,7 @@ namespace Aps.Core
 {
     public class Interpreter
     {
-        public List<DataPair> TransformResults(string scrapeSessionXmlData)
+        public ScrapeSession TransformResults(string scrapeSessionXmlData)
         {
             throw new NotImplementedException();
         }

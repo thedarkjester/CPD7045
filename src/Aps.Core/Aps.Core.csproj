@@ -61,6 +61,7 @@
     <Compile Include="KeyValuePair.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SchedulingEngine.cs" />
+    <Compile Include="ScrapeSession.cs" />
     <Compile Include="TestConstructor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
