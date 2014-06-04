@@ -1,13 +1,13 @@
 ﻿using System;
 using Aps.BillingCompanies;
 using Aps.BillingCompanies.Aggregates;
-using Aps.IntegrationEvents;
-using Aps.IntegrationEvents.Queries.BillingCompanyQueries;
-using Aps.IntegrationEvents.Queries.Events;
-using Aps.IntegrationEvents.Serialization;
+using Aps.Integration;
+using Aps.Integration.Queries.BillingCompanyQueries;
+using Aps.Integration.Queries.Events;
+using Aps.Integration.Serialization;
 using Autofac;
 using Caliburn.Micro;
-using Aps.Customer;
+using Aps.Customers;
 
 namespace Aps.Core
 {
@@ -36,6 +36,7 @@ namespace Aps.Core
             builder.RegisterType<CustomerRepositoryFake>().As<CustomerRepositoryFake>().InstancePerDependency();
             builder.RegisterType<BillingCompanyRepositoryFake>().As<BillingCompanyRepositoryFake>().InstancePerDependency();
             builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>().InstancePerDependency();
+            //builder.RegisterType<AccountStatementComposer>().As<AccountStatementComposer>().InstancePerDependency();
           
             RegisterIntegrationDependencies(builder);
 
@@ -47,6 +48,10 @@ namespace Aps.Core
             builder.RegisterType<BillingCompanyByIdQuery>().As<BillingCompanyByIdQuery>();
             builder.RegisterType<BillingCompanyBillingLifeCycleByCompanyIdQuery>().As<BillingCompanyBillingLifeCycleByCompanyIdQuery>();
             builder.RegisterType<BillingCompanyScrapingUrlQuery>().As<BillingCompanyScrapingUrlQuery>();
+            builder.RegisterType<AllBillingCompaniesQuery>().As<AllBillingCompaniesQuery>();
+            builder.RegisterType<BillingCompanyOpenClosedWindowsQuery>().As<BillingCompanyOpenClosedWindowsQuery>();
+            builder.RegisterType<ScrapingErrorRetryConfigurationQuery>().As<ScrapingErrorRetryConfigurationQuery>();
+            builder.RegisterType<BillingCompanyScrapingLoadManagementConfigurationQuery>().As<BillingCompanyScrapingLoadManagementConfigurationQuery>();
         }
 
         private static void RegisterIntegrationDependencies(ContainerBuilder builder)

@@ -1,7 +1,7 @@
 ﻿using System;
-using Aps.Customer;
+using Aps.ApsCustomer;
 
-namespace Aps.IntegrationEvents.Queries.Customer
+namespace Aps.Integration.Queries.Customer
 {
     public class CustomerByIdQuery
     {

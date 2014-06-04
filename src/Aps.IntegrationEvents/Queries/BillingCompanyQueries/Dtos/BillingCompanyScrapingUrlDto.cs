@@ -1,10 +1,11 @@
 ﻿using System;
 
-namespace Aps.IntegrationEvents.Queries.BillingCompanyQueries.Dtos
+namespace Aps.Integration.Queries.BillingCompanyQueries.Dtos
 {
     public class BillingCompanyScrapingUrlDto
     {
         public Guid Id { get; set; }
         public string Url { get; set; }
+        public bool CrossCheckScrapeEnabled { get; set; }
     }
 }

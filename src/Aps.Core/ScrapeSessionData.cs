@@ -12,6 +12,6 @@ namespace Aps.Core
 
         public DateTime Date { get; set; }
 
-        public IList<DataPair> MyProperty { get; set; }
+        public IList<DataPair> ScrapeSessionDataPair { get; set; }
     }
 }

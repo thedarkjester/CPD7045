@@ -9,7 +9,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
     {
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         [TestMethod]
-        public void WhenConstructingABillingCompanyLifeCycleTest_GivenAZeroForDaysPerCycle_ThrowsException()
+        public void WhenConstructingABillingCompanyLifeCycle_GivenAZeroForDaysPerCycle_ThrowsException()
         {
             //arrange
             int daysPerBillingCycle = 0;

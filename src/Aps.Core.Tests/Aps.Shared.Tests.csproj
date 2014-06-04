@@ -75,7 +75,7 @@
       <Project>{98EA6256-15B1-49C2-A405-A2E050D5741E}</Project>
       <Name>Aps.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Aps.Customer\Aps.Customer.csproj">
+    <ProjectReference Include="..\Aps.Customer\Aps.Customers.csproj">
       <Project>{D3540939-6FEA-41F8-BA61-335EC08EC7CE}</Project>
       <Name>Aps.Customer</Name>
     </ProjectReference>

@@ -40,7 +40,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             // arrange ( repository and depenency injection done )
 
             // act
-            BillingCompany billingCompany = container.Resolve<BillingCompanyRepositoryFake>().GetNewBillingCompany(companyName, companyType, companyUrl);
+            BillingCompany billingCompany = container.Resolve<BillingCompanyRepositoryFake>().BuildNewBillingCompany(companyName, companyType, companyUrl);
 
             // assert
             Assert.IsTrue(billingCompany.Id != Guid.Empty);
@@ -52,7 +52,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             // arrange ( repository and depenency injection done )
 
             // act
-            BillingCompany billingCompany = container.Resolve<BillingCompanyRepositoryFake>().GetNewBillingCompany(companyName, companyType, companyUrl);
+            BillingCompany billingCompany = container.Resolve<BillingCompanyRepositoryFake>().BuildNewBillingCompany(companyName, companyType, companyUrl);
 
             // assert
             Assert.IsTrue(billingCompany.OpenClosedWindows != null);
@@ -68,7 +68,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
 
             // act
             BillingCompany billingCompany = container.Resolve<BillingCompanyRepositoryFake>().
-                GetNewBillingCompany(companyName, companyType, companyUrl);
+                BuildNewBillingCompany(companyName, companyType, companyUrl);
 
             // assert
             // expected exception
@@ -83,7 +83,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
 
             // act
             BillingCompany billingCompany = container.Resolve<BillingCompanyRepositoryFake>().
-                GetNewBillingCompany(companyName, companyType, companyUrl);
+                BuildNewBillingCompany(companyName, companyType, companyUrl);
 
             // assert
             // expected exception
@@ -98,10 +98,11 @@ namespace Aps.Shared.Tests.BillingCompanyTests
 
             // act
             BillingCompany billingCompany = container.Resolve<BillingCompanyRepositoryFake>().
-                GetNewBillingCompany(companyName, companyType, companyUrl);
+                BuildNewBillingCompany(companyName, companyType, companyUrl);
 
             // assert
             // expected exception
         }
+
     }
 }

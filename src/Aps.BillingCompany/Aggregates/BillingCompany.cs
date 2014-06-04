@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Aps.BillingCompanies.ValueObjects;
 using Aps.DomainBase;
 using Caliburn.Micro;
@@ -8,6 +10,7 @@ namespace Aps.BillingCompanies.Aggregates
     public class BillingCompany : Aggregate
     {
         private readonly IEventAggregator eventAggregator;
+
         private readonly List<OpenClosedWindow> openClosedWindows;
         private readonly List<ScrapingErrorRetryConfiguration> scrapingErrorRetryConfigurations;
         private BillingLifeCycle billingLifeCycle;
@@ -15,6 +18,7 @@ namespace Aps.BillingCompanies.Aggregates
         private BillingCompanyType billingCompanyType;
         private BillingCompanyScrapingUrl billingCompanyScrapingUrl;
         private BillingCompanyName billingCompanyName;
+        private bool crossCheckScrapeEnabled;
 
         public IEnumerable<OpenClosedWindow> OpenClosedWindows { get { return openClosedWindows; } }
         public IEnumerable<ScrapingErrorRetryConfiguration> ScrapingErrorRetryConfigurations { get { return scrapingErrorRetryConfigurations; } }
@@ -22,6 +26,10 @@ namespace Aps.BillingCompanies.Aggregates
         public BillingLifeCycle BillingLifeCycle
         {
             get { return this.billingLifeCycle; }
+        }
+        public bool CrossCheckScrapeEnabled
+        {
+            get { return this.crossCheckScrapeEnabled; }
         }
 
         public BillingCompanyName BillingCompanyName
@@ -46,14 +54,15 @@ namespace Aps.BillingCompanies.Aggregates
 
         private BillingCompany()
         {
-            
+
         }
 
-        public BillingCompany(IEventAggregator eventAggregator, BillingCompanyName companyName, BillingCompanyType companyType, BillingCompanyScrapingUrl companyScrapingUrl)
+        public BillingCompany(IEventAggregator eventAggregator, BillingCompanyName companyName, BillingCompanyType companyType, BillingCompanyScrapingUrl companyScrapingUrl, bool crossCheckScrapeEnabled)
         {
             this.billingCompanyName = companyName;
             this.billingCompanyType = companyType;
             this.billingCompanyScrapingUrl = companyScrapingUrl;
+            this.crossCheckScrapeEnabled = crossCheckScrapeEnabled;
 
             this.eventAggregator = eventAggregator;
             this.eventAggregator.Subscribe(this);
@@ -98,9 +107,26 @@ namespace Aps.BillingCompanies.Aggregates
 
         public void AddOpenClosedWindow(OpenClosedWindow openClosedWindow)
         {
+            GuardAgainstOverlappingOpenClosedWindows(openClosedWindow);
             // validation of action
 
             this.openClosedWindows.Add(openClosedWindow);
+        }
+
+        private void GuardAgainstOverlappingOpenClosedWindows(OpenClosedWindow openClosedWindow)
+        {
+            foreach (var existingWindow in openClosedWindows)
+            {
+                if (openClosedWindow.StartDate.Between(existingWindow.StartDate, existingWindow.EndDate))
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
+
+                if (openClosedWindow.EndDate.Between(existingWindow.StartDate, existingWindow.EndDate))
+                {
+                    throw new ArgumentOutOfRangeException();
+                }  
+            }
         }
 
         public void RemoveOpenClosedWindow(OpenClosedWindow openClosedWindow)
@@ -113,6 +139,10 @@ namespace Aps.BillingCompanies.Aggregates
         public void AddScrapingErrorRetryConfiguration(ScrapingErrorRetryConfiguration scrapingErrorRetryConfiguration)
         {
             // validation of action
+            if (scrapingErrorRetryConfigurations.Any(x => x.ResponseCode == scrapingErrorRetryConfiguration.ResponseCode))
+            {
+                throw new InvalidOperationException("Duplicate Error Code Configuration Exists");
+            }
 
             this.scrapingErrorRetryConfigurations.Add(scrapingErrorRetryConfiguration);
         }
@@ -120,8 +150,10 @@ namespace Aps.BillingCompanies.Aggregates
         public void RemoveScrapingErrorRetryConfiguration(ScrapingErrorRetryConfiguration scrapingErrorRetryConfiguration)
         {
             // validation of action
-
-            this.scrapingErrorRetryConfigurations.Remove(scrapingErrorRetryConfiguration);
+            if (scrapingErrorRetryConfigurations.Contains(scrapingErrorRetryConfiguration))
+            {
+                this.scrapingErrorRetryConfigurations.Remove(scrapingErrorRetryConfiguration);
+            }
         }
     }
 }
