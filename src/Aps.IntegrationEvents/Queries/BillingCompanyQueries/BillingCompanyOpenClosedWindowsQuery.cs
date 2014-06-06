@@ -9,9 +9,9 @@ namespace Aps.Integration.Queries.BillingCompanyQueries
 {
     public class BillingCompanyOpenClosedWindowsQuery
     {
-        private readonly BillingCompanyRepositoryFake billingCompanyRepository;
+        private readonly IBillingCompanyRepository billingCompanyRepository;
 
-        public BillingCompanyOpenClosedWindowsQuery(BillingCompanyRepositoryFake billingCompanyRepository)
+        public BillingCompanyOpenClosedWindowsQuery(IBillingCompanyRepository billingCompanyRepository)
         {
             this.billingCompanyRepository = billingCompanyRepository;
         }

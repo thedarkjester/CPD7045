@@ -1,4 +1,5 @@
 ﻿using Aps.Customers;
+using Aps.Fakes;
 using Aps.Integration;
 using Aps.Integration.Queries.Events;
 using Aps.Integration.Serialization;
@@ -32,7 +33,7 @@ namespace Aps.CustomerEventListenerService
         {
             ContainerBuilder builder = new ContainerBuilder();
 
-            builder.RegisterType<CustomerRepositoryFake>().As<CustomerRepositoryFake>().InstancePerDependency();
+            builder.RegisterType<CustomerRepositoryFake>().As<ICustomerRepository>().InstancePerDependency();
             builder.RegisterType<EventIntegrationService>().As<EventIntegrationService>().SingleInstance();
             builder.RegisterType<BinaryEventSerializer>().As<BinaryEventSerializer>().InstancePerDependency();
             builder.RegisterType<BinaryEventDeSerializer>().As<BinaryEventDeSerializer>().InstancePerDependency();

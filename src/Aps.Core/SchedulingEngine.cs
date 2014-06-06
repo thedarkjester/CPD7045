@@ -10,17 +10,17 @@ namespace Aps.Core
     public class SchedulingEngine : IHandle<ScrapeSessionFailed>,IHandle<BillingCompanyAddedOpenClosedWindow>
     {
         private readonly IEventAggregator eventAggregator;
-        private readonly CustomerRepositoryFake customerRepositoryFake;
-        private readonly BillingCompanyRepositoryFake billingCompanyRepositoryFake;
+        private readonly ICustomerRepository ICustomerRepository;
+        private readonly IBillingCompanyRepository billingCompanyRepository;
         private readonly EventIntegrationService messageSendAndReceiver;
 
-        public SchedulingEngine(IEventAggregator eventAggregator, CustomerRepositoryFake customerRepositoryFake, BillingCompanyRepositoryFake billingCompanyRepositoryFake, EventIntegrationService messageSendAndReceiver)
+        public SchedulingEngine(IEventAggregator eventAggregator, ICustomerRepository ICustomerRepository, IBillingCompanyRepository billingCompanyRepository, EventIntegrationService messageSendAndReceiver)
         {
             this.eventAggregator = eventAggregator;
             this.eventAggregator.Subscribe(this);
 
-            this.customerRepositoryFake = customerRepositoryFake;
-            this.billingCompanyRepositoryFake = billingCompanyRepositoryFake;
+            this.ICustomerRepository = ICustomerRepository;
+            this.billingCompanyRepository = billingCompanyRepository;
             this.messageSendAndReceiver = messageSendAndReceiver;
         }
 

@@ -56,10 +56,20 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="AccountStatementTests\AccountStatementConstructionTests.cs" />
+    <Compile Include="AccountStatementTests\AccountStatementTransactionTests.cs" />
+    <Compile Include="AccountStatementTests\BillingCompanyDetailsConstructionTests.cs" />
+    <Compile Include="AccountStatementTests\CustomerDetailsAndStatementDateConstructionTests.cs" />
+    <Compile Include="BillingCompanyTests\BillingCompanyAddedOpenClosedWindowEventConstructionTests.cs" />
     <Compile Include="BillingCompanyTests\BillingCompanyAggregateTests.cs" />
     <Compile Include="BillingCompanyTests\BillingCompanyBillingCompanyUrlTests.cs" />
     <Compile Include="BillingCompanyTests\BillingCompanyLifeCycleTests.cs" />
     <Compile Include="BillingCompanyTests\BillingCompanyNameTests.cs" />
+    <Compile Include="BillingCompanyTests\BillingCompanyOpenClosedWindowTests.cs" />
+    <Compile Include="BillingCompanyTests\BillingCompanyScrapingConfigurationTests.cs" />
+    <Compile Include="BillingCompanyTests\ScrapingErrorRetryConfigurationTests.cs" />
+    <Compile Include="BillingCompanyTests\ScrapingLoadManagementConfigurationTests.cs" />
+    <Compile Include="CoreTests\CreatingANewScrapingObjectTest.cs" />
     <Compile Include="InterpreterTests\ScrapeSessionDataInterpreterTests.cs" />
     <Compile Include="RepositoryTests\EntityTests.cs" />
     <Compile Include="SampleTest.cs" />
@@ -67,6 +77,10 @@
     <Compile Include="ValidatorTests\ScrapeSessionDataValidatorTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Aps.AccountStatements\Aps.AccountStatements.csproj">
+      <Project>{1A25129B-BCD3-4C55-B5F8-48F1DE6206AE}</Project>
+      <Name>Aps.AccountStatements</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Aps.BillingCompany\Aps.BillingCompanies.csproj">
       <Project>{2B24072A-26C9-4A39-82E6-CABF65C1E0A8}</Project>
       <Name>Aps.BillingCompanies</Name>
@@ -82,6 +96,14 @@
     <ProjectReference Include="..\Aps.DomainBase\Aps.DomainBase.csproj">
       <Project>{16D706F7-AF2A-4838-AC14-8BC0607173CC}</Project>
       <Name>Aps.DomainBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Aps.Fakes\Aps.Fakes.csproj">
+      <Project>{BD1C6AE0-A019-4090-8E07-31D1F2641936}</Project>
+      <Name>Aps.Fakes</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Aps.Scraping\Aps.Scraping.csproj">
+      <Project>{CE43F772-47F0-4629-B9DC-74616B937556}</Project>
+      <Name>Aps.Scraping</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

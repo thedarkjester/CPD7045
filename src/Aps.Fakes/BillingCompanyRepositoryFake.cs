@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
+using Aps.BillingCompanies;
 using Aps.BillingCompanies.Aggregates;
 using Aps.BillingCompanies.ValueObjects;
 using Caliburn.Micro;
-using System.Collections.Generic;
 using Seterlund.CodeGuard;
 
-namespace Aps.BillingCompanies
+namespace Aps.Fakes
 {
-    public class BillingCompanyRepositoryFake
+    public class BillingCompanyRepositoryFake : IBillingCompanyRepository
     {
         private readonly List<BillingCompany> billingCompanies;
 
         private readonly IEventAggregator eventAggregator;
         private readonly BillingCompanyCreator billingCompanyCreator;
 
-        public BillingCompanyRepositoryFake(IEventAggregator eventAggregator,BillingCompanyCreator billingCompanyCreator)
+        public BillingCompanyRepositoryFake(IEventAggregator eventAggregator, BillingCompanyCreator billingCompanyCreator)
         {
             this.eventAggregator = eventAggregator;
             this.billingCompanyCreator = billingCompanyCreator;

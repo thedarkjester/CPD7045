@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Aps.Core
+namespace Aps.Scraping
 {
     public class ScrapingObject
     {

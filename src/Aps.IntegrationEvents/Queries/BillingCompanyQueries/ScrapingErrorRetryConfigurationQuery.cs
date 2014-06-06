@@ -10,9 +10,9 @@ namespace Aps.Integration.Queries.BillingCompanyQueries
 {
     public class ScrapingErrorRetryConfigurationQuery
     {
-        private readonly BillingCompanyRepositoryFake billingCompanyRepository;
+        private readonly IBillingCompanyRepository billingCompanyRepository;
 
-        public ScrapingErrorRetryConfigurationQuery(BillingCompanyRepositoryFake billingCompanyRepository)
+        public ScrapingErrorRetryConfigurationQuery(IBillingCompanyRepository billingCompanyRepository)
         {
             this.billingCompanyRepository = billingCompanyRepository;
         }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Aps.BillingCompanies;
 using Aps.BillingCompanies.ValueObjects;
+using Aps.Fakes;
 using Aps.Integration.Queries.BillingCompanyQueries;
 using Aps.Integration.Queries.BillingCompanyQueries.Dtos;
 using Autofac;
@@ -31,7 +32,7 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
             var builder = new ContainerBuilder();
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>();
-            builder.RegisterType<BillingCompanyRepositoryFake>().As<BillingCompanyRepositoryFake>().SingleInstance();
+            builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>().SingleInstance();
             builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>().SingleInstance();
             builder.RegisterType<BillingCompanyByIdQuery>().As<BillingCompanyByIdQuery>();
             builder.RegisterType<BillingCompanyBillingLifeCycleByCompanyIdQuery>().As<BillingCompanyBillingLifeCycleByCompanyIdQuery>();
@@ -49,7 +50,7 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
         public void Given_A_BillingCompany_When_QueryingBillingCompany_DtoReturns_NullIfNotFound()
         {
             //arrange
-            BillingCompanyRepositoryFake repository = container.Resolve<BillingCompanyRepositoryFake>();
+            IBillingCompanyRepository repository = container.Resolve<IBillingCompanyRepository>();
 
             //act
             var billingCompany = repository.GetBillingCompanyById(Guid.NewGuid());
@@ -62,7 +63,7 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
         public void Given_A_BillingCompany_When_QueryingBillingCompanyByMissingId_DtoReturns_Null()
         {
             //arrange
-            BillingCompanyRepositoryFake repository = container.Resolve<BillingCompanyRepositoryFake>();
+            IBillingCompanyRepository repository = container.Resolve<IBillingCompanyRepository>();
 
             //act
             BillingCompanyByIdQuery query = container.Resolve<BillingCompanyByIdQuery>();
@@ -77,7 +78,7 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
         public void Given_A_BillingCompany_When_QueryingBillingCompanyScrapingUrlById_DtoReturns_CorrectData()
         {
             //arrange
-            BillingCompanyRepositoryFake repository = container.Resolve<BillingCompanyRepositoryFake>();
+            IBillingCompanyRepository repository = container.Resolve<IBillingCompanyRepository>();
 
             var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl,true);
 
@@ -99,7 +100,7 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
         public void Given_A_BillingCompany_When_QueryingBillingCompanyById_DtoReturns_CorrectData()
         {
             //arrange
-            BillingCompanyRepositoryFake repository = container.Resolve<BillingCompanyRepositoryFake>();
+            IBillingCompanyRepository repository = container.Resolve<IBillingCompanyRepository>();
 
             var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
 
@@ -120,7 +121,7 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
         public void Given_A_BillingCompany_When_QueryingBillingCompanyLifeCycleById_DtoReturns_CorrectData()
         {
             //arrange
-            BillingCompanyRepositoryFake repository = container.Resolve<BillingCompanyRepositoryFake>();
+            IBillingCompanyRepository repository = container.Resolve<IBillingCompanyRepository>();
 
             var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
 
@@ -146,7 +147,7 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
         public void Given_A_BillingCompany_When_QueryingBillingCompany_RepositoryReturns_CorrectNonListData()
         {
             //arrange
-            BillingCompanyRepositoryFake repository = container.Resolve<BillingCompanyRepositoryFake>();
+            IBillingCompanyRepository repository = container.Resolve<IBillingCompanyRepository>();
 
             var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
 
@@ -177,7 +178,7 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
         public void WhenQueryingAll_BillingCompanies_AllBillingCompanyDtosAreReturned()
         {
             //arrange
-            BillingCompanyRepositoryFake repository = container.Resolve<BillingCompanyRepositoryFake>();
+            IBillingCompanyRepository repository = container.Resolve<IBillingCompanyRepository>();
 
             var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
             var newBillingCompany2 = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
@@ -200,7 +201,7 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
         public void Given_A_BillingCompany_When_QueryingOpenClosedWindows_RepositoryReturns_AllWindows()
         {
             //arrange
-            BillingCompanyRepositoryFake repository = container.Resolve<BillingCompanyRepositoryFake>();
+            IBillingCompanyRepository repository = container.Resolve<IBillingCompanyRepository>();
 
             var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
 
@@ -224,7 +225,7 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
         public void Given_A_BillingCompany_When_QueryingRetryConfigurations_RepositoryReturns_AllConfigurations()
         {
             //arrange
-            BillingCompanyRepositoryFake repository = container.Resolve<BillingCompanyRepositoryFake>();
+            IBillingCompanyRepository repository = container.Resolve<IBillingCompanyRepository>();
 
             var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
 
@@ -247,7 +248,7 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
         public void Given_A_BillingCompany_When_QueryingRetryConfigurations_RepositoryReturns_ScrapingLoadManagementConfiguration()
         {
             //arrange
-            BillingCompanyRepositoryFake repository = container.Resolve<BillingCompanyRepositoryFake>();
+            IBillingCompanyRepository repository = container.Resolve<IBillingCompanyRepository>();
 
             var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
 

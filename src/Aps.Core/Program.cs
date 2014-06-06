@@ -1,6 +1,7 @@
 ﻿using System;
 using Aps.BillingCompanies;
-using Aps.BillingCompanies.Aggregates;
+using Aps.Core.Services;
+using Aps.Fakes;
 using Aps.Integration;
 using Aps.Integration.Queries.BillingCompanyQueries;
 using Aps.Integration.Queries.Events;
@@ -33,10 +34,10 @@ namespace Aps.Core
             builder.RegisterType<SchedulingEngine>().As<SchedulingEngine>().InstancePerDependency();
             builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
 
-            builder.RegisterType<CustomerRepositoryFake>().As<CustomerRepositoryFake>().InstancePerDependency();
-            builder.RegisterType<BillingCompanyRepositoryFake>().As<BillingCompanyRepositoryFake>().InstancePerDependency();
+            builder.RegisterType<CustomerRepositoryFake>().As<ICustomerRepository>().InstancePerDependency();
+            builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>().InstancePerDependency();
             builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>().InstancePerDependency();
-            //builder.RegisterType<AccountStatementComposer>().As<AccountStatementComposer>().InstancePerDependency();
+            builder.RegisterType<AccountStatementComposer>().As<AccountStatementComposer>().InstancePerDependency();
           
             RegisterIntegrationDependencies(builder);
 

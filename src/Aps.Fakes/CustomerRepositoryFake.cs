@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
+using Aps.Customers;
 using Aps.Customers.Aggregates;
 using Aps.Customers.ValueObjects;
 using Caliburn.Micro;
-using System.Collections.Generic;
 using Seterlund.CodeGuard;
 
-namespace Aps.Customers
+namespace Aps.Fakes
 {
-    public class CustomerRepositoryFake
+    public class CustomerRepositoryFake : ICustomerRepository
     {
         private readonly List<Customer> customers;
 
         private readonly IEventAggregator eventAggregator;
         private readonly CustomerCreator customerCreator;
-        
+
         public CustomerRepositoryFake(IEventAggregator eventAggregator, CustomerCreator customerCreator)
         {
             this.eventAggregator = eventAggregator;

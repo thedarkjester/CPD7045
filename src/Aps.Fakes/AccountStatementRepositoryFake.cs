@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Aps.AccountStatements;
 using Aps.AccountStatements.Entities;
 using Caliburn.Micro;
-using Seterlund.CodeGuard;
 
-namespace Aps.AccountStatements
+namespace Aps.Fakes
 {
-    public class AccountStatementRepositoryFake
+    public class AccountStatementRepositoryFake : IAccountStatementRepository
     {
         public AccountStatement GetAccountStatementById(Guid id)
         {

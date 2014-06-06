@@ -3,6 +3,7 @@ using System.Linq;
 using Aps.BillingCompanies;
 using Aps.BillingCompanies.Aggregates;
 using Aps.BillingCompanies.ValueObjects;
+using Aps.Fakes;
 using Autofac;
 using Caliburn.Micro;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -28,7 +29,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             var builder = new ContainerBuilder();
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>();
-            builder.RegisterType<BillingCompanyRepositoryFake>().As<BillingCompanyRepositoryFake>();
+            builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>();
             builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>();
 
             container = builder.Build(); 
@@ -40,7 +41,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             // arrange ( repository and depenency injection done )
 
             // act
-            BillingCompany billingCompany = container.Resolve<BillingCompanyRepositoryFake>().BuildNewBillingCompany(companyName, companyType, companyUrl);
+            BillingCompany billingCompany = container.Resolve<IBillingCompanyRepository>().BuildNewBillingCompany(companyName, companyType, companyUrl);
 
             // assert
             Assert.IsTrue(billingCompany.Id != Guid.Empty);
@@ -52,7 +53,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             // arrange ( repository and depenency injection done )
 
             // act
-            BillingCompany billingCompany = container.Resolve<BillingCompanyRepositoryFake>().BuildNewBillingCompany(companyName, companyType, companyUrl);
+            BillingCompany billingCompany = container.Resolve<IBillingCompanyRepository>().BuildNewBillingCompany(companyName, companyType, companyUrl);
 
             // assert
             Assert.IsTrue(billingCompany.OpenClosedWindows != null);
@@ -67,7 +68,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             companyName = null;
 
             // act
-            BillingCompany billingCompany = container.Resolve<BillingCompanyRepositoryFake>().
+            BillingCompany billingCompany = container.Resolve<IBillingCompanyRepository>().
                 BuildNewBillingCompany(companyName, companyType, companyUrl);
 
             // assert
@@ -82,7 +83,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             companyType = null;
 
             // act
-            BillingCompany billingCompany = container.Resolve<BillingCompanyRepositoryFake>().
+            BillingCompany billingCompany = container.Resolve<IBillingCompanyRepository>().
                 BuildNewBillingCompany(companyName, companyType, companyUrl);
 
             // assert
@@ -97,7 +98,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             companyUrl = null;
 
             // act
-            BillingCompany billingCompany = container.Resolve<BillingCompanyRepositoryFake>().
+            BillingCompany billingCompany = container.Resolve<IBillingCompanyRepository>().
                 BuildNewBillingCompany(companyName, companyType, companyUrl);
 
             // assert

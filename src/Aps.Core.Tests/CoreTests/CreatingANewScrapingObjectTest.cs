@@ -1,4 +1,7 @@
 ﻿using System;
+using Aps.AccountStatements;
+using Aps.Fakes;
+using Aps.Scraping;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Autofac;
 using Aps.Core;
@@ -32,7 +35,7 @@ namespace Aps.Shared.Tests.CoreTests
             var builder = new ContainerBuilder();
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>();
-            builder.RegisterType<ScrapingObjectRepositoryFake>().As<ScrapingObjectRepositoryFake>();
+            builder.RegisterType<ScrapingObjectRepositoryFake>().As<IScrapingObjectRepository>();
             builder.RegisterType<ScrapingObjectCreator>().As<ScrapingObjectCreator>();
 
             container = builder.Build();
@@ -44,7 +47,7 @@ namespace Aps.Shared.Tests.CoreTests
             // arrange
 
             // act
-            ScrapingObject scrapingObject = container.Resolve<ScrapingObjectRepositoryFake>().BuildNewScrapingObject(customerId, billingCompanyId, URL, plainText, hiddenText);
+            ScrapingObject scrapingObject = container.Resolve<IScrapingObjectRepository>().BuildNewScrapingObject(customerId, billingCompanyId, URL, plainText, hiddenText);
 
             // assert
 

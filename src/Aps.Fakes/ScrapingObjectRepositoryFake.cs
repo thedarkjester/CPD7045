@@ -1,18 +1,18 @@
-﻿using Caliburn.Micro;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Aps.AccountStatements;
+using Aps.Scraping;
+using Caliburn.Micro;
 
-namespace Aps.Core
+namespace Aps.Fakes
 {
-    public class ScrapingObjectRepositoryFake
+    public class ScrapingObjectRepositoryFake : IScrapingObjectRepository
     {
-        public readonly List<ScrapingObject> scrapingObjects;
+        private readonly List<ScrapingObject> scrapingObjects;
 
-        public readonly IEventAggregator eventAggregator;
-        public readonly ScrapingObjectCreator scrapingObjectCreator;
+        private readonly IEventAggregator eventAggregator;
+        private readonly ScrapingObjectCreator scrapingObjectCreator;
 
         public ScrapingObjectRepositoryFake(IEventAggregator eventAggregator, ScrapingObjectCreator scrapingObjectCreator)
         {

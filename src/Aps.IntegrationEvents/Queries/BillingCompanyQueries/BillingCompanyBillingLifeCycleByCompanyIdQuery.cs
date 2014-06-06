@@ -7,9 +7,9 @@ namespace Aps.Integration.Queries.BillingCompanyQueries
 {
     public class BillingCompanyBillingLifeCycleByCompanyIdQuery
     {
-        private readonly BillingCompanyRepositoryFake billingCompanyRepository;
+        private readonly IBillingCompanyRepository billingCompanyRepository;
 
-        public BillingCompanyBillingLifeCycleByCompanyIdQuery(BillingCompanyRepositoryFake billingCompanyRepository)
+        public BillingCompanyBillingLifeCycleByCompanyIdQuery(IBillingCompanyRepository billingCompanyRepository)
         {
             this.billingCompanyRepository = billingCompanyRepository;
         }
