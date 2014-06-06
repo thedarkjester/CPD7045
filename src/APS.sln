@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.Shared.Tests", "Aps.Cor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.BillingCompanies", "Aps.BillingCompany\Aps.BillingCompanies.csproj", "{2B24072A-26C9-4A39-82E6-CABF65C1E0A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.Customer", "Aps.Customer\Aps.Customer.csproj", "{D3540939-6FEA-41F8-BA61-335EC08EC7CE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.Customers", "Aps.Customer\Aps.Customers.csproj", "{D3540939-6FEA-41F8-BA61-335EC08EC7CE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.Audit", "Aps.Audit\Aps.Audit.csproj", "{4C31EE2C-579F-4C8A-B6A2-658AE0D2D0AB}"
 EndProject
@@ -29,6 +29,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.Integration", "Aps.IntegrationEvents\Aps.Integration.csproj", "{78059759-BF3D-471D-B88B-CD3AA1EC101B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.IntegrationTests", "Aps.IntegrationTests\Aps.IntegrationTests.csproj", "{70CBA3C5-ED0A-4A71-98EF-B89498A56191}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.CustomerEventListenerService", "Aps.CustomerEventListenerService\Aps.CustomerEventListenerService.csproj", "{FA0DFFC0-71EB-4421-AE05-3E9BDC339E31}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.AccountStatements", "Aps.AccountStatements\Aps.AccountStatements.csproj", "{1A25129B-BCD3-4C55-B5F8-48F1DE6206AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -76,6 +80,14 @@ Global
 		{70CBA3C5-ED0A-4A71-98EF-B89498A56191}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70CBA3C5-ED0A-4A71-98EF-B89498A56191}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70CBA3C5-ED0A-4A71-98EF-B89498A56191}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA0DFFC0-71EB-4421-AE05-3E9BDC339E31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA0DFFC0-71EB-4421-AE05-3E9BDC339E31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA0DFFC0-71EB-4421-AE05-3E9BDC339E31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA0DFFC0-71EB-4421-AE05-3E9BDC339E31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A25129B-BCD3-4C55-B5F8-48F1DE6206AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A25129B-BCD3-4C55-B5F8-48F1DE6206AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A25129B-BCD3-4C55-B5F8-48F1DE6206AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A25129B-BCD3-4C55-B5F8-48F1DE6206AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

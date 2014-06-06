@@ -6,11 +6,11 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Threading.Tasks;
-using Aps.IntegrationEvents.Events;
-using Aps.IntegrationEvents.Serialization;
+using Aps.Integration.Events;
+using Aps.Integration.Serialization;
 using Caliburn.Micro;
 
-namespace Aps.IntegrationEvents
+namespace Aps.Integration
 {
     public class EventIntegrationService
     {
@@ -46,22 +46,16 @@ namespace Aps.IntegrationEvents
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                // every so often look for events
-
                 foreach (var subscription in subscriptions)
                 {
                     IEnumerable<IntegrationEvent> events = eventIntegrationRepositoryFake.GetLatestEvents(currentProcessedEvent, subscription);
                     DispatchEventsInProcess(events);
                 }
-                
-                Thread.Sleep(60000);
+
+                Console.WriteLine("Getting External Events");
+
+                Thread.Sleep(2500);
             }
-
-
-            // for each in subscription list check DB
-            // if event valid
-
-            //eventAggregator.Publish(DeserializedEventData);
         }
 
         private void DispatchEventsInProcess(IEnumerable<IntegrationEvent> events)
@@ -70,6 +64,12 @@ namespace Aps.IntegrationEvents
             {
                 var deserializedEvent = binaryEventDeSerializer.DeSerializeMessage(integrationEvent.SerializedEvent);
                 eventAggregator.Publish(deserializedEvent);
+
+                if (integrationEvent.RowVersion > currentProcessedEvent)
+                {
+                    currentProcessedEvent = integrationEvent.RowVersion;
+                    // store somewhere for future persistence so we don't reload events each time we start the instance.
+                }
             }
         }
 
@@ -91,14 +91,5 @@ namespace Aps.IntegrationEvents
             eventIntegrationRepositoryFake.StoreEvent(new IntegrationEvent(messageType, data));
         }
 
-    }
-
-
-    [Serializable]
-    public class ScrapeSessionFailedEvent
-    {
-        Guid ScrapeSessionId { get; set; }
-
-        string FailureReason { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 using System;
 
-namespace Aps.IntegrationEvents.Queries.BillingCompanyQueries.Dtos
+namespace Aps.Integration.Queries.BillingCompanyQueries.Dtos
 {
     public class BillingCompanyDto
     {

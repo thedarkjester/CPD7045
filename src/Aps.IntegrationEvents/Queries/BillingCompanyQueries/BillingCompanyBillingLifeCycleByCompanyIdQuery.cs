@@ -1,8 +1,9 @@
 ﻿using System;
+using Aps.BillingCompanies.Aggregates;
 using Aps.BillingCompanies;
-using Aps.IntegrationEvents.Queries.BillingCompanyQueries.Dtos;
+using Aps.Integration.Queries.BillingCompanyQueries.Dtos;
 
-namespace Aps.IntegrationEvents.Queries.BillingCompanyQueries
+namespace Aps.Integration.Queries.BillingCompanyQueries
 {
     public class BillingCompanyBillingLifeCycleByCompanyIdQuery
     {
@@ -15,7 +16,7 @@ namespace Aps.IntegrationEvents.Queries.BillingCompanyQueries
 
         public BillingCompanyBillingLifeCycleDto GetBillingCompanyBillingLifeCycleByCompanyId(Guid id)
         {
-            BillingCompanies.Aggregates.BillingCompany billingCompany = billingCompanyRepository.GetBillingCompanyById(id);
+            BillingCompany billingCompany = billingCompanyRepository.GetBillingCompanyById(id);
 
             if (billingCompany == null)
             {
@@ -27,7 +28,7 @@ namespace Aps.IntegrationEvents.Queries.BillingCompanyQueries
             return dto;
         }
 
-        private BillingCompanyBillingLifeCycleDto MapBillingCompanyAggregateToBillingCompanyBillingLifeCycleDto(BillingCompanies.Aggregates.BillingCompany billingCompany)
+        private BillingCompanyBillingLifeCycleDto MapBillingCompanyAggregateToBillingCompanyBillingLifeCycleDto(BillingCompany billingCompany)
         {
             var billingCompanyLifeCycleDto = new BillingCompanyBillingLifeCycleDto
                 {

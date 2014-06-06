@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Aps.IntegrationEvents;
-using Aps.IntegrationEvents.Events;
+using Aps.Integration;
+using Aps.Integration.Events;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Aps.IntegrationTests.RepositoryTests
@@ -95,7 +94,7 @@ namespace Aps.IntegrationTests.RepositoryTests
             IEnumerable<IntegrationEvent> events = repository.GetLatestEvents(3, "test");
 
             // assert
-            Assert.IsTrue(events.Count() == 0);
+            Assert.IsTrue(!events.Any());
         }
     }
 }

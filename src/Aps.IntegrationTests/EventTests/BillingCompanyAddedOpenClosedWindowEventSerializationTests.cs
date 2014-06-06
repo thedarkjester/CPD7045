@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using Aps.IntegrationEvents;
-using Aps.IntegrationEvents.Serialization;
+using Aps.Integration;
+using Aps.Integration.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Aps.IntegrationTests.EventTests

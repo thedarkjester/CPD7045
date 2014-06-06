@@ -1,4 +1,6 @@
-﻿namespace Aps.BillingCompanies.ValueObjects
+﻿using Seterlund.CodeGuard;
+
+namespace Aps.BillingCompanies.ValueObjects
 {
     public class ScrapingLoadManagementConfiguration
     {
@@ -11,6 +13,8 @@
 
         public ScrapingLoadManagementConfiguration(int concurrentScrapes)
         {
+            Guard.That(concurrentScrapes).IsGreaterThan(0);
+
             ConcurrentScrapes = concurrentScrapes;
         }
     }

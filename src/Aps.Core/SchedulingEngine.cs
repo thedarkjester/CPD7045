@@ -1,7 +1,8 @@
 ﻿using Aps.BillingCompanies;
 using Aps.Core.InternalEvents;
-using Aps.Customer;
-using Aps.IntegrationEvents;
+using Aps.Customers;
+using Aps.Integration;
+using Aps.Integration.Events;
 using Caliburn.Micro;
 
 namespace Aps.Core

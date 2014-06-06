@@ -1,6 +1,6 @@
 ﻿using Seterlund.CodeGuard;
 
-namespace Aps.IntegrationEvents.Queries.Events
+namespace Aps.Integration.Queries.Events
 {
     public class GetLatestEventsBySubScribedEventTypeQuery
     {
