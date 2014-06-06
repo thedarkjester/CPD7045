@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EnumTypes\ScrapeSessionTypes.cs" />
     <Compile Include="EnumTypes\ScrapingErrorResponseCodes.cs" />
     <Compile Include="EnumTypes\ServiceProviderTypes.cs" />
     <Compile Include="EventIntegrationRepositoryFake.cs" />

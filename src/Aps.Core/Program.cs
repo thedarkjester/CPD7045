@@ -8,6 +8,8 @@ using Aps.Integration.Serialization;
 using Autofac;
 using Caliburn.Micro;
 using Aps.Customers;
+using Aps.Core.Scrappers;
+using Aps.Integration.EnumTypes;
 
 namespace Aps.Core
 {
@@ -36,6 +38,9 @@ namespace Aps.Core
             builder.RegisterType<CustomerRepositoryFake>().As<CustomerRepositoryFake>().InstancePerDependency();
             builder.RegisterType<BillingCompanyRepositoryFake>().As<BillingCompanyRepositoryFake>().InstancePerDependency();
             builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>().InstancePerDependency();
+
+            builder.RegisterType<CrossCheckScrapper>().Keyed<Scrapper>(ScrapeSessionType.CrossCheckScrapper);
+            builder.RegisterType<StatementScrapper>().Keyed<Scrapper>(ScrapeSessionType.StatementScrapper);
             //builder.RegisterType<AccountStatementComposer>().As<AccountStatementComposer>().InstancePerDependency();
           
             RegisterIntegrationDependencies(builder);
