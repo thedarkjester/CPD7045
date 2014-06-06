@@ -29,7 +29,6 @@ namespace Aps.Core
             //messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(NewCustomerBillingCompanyAccount).FullName);
             messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(BillingCompanyAddedOpenClosedWindow).FullName);
 
-            var session = new ScrapeSession();
 
             // every so often look for scrape sessions that are valid ( retry or otherwise )
             Scrape();
@@ -56,9 +55,5 @@ namespace Aps.Core
         {
             // modify sessions
         }
-    }
-
-    public class ScrapeSession
-    {
     }
 }

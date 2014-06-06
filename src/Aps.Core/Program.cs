@@ -35,6 +35,7 @@ namespace Aps.Core
             builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
 
             builder.RegisterType<CustomerRepositoryFake>().As<ICustomerRepository>().InstancePerDependency();
+            builder.RegisterType<CustomerCreator>().As<CustomerCreator>().InstancePerDependency();
             builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>().InstancePerDependency();
             builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>().InstancePerDependency();
             builder.RegisterType<AccountStatementComposer>().As<AccountStatementComposer>().InstancePerDependency();
