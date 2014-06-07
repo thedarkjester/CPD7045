@@ -2,7 +2,6 @@
 using Aps.Core.Services;
 using Aps.Integration;
 using Aps.Integration.Events;
-using Aps.Shared.Tests.ValidatorTests;
 using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
@@ -46,7 +45,7 @@ namespace Aps.Core.ScrapeOrchestrators
                 //return
 
                 eventAggregator.Publish(new ScrapeSessionDuplicateStatement(scrapeSessionId));
-                var validatedResults = new ScrapeSessionDataValidator().validateScrapeData(transformedResults);
+                //var validatedResults = new ScrapeSessionDataValidator().validateScrapeData(transformedResults);
 
                 //fire event
                 accountStatementComposer.BuildAccountStatement(customerId, billingCompanyId, new List<KeyValuePair<string, object>>());
