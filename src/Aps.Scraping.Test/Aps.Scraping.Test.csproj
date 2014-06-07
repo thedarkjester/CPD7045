@@ -37,6 +37,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=3.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Autofac.3.4.1\lib\net40\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.2.1402.2112\lib\net40\Moq.dll</HintPath>
     </Reference>
@@ -63,6 +67,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Aps.Core\Aps.Core.csproj">
+      <Project>{98ea6256-15b1-49c2-a405-a2e050d5741e}</Project>
+      <Name>Aps.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Aps.Scraping\Aps.Scraping.csproj">
       <Project>{ce43f772-47f0-4629-b9dc-74616b937556}</Project>
       <Name>Aps.Scraping</Name>

@@ -40,7 +40,7 @@ namespace Aps.CustomerEventListenerService
 
         public void Start(System.Threading.CancellationToken cancellationToken)
         {
-            while (true)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 Console.WriteLine("Waiting for EventAggregator Events");
                 Thread.Sleep(1000);
