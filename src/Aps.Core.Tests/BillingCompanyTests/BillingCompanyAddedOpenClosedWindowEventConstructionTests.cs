@@ -87,8 +87,8 @@ namespace Aps.Shared.Tests.BillingCompanyTests
         public void Given_A_BillingCompanyAddedOpenClosedWindowEvent_When_The_StartDateIsLessThanEndDateInLowestGranularity_ExceptionIsThrown()
         {
             //arrange ( you should be able to scrape if the window is open )
-            endDate = endDate.AddMilliseconds(2);
-            startDate = startDate.AddMilliseconds(3);
+            endDate = endDate.AddMilliseconds(200);
+            startDate = startDate.AddMilliseconds(3000);
 
             //act
             var openClosedWindow = new OpenClosedWindow(startDate, endDate, isOpen, concurrentScrapingLimit);
