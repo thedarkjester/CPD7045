@@ -1,6 +1,9 @@
 ﻿using Aps.Customers;
+using Aps.Customers.Aggregates;
+using Aps.Customers.ValueObjects;
 using Aps.Integration;
 using Aps.Integration.Events;
+using Aps.Integration.Queries.CustomerQueries.Dtos;
 using Caliburn.Micro;
 using System;
 using System.Threading;
@@ -28,14 +31,22 @@ namespace Aps.CustomerEventListenerService
 
         public void Handle(CustomerScrapeSessionFailed message)
         {
-           // Customer customer = customerRepository.GetAccountStatement();
-          //  customer.SetStatus();
+            
+          Customer customer = customerRepository.GetCustomerById(message.customerID);
+          customer.ChangeCustomerBillingCompanyAccountStatus(message.billingCompanyID, message.status);
+          
         }
 
 
         public void Handle(AccountStatementGenerated message)
         {
+               
+            // is the statement an overall statement (outside BCA's - as is.) or per billing company (need bc id then and in BCA's)?
             // store on customer a statementId and date ( CustomerStatement Value Object )
+
+            Customer customer = customerRepository.GetCustomerById(message.CustomerId);
+            customer.SetCustomerStatement(new CustomerStatement(message.AccountStatementId, message.StatementDate));
+
         }
 
         public void Start(System.Threading.CancellationToken cancellationToken)

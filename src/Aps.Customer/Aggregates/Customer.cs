@@ -1,12 +1,16 @@
 ﻿using Aps.Customers.ValueObjects;
 using Aps.DomainBase;
 using Caliburn.Micro;
+using System;
+using System.Collections.Generic;
+using Aps.Integration;
 
 namespace Aps.Customers.Aggregates
 {
     public class Customer : Aggregate
     {
         private readonly IEventAggregator eventAggregator;
+        private readonly EventIntegrationService eventIntegrationService;
 
         private CustomerFirstName customerFirstName;
         private CustomerLastName customerLastName;
@@ -14,13 +18,15 @@ namespace Aps.Customers.Aggregates
         private CustomerTelephone customerTelephone;
         private CustomerAPSUsername customerAPSUsername;
         private CustomerAPSPassword customerAPSPassword;
+        private List<CustomerBillingCompanyAccount> customerBillingCompanyAccounts;
+        private CustomerStatement customerStatement;
 
         private Customer()
         {
 
         }
                 
-        public Customer(IEventAggregator aggregator, CustomerFirstName customerFirstName, CustomerLastName customerLastName, CustomerEmailAddress customerEmailAddress,
+        public Customer(IEventAggregator aggregator, EventIntegrationService eventIntegrationService, CustomerFirstName customerFirstName, CustomerLastName customerLastName, CustomerEmailAddress customerEmailAddress,
                         CustomerTelephone customerTelephone, CustomerAPSUsername customerAPSUsername, CustomerAPSPassword customerAPSPassword)
         {
             this.customerFirstName = customerFirstName;
@@ -29,9 +35,13 @@ namespace Aps.Customers.Aggregates
             this.customerTelephone = customerTelephone;
             this.customerAPSUsername = customerAPSUsername;
             this.customerAPSPassword = customerAPSPassword;
+            this.customerBillingCompanyAccounts = new List<CustomerBillingCompanyAccount>();
+            this.customerStatement = null;
 
             this.eventAggregator = aggregator;
             this.eventAggregator.Subscribe(this);
+
+            this.eventIntegrationService = eventIntegrationService;
 
         }
 
@@ -63,6 +73,11 @@ namespace Aps.Customers.Aggregates
         public CustomerAPSPassword CustomerAPSPassword
         {
             get { return this.customerAPSPassword; }
+        }
+
+        public CustomerStatement CustomerStatement
+        {
+            get { return this.CustomerStatement; }
         }
 
         public void SetCustomerFirstName(CustomerFirstName firstName)
@@ -107,5 +122,39 @@ namespace Aps.Customers.Aggregates
             this.customerAPSPassword = password;
         }
 
+        public void AddCustomerBillingCompanyAccount(CustomerBillingCompanyAccount customerBillingCompanyAccount)
+        {
+            this.customerBillingCompanyAccounts.Add(customerBillingCompanyAccount);
+
+            Guid billingCompanyId = customerBillingCompanyAccount.getBillingCompanyId();
+
+            /// TODO: how do I get the customer ID here that Wynand is going to need?
+
+            CustomerBillingAccountAdded customerBillingAccountAddedEvent = new CustomerBillingAccountAdded();
+
+            eventIntegrationService.Publish(customerBillingAccountAddedEvent);
+
+        }
+
+        public void RemoveCustomerBillingCompanyAccount(CustomerBillingCompanyAccount customerBillingCompanyAccount)
+        {
+            this.customerBillingCompanyAccounts.Remove(customerBillingCompanyAccount);
+        }
+
+        public void ChangeCustomerBillingCompanyAccountStatus(Guid billingCompanyId, string status)
+        {
+            foreach(CustomerBillingCompanyAccount cbca in customerBillingCompanyAccounts) 
+            {
+                if (cbca.getBillingCompanyId() == billingCompanyId)
+                {
+                    cbca.ChangeCustomerBillingAccountStatus(status);
+                }
+            }
+        }
+
+        public void SetCustomerStatement(CustomerStatement statement)
+        {
+            this.customerStatement = statement;
+        }
     }
 }
