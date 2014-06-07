@@ -71,10 +71,10 @@
     <Compile Include="KeyValuePair.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SchedulingEngine.cs" />
+    <Compile Include="ScrapeOrchestrators\CrossCheckScrapeOrchestrator.cs" />
     <Compile Include="ScrapeSessionInitiator.cs" />
     <Compile Include="ScrapeSessionData.cs" />
     <Compile Include="ScrapperException.cs" />
-    <Compile Include="ScrapeOrchestrators\CrossCheckScrapeOrchestrator.cs" />
     <Compile Include="ScrapeOrchestrators\ScrapeOrchestrator.cs" />
     <Compile Include="ScrapeOrchestrators\StatementScrapeOrchestrator.cs" />
     <Compile Include="Services\AccountStatementComposer.cs" />
