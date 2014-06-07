@@ -7,6 +7,7 @@ using Aps.Integration.EnumTypes;
 using Autofac.Features.Indexed;
 using Moq;
 using Aps.Core;
+using Aps.Core.ScrapeOrchestrators;
 using Aps.Customers;
 using Aps.BillingCompanies;
 
