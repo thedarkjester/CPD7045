@@ -2,6 +2,8 @@
 using Aps.Core.Services;
 using Aps.Integration;
 using Aps.Integration.Events;
+using Aps.Scraping;
+using Aps.Scraping.Scrapers;
 using Caliburn.Micro;
 using System;
 using System.Collections.Generic;
@@ -13,16 +15,20 @@ namespace Aps.Core.ScrapeOrchestrators
 {
     public class StatementScrapeOrchestrator : ScrapeOrchestrator
     {
-        private readonly IEventAggregator eventAggregator;
-        private readonly AccountStatementComposer accountStatementComposer;
-        private readonly FailureHandler failureHandler;
-        private readonly EventIntegrationService eventIntegrationService;
-        public StatementScrapeOrchestrator(IEventAggregator eventAggregator, EventIntegrationService eventIntegrationService,  AccountStatementComposer accountStatementComposer, FailureHandler failureHandler)
+        readonly IEventAggregator eventAggregator;
+        readonly AccountStatementComposer accountStatementComposer;
+        readonly FailureHandler failureHandler;
+        readonly EventIntegrationService eventIntegrationService;
+        readonly IScrapeLoggingRepository scrapeLoggingRepository;
+        readonly IWebScraper webScraper;
+        public StatementScrapeOrchestrator(IEventAggregator eventAggregator, EventIntegrationService eventIntegrationService, AccountStatementComposer accountStatementComposer, FailureHandler failureHandler, IScrapeLoggingRepository scrapeLoggingRepository, IWebScraper webScraper)
         {
             this.eventAggregator = eventAggregator;
             this.eventIntegrationService = eventIntegrationService;
             this.accountStatementComposer = accountStatementComposer;
             this.failureHandler = failureHandler;
+            this.scrapeLoggingRepository = scrapeLoggingRepository;
+            this.webScraper = webScraper;
         }
 
         public override void Orchestrate()
@@ -30,40 +36,54 @@ namespace Aps.Core.ScrapeOrchestrators
             Guid customerId = Guid.NewGuid();
             Guid billingCompanyId = Guid.NewGuid();
             Guid scrapeSessionId = Guid.NewGuid();
+            Guid queueId = Guid.NewGuid();
+            bool isDuplicateStatment = false;
+            bool hasFailed = false;
+            var scrapeSessionData = string.Empty;
             try
             {
-                //Initiate scrape session
-                var scrapeSessionData = string.Empty; //create interface
-                eventIntegrationService.Publish(new ScrapeSessionDataRetrievalCompleted(customerId, billingCompanyId));
-                
+                eventIntegrationService.Publish(new ScrapeSessionStarted(scrapeSessionId, customerId, billingCompanyId));
+                scrapeSessionData = webScraper.Scrape(null, null, null);
+                eventIntegrationService.Publish(new ScrapeSessionDataRetrievalCompleted(scrapeSessionId, customerId, billingCompanyId));
+
                 var transformedResults = new Interpreter().TransformResults(scrapeSessionData);
-                //fire event
+                eventIntegrationService.Publish(new ScrapeSessionDataInterpretered(scrapeSessionId, customerId, billingCompanyId));
+
                 //check if duplicate statement
-                //if there is duplicate
-                //fire event
-                //call failure handler 
-                //return
+                if (isDuplicateStatment)
+                {
+                    eventAggregator.Publish(new ScrapeSessionDuplicateStatement(queueId));
+                    eventIntegrationService.Publish(new ScrapeSessionDuplicateStatementReceived(scrapeSessionId, customerId, billingCompanyId));
+                    //failureHandler.ProcessNewFailure(customerId, billingCompanyId, Integration.EnumTypes.ScrapingErrorResponseCodes.Unknown);
+                    return;
+                }
 
-                eventAggregator.Publish(new ScrapeSessionDuplicateStatement(scrapeSessionId));
                 //var validatedResults = new ScrapeSessionDataValidator().validateScrapeData(transformedResults);
+                eventIntegrationService.Publish(new ScrapeSessionDataValidated(scrapeSessionId, customerId, billingCompanyId));
 
-                //fire event
                 accountStatementComposer.BuildAccountStatement(customerId, billingCompanyId, new List<KeyValuePair<string, object>>());
-                //fire event
-                eventAggregator.Publish(new ScrapeSessionSuccessful(scrapeSessionId, customerId, billingCompanyId));
-                eventIntegrationService.Publish(new CustomerScrapeSessionSuccessful(customerId, billingCompanyId));
-            }
-            catch (ScrapperException se)
-            {
+                eventIntegrationService.Publish(new ScrapeSessionStatementComposed(scrapeSessionId, customerId, billingCompanyId));
 
-                failureHandler.ProcessNewFailure(customerId, billingCompanyId, se.Error);
-                eventIntegrationService.Publish(new CustomerScrapeSessionFailed(customerId, billingCompanyId, se.Error));
-                eventAggregator.Publish(new ScrapeSessionFailed(scrapeSessionId, se.Error.ToString()));
-                
+                eventAggregator.Publish(new ScrapeSessionSuccessful(queueId));
+                eventIntegrationService.Publish(new ScrapeSessionCompletedSuccessfully(scrapeSessionId, customerId, billingCompanyId));
+            }
+            catch (DataScraperException dse)
+            {
+                failureHandler.ProcessNewFailure(customerId, billingCompanyId, dse.Error);
+                eventIntegrationService.Publish(new ScrapeSessionCompletedWithErrors(scrapeSessionId, customerId, billingCompanyId, dse.Error.ToString()));
+                eventAggregator.Publish(new ScrapeSessionFailed(queueId, dse.Error.ToString()));
+                hasFailed = true;
+            }
+            catch (Exception e)
+            {
+                failureHandler.ProcessNewFailure(customerId, billingCompanyId, Integration.EnumTypes.ScrapingErrorResponseCodes.Unknown);
+                eventIntegrationService.Publish(new ScrapeSessionCompletedWithErrors(scrapeSessionId, customerId, billingCompanyId, e.Message));
+                eventAggregator.Publish(new ScrapeSessionFailed(queueId, Integration.EnumTypes.ScrapingErrorResponseCodes.Unknown.ToString()));
+                hasFailed = true;
             }
             finally
             {
-                //log data
+                scrapeLoggingRepository.StoreScrape(new ScrapingLog(scrapeSessionId, customerId, billingCompanyId, hasFailed, scrapeSessionData));
             }
         }
     }

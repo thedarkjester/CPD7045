@@ -67,7 +67,6 @@ namespace Aps.Shared.Tests.CoreTests
             scrapeSessionInitiator.InitiateNewScrapeSession(billingCompanyId, customerId, queueId, ScrapeSessionTypes.CrossCheckScrapper);
 
             mockScrapeSessionInitiator.Verify();
-
         }
 
     }

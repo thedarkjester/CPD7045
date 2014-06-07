@@ -44,12 +44,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IScrapeLoggingRepository.cs" />
     <Compile Include="IScrapingObjectRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScrapingLog.cs" />
     <Compile Include="ScrapingObject.cs" />
     <Compile Include="ScrapingObjectCreator.cs" />
-    <Compile Include="WebScrapers\IWebScraper.cs" />
-    <Compile Include="WebScrapers\WebScraperFake.cs" />
+    <Compile Include="Scrapers\ICrossCheckScraper.cs" />
+    <Compile Include="Scrapers\IWebScraper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aps.DomainBase\Aps.DomainBase.csproj">

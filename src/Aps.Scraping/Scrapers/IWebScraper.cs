@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aps.Scraping.WebScrapers
+namespace Aps.Scraping.Scrapers
 {
     public interface IWebScraper
     {

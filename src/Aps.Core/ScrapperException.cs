@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Aps.Core
 {
-    public class ScrapperException : Exception
+    public class DataScraperException : Exception
     {
         private readonly ScrapingErrorResponseCodes scrapingErrorResponseCodes;
 
@@ -16,7 +16,7 @@ namespace Aps.Core
             get { return scrapingErrorResponseCodes; }
         }
 
-        public ScrapperException(ScrapingErrorResponseCodes scrapingErrorResponseCodes)
+        public DataScraperException(ScrapingErrorResponseCodes scrapingErrorResponseCodes)
         {
             this.scrapingErrorResponseCodes = scrapingErrorResponseCodes;
         }

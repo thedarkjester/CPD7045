@@ -4,28 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aps.Integration.Events
+namespace Aps.Scraping
 {
-    [Serializable]
-    public class ScrapeSessionDataRetrievalCompleted
+    public class ScrapingLog
     {
 
-        Guid scrapeSessionId; 
+        Guid scrapeSessionId;
         Guid customerId;
         Guid billingCompanyId;
-        DateTime dateCreated;
-
-        public Guid ScrapeSessionIdv { get { return scrapeSessionId; } }
+        string scrapedData;
+        bool hasFailed;
+        public Guid ScrapeSessionId { get { return scrapeSessionId; } }
         public Guid CustomerId { get { return customerId; } }
         public Guid BillingCompanyId { get { return billingCompanyId; } }
-        public DateTime DateCreated { get { return dateCreated; } }
+        public string ScrapedData { get { return scrapedData; } }
 
-        public ScrapeSessionDataRetrievalCompleted(Guid scrapeSessionId, Guid customerId, Guid billingCompanyId)
+
+        public ScrapingLog(Guid scrapeSessionId, Guid customerId, Guid billingCompanyId, bool hasFailed, string scrapedData)
         {
+
             this.scrapeSessionId = scrapeSessionId;
             this.customerId = customerId;
             this.billingCompanyId = billingCompanyId;
-            dateCreated = DateTime.Now;
+            this.scrapedData = scrapedData;
+            this.hasFailed = hasFailed;
         }
     }
 }

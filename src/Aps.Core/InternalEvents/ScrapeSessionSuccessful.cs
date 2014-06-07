@@ -8,7 +8,7 @@ namespace Aps.Core.InternalEvents
 {
     public class ScrapeSessionSuccessful
     {
-        public ScrapeSessionSuccessful(Guid scraperSessionId, Guid customerId, Guid billingCompanyId)
+        public ScrapeSessionSuccessful(Guid queueId)
         {
             
         }

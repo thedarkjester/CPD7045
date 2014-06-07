@@ -6,25 +6,25 @@ using System.Threading.Tasks;
 
 namespace Aps.Integration.Events
 {
-    [Serializable]
-    public class ScrapeSessionDataRetrievalCompleted
+    public class CrossCheckSessionCompletedSuccesfully
     {
-
-        Guid scrapeSessionId; 
+        Guid crossCheckSessionId;
         Guid customerId;
         Guid billingCompanyId;
         DateTime dateCreated;
+        string accountNumber;
 
-        public Guid ScrapeSessionIdv { get { return scrapeSessionId; } }
+        public Guid CrossCheckSessionId { get { return crossCheckSessionId; } }
         public Guid CustomerId { get { return customerId; } }
         public Guid BillingCompanyId { get { return billingCompanyId; } }
         public DateTime DateCreated { get { return dateCreated; } }
-
-        public ScrapeSessionDataRetrievalCompleted(Guid scrapeSessionId, Guid customerId, Guid billingCompanyId)
+        public string AccountNumber { get { return accountNumber; } }
+        public CrossCheckSessionCompletedSuccesfully(Guid crossCheckSessionId, Guid customerId, Guid billingCompanyId, string accountNumber)
         {
-            this.scrapeSessionId = scrapeSessionId;
+            this.crossCheckSessionId = crossCheckSessionId;
             this.customerId = customerId;
             this.billingCompanyId = billingCompanyId;
+            this.accountNumber = accountNumber;
             dateCreated = DateTime.Now;
         }
     }

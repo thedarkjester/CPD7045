@@ -35,7 +35,7 @@ namespace Aps.Core
 
 
             //get user credentials for billing company 
-            eventAggregator.Publish(new ScrapeSessionStarted(queueId, customerId, billingCompanyId));
+            
             Task.Run(() => scrapeOrchestrator.Orchestrate()/*(billingCompanyId, customerId)*/);
         }
     }

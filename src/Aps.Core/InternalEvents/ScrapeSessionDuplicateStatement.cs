@@ -8,7 +8,7 @@ namespace Aps.Core.InternalEvents
 {
     public class ScrapeSessionDuplicateStatement
     {
-        public ScrapeSessionDuplicateStatement(Guid scrapeSessionId)
+        public ScrapeSessionDuplicateStatement(Guid queueId)
         {
 
         }

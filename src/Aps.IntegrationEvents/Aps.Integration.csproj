@@ -50,10 +50,27 @@
     <Compile Include="EnumTypes\ScrapingErrorResponseCodes.cs" />
     <Compile Include="EnumTypes\ServiceProviderTypes.cs" />
     <Compile Include="EventIntegrationRepositoryFake.cs" />
+    <Compile Include="Events\CrossCheckSessionCompletedSuccesfully.cs" />
+    <Compile Include="Events\CrossCheckSessionCompletedWithErrors.cs" />
+    <Compile Include="Events\CrossCheckSessionStarted.cs" />
     <Compile Include="Events\CustomerScrapeSessionFailed.cs" />
     <Compile Include="Events\AccountStatementGenerated.cs" />
-    <Compile Include="Events\CustomerScrapeSessionSuccessful.cs" />
+    <Compile Include="Events\ScrapeSessionCompletedSuccessfully.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\ScrapeSessionDataInterpretered.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Events\ScrapeSessionDataRetrievalCompleted.cs" />
+    <Compile Include="Events\ScrapeSessionCompletedWithErrors.cs" />
+    <Compile Include="Events\ScrapeSessionDataValidated.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\ScrapeSessionDuplicateStatementReceived.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\ScrapeSessionStarted.cs" />
+    <Compile Include="Events\ScrapeSessionStatementComposed.cs" />
     <Compile Include="Queries\BillingCompanyQueries\AllBillingCompaniesQuery.cs" />
     <Compile Include="Queries\BillingCompanyQueries\BillingCompanyBillingLifeCycleByCompanyIdQuery.cs" />
     <Compile Include="Queries\BillingCompanyQueries\BillingCompanyOpenClosedWindowsQuery.cs" />

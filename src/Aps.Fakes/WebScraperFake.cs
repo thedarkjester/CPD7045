@@ -1,11 +1,12 @@
-﻿using Seterlund.CodeGuard;
+﻿using Aps.Scraping.Scrapers;
+using Seterlund.CodeGuard;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aps.Scraping.WebScrapers
+namespace Aps.Fakes
 {
     public class WebScraperFake : IWebScraper
     {

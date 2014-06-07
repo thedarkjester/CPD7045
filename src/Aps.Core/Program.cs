@@ -11,6 +11,8 @@ using Caliburn.Micro;
 using Aps.Customers;
 using Aps.Core.ScrapeOrchestrators;
 using Aps.Integration.EnumTypes;
+using Aps.Scraping;
+using Aps.Scraping.Scrapers;
 
 namespace Aps.Core
 {
@@ -41,7 +43,9 @@ namespace Aps.Core
             builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>().InstancePerDependency();
             builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>().InstancePerDependency();
             builder.RegisterType<AccountStatementComposer>().As<AccountStatementComposer>().InstancePerDependency();
-
+            builder.RegisterType<ScrapeLoggingRepositoryFake>().As<IScrapeLoggingRepository>().InstancePerDependency();
+            builder.RegisterType<WebScraperFake>().As<IWebScraper>().InstancePerDependency();
+            builder.RegisterType<CrossCheckScraperFake>().As<ICrossCheckScraper>().InstancePerDependency();
             builder.RegisterType<CrossCheckScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.CrossCheckScrapper);
             builder.RegisterType<StatementScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.StatementScrapper);
             RegisterIntegrationDependencies(builder);
