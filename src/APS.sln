@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.Fakes", "Aps.Fakes\Aps.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.Scraping", "Aps.Scraping\Aps.Scraping.csproj", "{CE43F772-47F0-4629-B9DC-74616B937556}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aps.Scraping.Test", "Aps.Scraping.Test\Aps.Scraping.Test.csproj", "{A8AE2681-9F36-4A37-9928-00D6D432306C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,6 +102,10 @@ Global
 		{CE43F772-47F0-4629-B9DC-74616B937556}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE43F772-47F0-4629-B9DC-74616B937556}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE43F772-47F0-4629-B9DC-74616B937556}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8AE2681-9F36-4A37-9928-00D6D432306C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8AE2681-9F36-4A37-9928-00D6D432306C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8AE2681-9F36-4A37-9928-00D6D432306C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8AE2681-9F36-4A37-9928-00D6D432306C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -108,5 +114,6 @@ Global
 		{6FE6CB55-4943-495C-A88D-972C04518B77} = {FD9F6591-7395-4E5B-9729-2397A470D1CE}
 		{FE8A52E8-D38F-40BA-8259-703EFDF9C744} = {FD9F6591-7395-4E5B-9729-2397A470D1CE}
 		{70CBA3C5-ED0A-4A71-98EF-B89498A56191} = {FD9F6591-7395-4E5B-9729-2397A470D1CE}
+		{A8AE2681-9F36-4A37-9928-00D6D432306C} = {FD9F6591-7395-4E5B-9729-2397A470D1CE}
 	EndGlobalSection
 EndGlobal

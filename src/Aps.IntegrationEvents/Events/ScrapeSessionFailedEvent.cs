@@ -8,5 +8,12 @@ namespace Aps.Integration.Events
         Guid ScrapeSessionId { get; set; }
 
         string FailureReason { get; set; }
+
+        public ScrapeSessionFailedEvent(Guid scrapeSessionId, string failureReason)
+        {
+
+        }
+
+
     }
 }

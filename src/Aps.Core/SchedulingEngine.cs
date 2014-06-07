@@ -37,7 +37,7 @@ namespace Aps.Core
         private void Scrape()
         {
               // DO SOMETHING AND IF FAILS
-                eventAggregator.Publish(new ScrapeSessionFailed());
+                eventAggregator.Publish(new ScrapeSessionFailed(System.Guid.NewGuid(), string.Empty));
         }
 
         public void Stop()
@@ -48,7 +48,7 @@ namespace Aps.Core
         public void Handle(ScrapeSessionFailed message)
         {
             // Failurehandler code
-            messageSendAndReceiver.Publish(new ScrapeSessionFailedEvent());
+            messageSendAndReceiver.Publish(new ScrapeSessionFailedEvent(System.Guid.NewGuid(), string.Empty));
         }
 
         public void Handle(BillingCompanyAddedOpenClosedWindow message)

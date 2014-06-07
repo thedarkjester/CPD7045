@@ -9,6 +9,8 @@ using Aps.Integration.Serialization;
 using Autofac;
 using Caliburn.Micro;
 using Aps.Customers;
+using Aps.Core.ScrapeOrchestrators;
+using Aps.Integration.EnumTypes;
 
 namespace Aps.Core
 {
@@ -39,7 +41,9 @@ namespace Aps.Core
             builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>().InstancePerDependency();
             builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>().InstancePerDependency();
             builder.RegisterType<AccountStatementComposer>().As<AccountStatementComposer>().InstancePerDependency();
-          
+
+            builder.RegisterType<CrossCheckScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.CrossCheckScrapper);
+            builder.RegisterType<StatementScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.StatementScrapper);
             RegisterIntegrationDependencies(builder);
 
             Container = builder.Build();
