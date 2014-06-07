@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aps.Core.Scrappers
+namespace Aps.Core.ScrapeOrchestrators
 {
-    public abstract class Scrapper
+    public abstract class ScrapeOrchestrator
     {
-        public abstract void Scrape();        
+        public abstract void Orchestrate();        
     }
 }

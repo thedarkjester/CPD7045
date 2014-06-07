@@ -1,6 +1,7 @@
 ﻿using System;
 using Aps.BillingCompanies;
-using Aps.BillingCompanies.Aggregates;
+using Aps.Core.Services;
+using Aps.Fakes;
 using Aps.Integration;
 using Aps.Integration.Queries.BillingCompanyQueries;
 using Aps.Integration.Queries.Events;
@@ -8,7 +9,7 @@ using Aps.Integration.Serialization;
 using Autofac;
 using Caliburn.Micro;
 using Aps.Customers;
-using Aps.Core.Scrappers;
+using Aps.Core.ScrapeOrchestrators;
 using Aps.Integration.EnumTypes;
 
 namespace Aps.Core
@@ -35,14 +36,14 @@ namespace Aps.Core
             builder.RegisterType<SchedulingEngine>().As<SchedulingEngine>().InstancePerDependency();
             builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
 
-            builder.RegisterType<CustomerRepositoryFake>().As<CustomerRepositoryFake>().InstancePerDependency();
-            builder.RegisterType<BillingCompanyRepositoryFake>().As<BillingCompanyRepositoryFake>().InstancePerDependency();
+            builder.RegisterType<CustomerRepositoryFake>().As<ICustomerRepository>().InstancePerDependency();
+            builder.RegisterType<CustomerCreator>().As<CustomerCreator>().InstancePerDependency();
+            builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>().InstancePerDependency();
             builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>().InstancePerDependency();
+            builder.RegisterType<AccountStatementComposer>().As<AccountStatementComposer>().InstancePerDependency();
 
-            builder.RegisterType<CrossCheckScrapper>().Keyed<Scrapper>(ScrapeSessionType.CrossCheckScrapper);
-            builder.RegisterType<StatementScrapper>().Keyed<Scrapper>(ScrapeSessionType.StatementScrapper);
-            //builder.RegisterType<AccountStatementComposer>().As<AccountStatementComposer>().InstancePerDependency();
-          
+            builder.RegisterType<CrossCheckScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.CrossCheckScrapper);
+            builder.RegisterType<StatementScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.StatementScrapper);
             RegisterIntegrationDependencies(builder);
 
             Container = builder.Build();

@@ -1,6 +1,7 @@
 using System;
 using Aps.BillingCompanies;
 using Aps.Customers;
+using Aps.Fakes;
 using Autofac;
 using Caliburn.Micro;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -19,13 +20,13 @@ namespace Aps.Shared.Tests.RepositoryTests
             var builder = new ContainerBuilder();
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>();
-            builder.RegisterType<CustomerRepositoryFake>().As<CustomerRepositoryFake>();
+            builder.RegisterType<CustomerRepositoryFake>().As<ICustomerRepository>();
             builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>();
 
             container = builder.Build();
 
             // act
-            //var customer = container.Resolve<CustomerRepositoryFake>().GetNewCustomer(;
+            //var customer = container.Resolve<ICustomerRepository>().GetNewCustomer(;
 
             // assert
             //Assert.IsTrue(customer.Id != Guid.Empty);

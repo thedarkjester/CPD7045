@@ -34,8 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac">
-      <HintPath>..\packages\Autofac.3.4.0\lib\net40\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=3.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Autofac.3.4.1\lib\net40\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="Seterlund.CodeGuard">
       <HintPath>..\packages\Seterlund.CodeGuard.2.3.4\lib\net40\Seterlund.CodeGuard.dll</HintPath>
@@ -68,6 +69,10 @@
     <ProjectReference Include="..\Aps.DomainBase\Aps.DomainBase.csproj">
       <Project>{16d706f7-af2a-4838-ac14-8bc0607173cc}</Project>
       <Name>Aps.DomainBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Aps.Fakes\Aps.Fakes.csproj">
+      <Project>{BD1C6AE0-A019-4090-8E07-31D1F2641936}</Project>
+      <Name>Aps.Fakes</Name>
     </ProjectReference>
     <ProjectReference Include="..\Aps.IntegrationEvents\Aps.Integration.csproj">
       <Project>{78059759-bf3d-471d-b88b-cd3aa1ec101b}</Project>

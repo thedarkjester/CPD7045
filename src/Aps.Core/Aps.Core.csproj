@@ -35,8 +35,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac">
-      <HintPath>..\packages\Autofac.3.4.0\lib\net40\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=3.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Autofac.3.4.1\lib\net40\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
@@ -56,16 +57,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\StatementFields.cs" />
+    <Compile Include="EmailMessage.cs" />
+    <Compile Include="FailureHandler.cs" />
+    <Compile Include="InternalEvents\ScrapeSessionDuplicateStatement.cs" />
     <Compile Include="InternalEvents\ScrapeSessionFailed.cs" />
+    <Compile Include="InternalEvents\ScrapeSessionStarted.cs" />
+    <Compile Include="InternalEvents\ScrapeSessionSuccessful.cs" />
     <Compile Include="Interpreters\Interpreter.cs" />
     <Compile Include="KeyValuePair.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SchedulingEngine.cs" />
+    <Compile Include="ScrapeSessionInitiator.cs" />
     <Compile Include="ScrapeSessionData.cs" />
-    <Compile Include="ScrapeSessionAgent.cs" />
-    <Compile Include="Scrappers\CrossCheckScrapper.cs" />
-    <Compile Include="Scrappers\Scrapper.cs" />
-    <Compile Include="Scrappers\StatementScrapper.cs" />
+    <Compile Include="ScrapperException.cs" />
+    <Compile Include="ScrapeOrchestrators\CrossCheckScrapeOrchestrator.cs" />
+    <Compile Include="ScrapeOrchestrators\ScrapeOrchestrator.cs" />
+    <Compile Include="ScrapeOrchestrators\StatementScrapeOrchestrator.cs" />
+    <Compile Include="Services\AccountStatementComposer.cs" />
     <Compile Include="TestConstructor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validation\IValidationResults.cs" />
@@ -78,6 +87,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Aps.AccountStatements\Aps.AccountStatements.csproj">
+      <Project>{1A25129B-BCD3-4C55-B5F8-48F1DE6206AE}</Project>
+      <Name>Aps.AccountStatements</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Aps.BillingCompany\Aps.BillingCompanies.csproj">
       <Project>{2b24072a-26c9-4a39-82e6-cabf65c1e0a8}</Project>
       <Name>Aps.BillingCompanies</Name>
@@ -90,12 +103,18 @@
       <Project>{16D706F7-AF2A-4838-AC14-8BC0607173CC}</Project>
       <Name>Aps.DomainBase</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Aps.Fakes\Aps.Fakes.csproj">
+      <Project>{BD1C6AE0-A019-4090-8E07-31D1F2641936}</Project>
+      <Name>Aps.Fakes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Aps.IntegrationEvents\Aps.Integration.csproj">
       <Project>{78059759-BF3D-471D-B88B-CD3AA1EC101B}</Project>
       <Name>Aps.Integration</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Entities\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

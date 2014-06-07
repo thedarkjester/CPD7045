@@ -7,16 +7,16 @@ namespace Aps.Integration.Queries.CustomerQueries
 {
     public class CustomerByIdQuery
     {
-        private readonly CustomerRepositoryFake customerRepositoryFake;
+        private readonly ICustomerRepository ICustomerRepository;
         
-        public CustomerByIdQuery(CustomerRepositoryFake customerRepositoryFake)
+        public CustomerByIdQuery(ICustomerRepository ICustomerRepository)
         {
-            this.customerRepositoryFake = customerRepositoryFake;
+            this.ICustomerRepository = ICustomerRepository;
         }
 
         public CustomerDto GetCustomerById(Guid id)
         {
-            Customer customer = customerRepositoryFake.GetCustomerById(id);
+            Customer customer = ICustomerRepository.GetCustomerById(id);
 
             if (customer == null)
             {    

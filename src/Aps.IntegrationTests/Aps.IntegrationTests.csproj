@@ -37,8 +37,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Autofac">
-      <HintPath>..\packages\Autofac.3.4.0\lib\net40\Autofac.dll</HintPath>
+    <Reference Include="Autofac, Version=3.4.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Autofac.3.4.1\lib\net40\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
@@ -72,12 +73,15 @@
       <Project>{16D706F7-AF2A-4838-AC14-8BC0607173CC}</Project>
       <Name>Aps.DomainBase</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Aps.Fakes\Aps.Fakes.csproj">
+      <Project>{BD1C6AE0-A019-4090-8E07-31D1F2641936}</Project>
+      <Name>Aps.Fakes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Aps.IntegrationEvents\Aps.Integration.csproj">
       <Project>{78059759-BF3D-471D-B88B-CD3AA1EC101B}</Project>
       <Name>Aps.Integration</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

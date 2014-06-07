@@ -11,9 +11,9 @@ namespace Aps.CustomerEventListenerService
     {
         private readonly EventIntegrationService eventIntegrationService;
         private readonly IEventAggregator eventAggregator;
-        private readonly CustomerRepositoryFake customerRepository;
+        private readonly ICustomerRepository customerRepository;
 
-        public CustomerService(IEventAggregator eventAggregator, EventIntegrationService eventIntegrationService,CustomerRepositoryFake customerRepository)
+        public CustomerService(IEventAggregator eventAggregator, EventIntegrationService eventIntegrationService,ICustomerRepository customerRepository)
         {
             this.eventIntegrationService = eventIntegrationService;
             this.eventAggregator = eventAggregator;

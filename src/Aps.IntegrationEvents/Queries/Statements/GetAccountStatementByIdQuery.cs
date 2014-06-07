@@ -9,9 +9,9 @@ namespace Aps.Integration.Queries.Statements
 {
     public class GetAccountStatementByIdQuery
     {
-        private readonly AccountStatementRepositoryFake accountStatementRepository;
+        private readonly IAccountStatementRepository accountStatementRepository;
 
-        public GetAccountStatementByIdQuery(AccountStatementRepositoryFake accountStatementRepository)
+        public GetAccountStatementByIdQuery(IAccountStatementRepository accountStatementRepository)
         {
             this.accountStatementRepository = accountStatementRepository;
         }

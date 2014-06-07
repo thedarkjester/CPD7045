@@ -1,6 +1,7 @@
 ﻿using System;
 using Aps.BillingCompanies;
 using Aps.Customers;
+using Aps.Fakes;
 using Aps.Integration;
 using Aps.Integration.Queries.Events;
 using Aps.Integration.Serialization;
@@ -35,8 +36,8 @@ namespace Aps.Audit
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
 
-            builder.RegisterType<CustomerRepositoryFake>().As<CustomerRepositoryFake>().InstancePerDependency();
-            builder.RegisterType<BillingCompanyRepositoryFake>().As<BillingCompanyRepositoryFake>().InstancePerDependency();
+            builder.RegisterType<CustomerRepositoryFake>().As<ICustomerRepository>().InstancePerDependency();
+            builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>().InstancePerDependency();
             builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>().InstancePerDependency();
 
             RegisterIntegrationDependencies(builder);

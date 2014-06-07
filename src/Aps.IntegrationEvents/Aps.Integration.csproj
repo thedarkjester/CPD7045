@@ -52,6 +52,8 @@
     <Compile Include="EventIntegrationRepositoryFake.cs" />
     <Compile Include="Events\CustomerScrapeSessionFailed.cs" />
     <Compile Include="Events\AccountStatementGenerated.cs" />
+    <Compile Include="Events\CustomerScrapeSessionSuccessful.cs" />
+    <Compile Include="Events\ScrapeSessionDataRetrievalCompleted.cs" />
     <Compile Include="Queries\BillingCompanyQueries\AllBillingCompaniesQuery.cs" />
     <Compile Include="Queries\BillingCompanyQueries\BillingCompanyBillingLifeCycleByCompanyIdQuery.cs" />
     <Compile Include="Queries\BillingCompanyQueries\BillingCompanyOpenClosedWindowsQuery.cs" />

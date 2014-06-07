@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Aps.Integration.EnumTypes
 {
-    public enum ScrapeSessionType
+    public enum ScrapeSessionTypes
     {
         [Description("Cross Check Scrapper")]
         CrossCheckScrapper = 1,
