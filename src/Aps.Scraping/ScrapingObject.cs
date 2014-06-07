@@ -4,31 +4,23 @@ namespace Aps.Scraping
 {
     public class ScrapingObject
     {
+        public Guid queueId;
         public Guid customerId;
         public Guid billingCompanyId;
-        public readonly string URL;
-        public readonly string plainText1;
-        public readonly string hiddenText1;
-
         public string scrapeType;
         public string scrapeStatus;
-        public DateTime timeToRun;
-        public DateTime timeCreated;
+        public DateTime createdDate;
+        public DateTime ScheduledDate;
+        public bool registrationType;
 
-        public ScrapingObject(Guid customerId, Guid billingCompanyId, string URL, string plainText1, string hiddenText1)
+        public ScrapingObject(Guid customerId, Guid billingCompanyId, bool registrationType)
         {
+            this.queueId = Guid.NewGuid();
             this.customerId = customerId;
             this.billingCompanyId = billingCompanyId;
-            this.URL = URL;
-            this.plainText1 = plainText1;
-            this.hiddenText1 = hiddenText1;
-
-            scrapeType = "Register";
-            scrapeStatus = "Active";
-
-            timeToRun = DateTime.Now;
-            timeCreated = DateTime.Now;
-
+            this.registrationType = registrationType;
+            this.createdDate = DateTime.UtcNow;
+            this.ScheduledDate = DateTime.UtcNow;
         }
     }
 }

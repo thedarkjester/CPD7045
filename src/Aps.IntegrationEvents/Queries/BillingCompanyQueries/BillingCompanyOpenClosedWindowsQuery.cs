@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Aps.BillingCompanies;
 using Aps.BillingCompanies.Aggregates;
@@ -41,6 +42,17 @@ namespace Aps.Integration.Queries.BillingCompanyQueries
             }
 
             return billingCompanyDtos;
+        }
+
+        public OpenClosedWindowDto GetCurrentOpenClosedWindow(Guid billingCompanyId)
+        {
+            DateTime currentTime = DateTime.UtcNow;
+
+            BillingCompany billingCompany = billingCompanyRepository.GetBillingCompanyById(billingCompanyId);
+
+            OpenClosedWindow openClosedWindow = billingCompany.OpenClosedWindows.FirstOrDefault(x => x.StartDate <= currentTime && x.EndDate <= currentTime);
+
+            return MapOpenClosedWindowAggregateToOpenClosedWindowDto(openClosedWindow);
         }
     }
 }

@@ -12,9 +12,9 @@ namespace Aps.Scraping
             this.eventAggregator = eventAggregator;
         }
 
-        public ScrapingObject GetNewScrapingObject(Guid customerId, Guid billingCompanyId, string URL, string plainText, string hiddenText)
+        public ScrapingObject GetNewScrapingObject(Guid customerId, Guid billingCompanyId, bool registrationType)
         {
-            return new ScrapingObject(customerId, billingCompanyId, URL, plainText, hiddenText);
+            return new ScrapingObject(customerId, billingCompanyId, registrationType);
         }
     }
 }
