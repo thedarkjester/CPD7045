@@ -46,7 +46,7 @@ namespace Aps.Core.ScrapeOrchestrators
                 scrapeSessionData = webScraper.Scrape(null, null, null);
                 eventIntegrationService.Publish(new ScrapeSessionDataRetrievalCompleted(scrapeSessionId, customerId, billingCompanyId));
 
-                var transformedResults = new Interpreter().TransformResults(scrapeSessionData);
+                var transformedResults = new ScrapeSessionXMLToDataPairConverter().ConvertXmlToScrapeSessionDataPairs(scrapeSessionData);
                 eventIntegrationService.Publish(new ScrapeSessionDataInterpretered(scrapeSessionId, customerId, billingCompanyId));
 
                 //check if duplicate statement

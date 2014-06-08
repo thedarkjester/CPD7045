@@ -83,6 +83,7 @@
     <Compile Include="CustomerTests\CustomerLastNameTests.cs" />
     <Compile Include="CustomerTests\CustomerTelephoneTests.cs" />
     <Compile Include="InterpreterTests\ScrapeSessionDataInterpreterTests.cs" />
+    <Compile Include="InterpreterTests\ScrapeSessionXMLToDataPairConverterTests.cs" />
     <Compile Include="RepositoryTests\EntityTests.cs" />
     <Compile Include="SampleTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
