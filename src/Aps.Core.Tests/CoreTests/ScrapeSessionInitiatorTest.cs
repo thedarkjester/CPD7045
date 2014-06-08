@@ -2,14 +2,14 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Autofac;
 using Caliburn.Micro;
-using Aps.Core.ScrapeOrchestrators;
 using Aps.Integration.EnumTypes;
 using Autofac.Features.Indexed;
 using Moq;
-using Aps.Core;
-using Aps.Core.ScrapeOrchestrators;
+using Aps.Scheduling.ApplicationService;
 using Aps.Customers;
 using Aps.BillingCompanies;
+using Aps.Scheduling.ApplicationService.ScrapeOrchestrators;
+using Aps.Scraping;
 
 namespace Aps.Shared.Tests.CoreTests
 {
@@ -52,7 +52,7 @@ namespace Aps.Shared.Tests.CoreTests
             
             ScrapeSessionInitiator scrapeSessionInitiator = mockScrapeSessionInitiator.Object;
 
-            scrapeSessionInitiator.InitiateNewScrapeSession(billingCompanyId, customerId, queueId, ScrapeSessionTypes.StatementScrapper);
+            scrapeSessionInitiator.InitiateNewScrapeSession(new ScrapingObject(customerId, billingCompanyId, ScrapeSessionTypes.StatementScrapper));
 
             mockScrapeSessionInitiator.Verify();
 
@@ -65,7 +65,7 @@ namespace Aps.Shared.Tests.CoreTests
 
             ScrapeSessionInitiator scrapeSessionInitiator = mockScrapeSessionInitiator.Object;
 
-            scrapeSessionInitiator.InitiateNewScrapeSession(billingCompanyId, customerId, queueId, ScrapeSessionTypes.CrossCheckScrapper);
+            scrapeSessionInitiator.InitiateNewScrapeSession(new ScrapingObject(customerId, billingCompanyId, ScrapeSessionTypes.CrossCheckScrapper));
 
             mockScrapeSessionInitiator.Verify();
         }

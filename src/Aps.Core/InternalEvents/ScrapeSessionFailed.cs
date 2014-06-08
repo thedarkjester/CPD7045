@@ -3,21 +3,16 @@ namespace Aps.Scheduling.ApplicationService.InternalEvents
 {
     public class ScrapeSessionFailed
     {
-        private Guid customerId;
-        private Guid billingCompanyId;
-        private Integration.EnumTypes.ScrapingErrorResponseCodes scrapingErrorResponseCodes;
+        private Guid queueId;
+        private Integration.EnumTypes.ScrapingErrorResponseCodes scrapingErrorResponseCode;
 
-        public ScrapeSessionFailed(Guid queueId, string failureReason)
+        public Guid QueueId { get { return queueId; } }
+        public Integration.EnumTypes.ScrapingErrorResponseCodes ScrapingErrorResponseCode { get { return scrapingErrorResponseCode; } }
+
+        public ScrapeSessionFailed(Guid queueId, Integration.EnumTypes.ScrapingErrorResponseCodes scrapingErrorResponseCode)
         {
-
-        }
-
-        public ScrapeSessionFailed(Guid customerId, Guid billingCompanyId, Integration.EnumTypes.ScrapingErrorResponseCodes scrapingErrorResponseCodes)
-        {
-            // TODO: Complete member initialization
-            this.customerId = customerId;
-            this.billingCompanyId = billingCompanyId;
-            this.scrapingErrorResponseCodes = scrapingErrorResponseCodes;
+            this.queueId = queueId;
+            this.scrapingErrorResponseCode = scrapingErrorResponseCode;
         }
     }
 }

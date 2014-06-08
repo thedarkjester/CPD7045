@@ -13,6 +13,7 @@ using Aps.Customers;
 using Aps.Integration.EnumTypes;
 using Aps.Scraping;
 using Aps.Scraping.Scrapers;
+using Aps.Integration.Queries.CustomerQueries.Dtos;
 
 namespace Aps.Scheduling.ApplicationService
 {
@@ -62,6 +63,8 @@ namespace Aps.Scheduling.ApplicationService
             builder.RegisterType<BillingCompanyOpenClosedWindowsQuery>().As<BillingCompanyOpenClosedWindowsQuery>();
             builder.RegisterType<ScrapingErrorRetryConfigurationQuery>().As<ScrapingErrorRetryConfigurationQuery>();
             builder.RegisterType<BillingCompanyScrapingLoadManagementConfigurationQuery>().As<BillingCompanyScrapingLoadManagementConfigurationQuery>();
+            builder.RegisterType<CustomerBillingCompanyAccountsById>().As<CustomerBillingCompanyAccountsById>();
+            
         }
 
         private static void RegisterIntegrationDependencies(ContainerBuilder builder)

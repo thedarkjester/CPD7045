@@ -8,9 +8,11 @@ namespace Aps.Scheduling.ApplicationService.InternalEvents
 {
     public class ScrapeSessionDuplicateStatement
     {
+        Guid queueId;
+        public Guid QueueId { get { return queueId; } }
         public ScrapeSessionDuplicateStatement(Guid queueId)
         {
-
+            this.queueId = queueId;
         }
     }
 }

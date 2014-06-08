@@ -8,6 +8,6 @@ namespace Aps.Scheduling.ApplicationService.ScrapeOrchestrators
 {
     public abstract class ScrapeOrchestrator
     {
-        public abstract void Orchestrate();        
+        public abstract void Orchestrate(Aps.Scheduling.ApplicationService.Entities.ScrapeOrchestratorEntity scrapeOrchestratorEntity);        
     }
 }

@@ -48,7 +48,8 @@ namespace Aps.Integration.Queries.CustomerQueries.Dtos
                 billingCompanyPIN = customerBillingCompanyAccount.BillingCompanyPIN,
                 dateBillingCompanyAdded = customerBillingCompanyAccount.DateBillingCompanyAdded,
                 statementId = customerBillingCompanyAccount.CustomerStatement.statementId,
-                statementDate = customerBillingCompanyAccount.CustomerStatement.statementDate
+                statementDate = customerBillingCompanyAccount.CustomerStatement.statementDate,
+                billingCompanyAccountNumber = customerBillingCompanyAccount.BillingCompanyAccountNumber
             };
 
             return dto;

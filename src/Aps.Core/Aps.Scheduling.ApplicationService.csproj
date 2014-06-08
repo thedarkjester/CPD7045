@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="Constants\StatementFields.cs" />
     <Compile Include="EmailMessage.cs" />
+    <Compile Include="Entities\ScrapeOrchestratorEntity.cs" />
     <Compile Include="ErrorCode.cs" />
     <Compile Include="FailureHandler.cs" />
     <Compile Include="InternalEvents\CrossCheckCompleted.cs" />
@@ -114,9 +115,7 @@
       <Name>Aps.Scraping</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Entities\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

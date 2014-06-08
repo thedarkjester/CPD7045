@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Aps.Core;
-using Aps.Core.Validation;
+using Aps.Scheduling.ApplicationService;
 using System.Collections.Generic;
+using Aps.Scheduling.ApplicationService.Validation;
 
 namespace Aps.Shared.Tests.ValidatorTests
 {
