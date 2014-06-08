@@ -29,8 +29,9 @@ namespace Aps.Core
         public IEnumerable<ScrapingObject> scrapeElementsQueue;
         public List<ScrapingObject> scrapeElementsRunning;
         public CancellationToken cancellationToken;
+        readonly ScrapeSessionInitiator scrapeSessionInitiator;
 
-        public SchedulingEngine(IEventAggregator eventAggregator, EventIntegrationService messageSendAndReceiver, IScrapingObjectRepository scrapingObjectRepositoryFake, BillingCompanyOpenClosedWindowsQuery billingCompanyOpenClosedWindowsQuery, BillingCompanyScrapingLoadManagementConfigurationQuery billingCompanyScrapingLoadManagementConfigurationQuery)
+        public SchedulingEngine(IEventAggregator eventAggregator, EventIntegrationService messageSendAndReceiver, IScrapingObjectRepository scrapingObjectRepositoryFake, BillingCompanyOpenClosedWindowsQuery billingCompanyOpenClosedWindowsQuery, BillingCompanyScrapingLoadManagementConfigurationQuery billingCompanyScrapingLoadManagementConfigurationQuery, ScrapeSessionInitiator scrapeSessionInitiator)
         {
             this.eventAggregator = eventAggregator;
             this.eventAggregator.Subscribe(this);
@@ -43,12 +44,14 @@ namespace Aps.Core
             maxAllowedServerScrapes = 20;
             this.scrapeElementsQueue = new List<ScrapingObject>();
             this.scrapeElementsRunning = new List<ScrapingObject>();
+            this.scrapeSessionInitiator = scrapeSessionInitiator;
         }
 
 
         public void Start()
         {
             //messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(NewCustomerBillingCompanyAccount).FullName);
+            messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(CustomerBillingAccountAdded).FullName);
             Scrape();
         }
 
@@ -78,7 +81,9 @@ namespace Aps.Core
                     {
                         currentNumberOfThreadsPerBillingCompany[scrapingQueueElement.billingCompanyId] += 1;
                         scrapeElementsRunning.Add(scrapingQueueElement);
-                        //ThreadPool.QueueUserWorkItem(new WaitCallback(SSFactory), scrapingQueueElement);
+                        // This is where I pass the work to Jignesh! Once it exists, add it. 
+                        //scrapeSessionInitiator.InitiateNewScrapeSession(scrapingQueueElement);
+
                     }
                 }
                 Thread.Sleep(6); // Entire QueueProcessed or threads full, sleep a while and then start with a new Queue
@@ -183,7 +188,7 @@ namespace Aps.Core
 
         /*
         // This Handle's name will need to change to "CustomerBillingCompanyAccountAdded"
-        public void Handle(BillingCompanyAccountAdded message)
+        public void Handle(CustomerBillingAccountAdded message)
         {
             // Store item in scrapingRepo
             ScrapingQueueElement scrapingQueueElement = scrapingObjectRepositoryFake.BuildNewScrapingObject(message.CustomerId, message.BillingCompanyId, message.RegistrationRequest);

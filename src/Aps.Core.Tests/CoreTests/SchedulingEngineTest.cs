@@ -13,6 +13,8 @@ using Aps.BillingCompanies;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Aps.Integration.EnumTypes;
+using Aps.Customers;
+using Aps.Core.ScrapeOrchestrators;
 
 namespace Aps.Shared.Tests.CoreTests
 {
@@ -47,7 +49,10 @@ namespace Aps.Shared.Tests.CoreTests
             builder.RegisterType<EventIntegrationRepositoryFake>().As<EventIntegrationRepositoryFake>();
             builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>();
             builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>();
-            
+            builder.RegisterType<ScrapeSessionInitiator>().As<ScrapeSessionInitiator>();
+            builder.RegisterType<CustomerRepositoryFake>().As<ICustomerRepository>();
+            builder.RegisterType<CrossCheckScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.CrossCheckScrapper);
+            builder.RegisterType<StatementScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.StatementScrapper);
 
             container = builder.Build();
         }
@@ -57,7 +62,7 @@ namespace Aps.Shared.Tests.CoreTests
         {
             // arrange
 
-            SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>());
+            SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiator>());
 
             // act
 
@@ -70,7 +75,7 @@ namespace Aps.Shared.Tests.CoreTests
         {
             // arrange
 
-            SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>());
+            SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiator>());
 
             // act
             int i = schedulingEngine.getNumberOfThreadsAvailableOnServer();
@@ -83,7 +88,7 @@ namespace Aps.Shared.Tests.CoreTests
         public void getNumberOfThreadsAvailableOnServerIfSomeCompanyThreadsAreUsedTest()
         {
             // arrange
-            SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>());
+            SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiator>());
 
             // act
             Guid billingCompanyId = Guid.NewGuid();
@@ -107,7 +112,7 @@ namespace Aps.Shared.Tests.CoreTests
             // arrange
             List<ScrapingObject> myList;
 
-            SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>());
+            SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiator>());
             // act
             myList = schedulingEngine.getNewScrapeQueueWithoutCompletedItems();
 
@@ -120,7 +125,7 @@ namespace Aps.Shared.Tests.CoreTests
         {
             // arrange
             List<ScrapingObject> myList;
-            SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>());
+            SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiator>());
             ScrapingObject myScrapingObject = new ScrapingObject(customerId, billingCompanyId, scrapeSessionTypes);
             //IScrapingObjectRepository myRepo = new ScrapingObjectRepositoryFake(container.Resolve<IEventAggregator>(), container.Resolve<ScrapingObjectCreator>());
 
