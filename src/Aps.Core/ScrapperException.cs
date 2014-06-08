@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aps.Core
+namespace Aps.Scheduling.ApplicationService
 {
     public class DataScraperException : Exception
     {

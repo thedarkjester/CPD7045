@@ -30,7 +30,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>();
             builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>();
-            builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>();
+            builder.RegisterType<BillingCompanyFactory>().As<BillingCompanyFactory>();
 
             container = builder.Build(); 
         }
@@ -41,7 +41,8 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             // arrange ( repository and depenency injection done )
 
             // act
-            BillingCompany billingCompany = container.Resolve<IBillingCompanyRepository>().BuildNewBillingCompany(companyName, companyType, companyUrl);
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
+            BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
 
             // assert
             Assert.IsTrue(billingCompany.Id != Guid.Empty);
@@ -53,7 +54,8 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             // arrange ( repository and depenency injection done )
 
             // act
-            BillingCompany billingCompany = container.Resolve<IBillingCompanyRepository>().BuildNewBillingCompany(companyName, companyType, companyUrl);
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
+            BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
 
             // assert
             Assert.IsTrue(billingCompany.OpenClosedWindows != null);
@@ -68,8 +70,8 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             companyName = null;
 
             // act
-            BillingCompany billingCompany = container.Resolve<IBillingCompanyRepository>().
-                BuildNewBillingCompany(companyName, companyType, companyUrl);
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
+            BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
 
             // assert
             // expected exception
@@ -83,8 +85,8 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             companyType = null;
 
             // act
-            BillingCompany billingCompany = container.Resolve<IBillingCompanyRepository>().
-                BuildNewBillingCompany(companyName, companyType, companyUrl);
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
+            BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
 
             // assert
             // expected exception
@@ -98,8 +100,8 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             companyUrl = null;
 
             // act
-            BillingCompany billingCompany = container.Resolve<IBillingCompanyRepository>().
-                BuildNewBillingCompany(companyName, companyType, companyUrl);
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
+            BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
 
             // assert
             // expected exception

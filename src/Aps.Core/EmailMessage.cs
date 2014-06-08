@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Net.Mail;
 using Seterlund.CodeGuard;
 
-namespace Aps.Core
+namespace Aps.Scheduling.ApplicationService
 {
     class EmailMessage
     {

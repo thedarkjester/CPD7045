@@ -4,15 +4,15 @@ using System.Globalization;
 using System.Linq;
 using Aps.AccountStatements.Entities;
 using Aps.AccountStatements.ValueObjects;
-using Aps.Core.Constants;
 using Aps.Integration;
 using Aps.Integration.Queries.BillingCompanyQueries;
 using Aps.Integration.Queries.BillingCompanyQueries.Dtos;
 using Aps.Integration.Queries.CustomerQueries;
 using Aps.Integration.Queries.CustomerQueries.Dtos;
+using Aps.Scheduling.ApplicationService.Constants;
 using Caliburn.Micro;
 
-namespace Aps.Core.Services
+namespace Aps.Scheduling.ApplicationService.Services
 {
     public class AccountStatementComposer
     {

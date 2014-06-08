@@ -1,20 +1,21 @@
 ﻿using System;
 using Aps.BillingCompanies;
-using Aps.Core.Services;
 using Aps.Fakes;
 using Aps.Integration;
 using Aps.Integration.Queries.BillingCompanyQueries;
 using Aps.Integration.Queries.Events;
 using Aps.Integration.Serialization;
+using Aps.Scheduling.ApplicationService.ScrapeOrchestrators;
+using Aps.Scheduling.ApplicationService.Services;
 using Autofac;
 using Caliburn.Micro;
 using Aps.Customers;
-using Aps.Core.ScrapeOrchestrators;
 using Aps.Integration.EnumTypes;
 using Aps.Scraping;
 using Aps.Scraping.Scrapers;
+using Aps.Integration.Queries.CustomerQueries.Dtos;
 
-namespace Aps.Core
+namespace Aps.Scheduling.ApplicationService
 {
     class Program
     {
@@ -41,7 +42,7 @@ namespace Aps.Core
             builder.RegisterType<CustomerRepositoryFake>().As<ICustomerRepository>().InstancePerDependency();
             builder.RegisterType<CustomerCreator>().As<CustomerCreator>().InstancePerDependency();
             builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>().InstancePerDependency();
-            builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>().InstancePerDependency();
+            builder.RegisterType<BillingCompanyFactory>().As<BillingCompanyFactory>().InstancePerDependency();
             builder.RegisterType<AccountStatementComposer>().As<AccountStatementComposer>().InstancePerDependency();
             builder.RegisterType<ScrapeLoggingRepositoryFake>().As<IScrapeLoggingRepository>().InstancePerDependency();
             builder.RegisterType<WebScraperFake>().As<IWebScraper>().InstancePerDependency();
@@ -62,6 +63,8 @@ namespace Aps.Core
             builder.RegisterType<BillingCompanyOpenClosedWindowsQuery>().As<BillingCompanyOpenClosedWindowsQuery>();
             builder.RegisterType<ScrapingErrorRetryConfigurationQuery>().As<ScrapingErrorRetryConfigurationQuery>();
             builder.RegisterType<BillingCompanyScrapingLoadManagementConfigurationQuery>().As<BillingCompanyScrapingLoadManagementConfigurationQuery>();
+            builder.RegisterType<CustomerBillingCompanyAccountsById>().As<CustomerBillingCompanyAccountsById>();
+            
         }
 
         private static void RegisterIntegrationDependencies(ContainerBuilder builder)
