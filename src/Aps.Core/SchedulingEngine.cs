@@ -51,7 +51,11 @@ namespace Aps.Core
         public void Start()
         {
             //messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(NewCustomerBillingCompanyAccount).FullName);
+<<<<<<< HEAD
            // messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(CustomerBillingAccountAdded).FullName);
+=======
+            //messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(CustomerBillingAccountAdded).FullName);
+>>>>>>> 88d16b625f895799156b5172f5b92fd19271322e
             Scrape();
         }
         
@@ -220,6 +224,8 @@ namespace Aps.Core
         // This Handle's name will need to change to "CustomerScrapeSessionFailed"
         public void Handle(ScrapeSessionFailed message)
         {
+            //Input - QueueId , Failure Enum
+
             // Look at error code and decide what to do with error
             // For all error types do the following:
             // currentNumberOfThreadsPerBillingCompany[scrapingQueueElement.billingCompanyId] -= 1;
@@ -255,12 +261,21 @@ namespace Aps.Core
         }
 
         /*
+         * Jignesh Events
+        public void Handle(CrossCheckCompleted message){//Input - QueueId}
+        public void Handle(ScrapeSessionCompleted message){//Input - QueueId, statement Date}
+        public void Handle(ScrapeSessionDuplicateStatemsnt message){//Input - QueueId}
         
-        public void Handle(AccountStatementGenerated message){}
-        public void Handle(CustomerBillingCompanyAccountUpdated message){}
-        public void Handle(CustomerBillingCompanyAccountDeleted message){}
-        public void Handle(ScrapeSessionCompleted message){}
-        public void Handle(ScrapeSessionDuplicateStatemsnt message){}
+         * Carlos Events
+        public void Handle(CustomerBillingCompanyAccountDeleted message){//Input - CustomerId, BillingCompanyId}
+        public void Handle(CustomerBillingAccountAdded message)
+         * {
+         * //Input - CustomerId, BillingCompanyId
+         * Need to get dto to set ScrapeSessionTypes scrapeSessionTypes enum variable.
+         * }
+ 
+         * Grant Events
+        public void Handle(AccountStatementGenerated message){} why do I need it?
         
     */
 
