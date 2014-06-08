@@ -16,7 +16,7 @@ namespace Aps.Core
             var xMembers = doc.Root.Elements("datapair").Elements().ToList();
             if (xMembers.Count.Equals(0))
             {
-                ScrapeNoDataPairsFoundException exception = new ScrapeNoDataPairsFoundException();
+                ScrapeSessionConversionException exception = new ScrapeSessionConversionException();
                 exception.ErrorCode = ErrorCode.NoDataPairs;
                 throw exception;
             }

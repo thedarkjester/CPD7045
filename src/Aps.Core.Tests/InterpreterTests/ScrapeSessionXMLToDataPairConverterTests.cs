@@ -30,7 +30,7 @@ namespace Aps.Shared.Tests.InterpreterTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ScrapeNoDataPairsFoundException), "There were no data pairs in the xml")]
+        [ExpectedException(typeof(ScrapeSessionConversionException), "There were no data pairs in the xml")]
         public void GivenValidXmlWithNoDataPairs_WhenConvertingToDataPairs_ScrapeNoDataPairsFoundExceptionShouldBeReturned()
         {
             //Arrange
