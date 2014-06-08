@@ -86,6 +86,7 @@
     <Compile Include="Queries\BillingCompanyQueries\Dtos\OpenClosedWindowDto.cs" />
     <Compile Include="Queries\BillingCompanyQueries\Dtos\ScrapingErrorRetryConfigurationDto.cs" />
     <Compile Include="Queries\BillingCompanyQueries\ScrapingErrorRetryConfigurationQuery.cs" />
+    <Compile Include="Queries\CustomerQueries\CustomerBillingCompanyAccountsById.cs" />
     <Compile Include="Queries\Events\GetLatestEventsBySubScribedEventTypeQuery.cs" />
     <Compile Include="Events\BillingCompanyAddedOpenClosedWindow.cs" />
     <Compile Include="EventIntegrationService.cs" />

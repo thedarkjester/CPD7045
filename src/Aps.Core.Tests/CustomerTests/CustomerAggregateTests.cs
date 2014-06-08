@@ -2,6 +2,7 @@
 using System.Linq;
 using Aps.Customers;
 using Aps.Customers.Aggregates;
+using Aps.Customers.Entities;
 using Aps.Customers.ValueObjects;
 using Aps.Fakes;
 using Autofac;

@@ -2,6 +2,7 @@
 using System.Linq;
 using Aps.Customers;
 using Aps.Customers.Aggregates;
+using Aps.Customers.Entities;
 using Aps.Customers.ValueObjects;
 using Aps.Fakes;
 using Autofac;
@@ -54,7 +55,7 @@ namespace Aps.Shared.Tests.CustomerTests
                                                                             customerEmail, customerTelephone,
                                                                             customerAPSUsername, customerAPSPassword);
 
-            var customerBillingCompanyAccount = new CustomerBillingCompanyAccount(Guid.NewGuid(), "Username", "Password", "Trying", 0, DateTime.Now);
+            var customerBillingCompanyAccount = new CustomerBillingCompanyAccount(Guid.NewGuid(), "Username", "Password", "Trying", "101", 0, DateTime.Now);
             
             //act
             customer.AddCustomerBillingCompanyAccount(customerBillingCompanyAccount);
@@ -70,8 +71,8 @@ namespace Aps.Shared.Tests.CustomerTests
             Customer customer = container.Resolve<ICustomerRepository>().GetNewCustomer(customerFirstName, customerLastName,
                                                                             customerEmail, customerTelephone,
                                                                             customerAPSUsername, customerAPSPassword);
-            var customerBillingCompanyAccount1 = new CustomerBillingCompanyAccount(Guid.NewGuid(), "Username1", "Password", "Trying", 0, DateTime.Now);
-            var customerBillingCompanyAccount2 = new CustomerBillingCompanyAccount(Guid.NewGuid(), "Username2", "Password", "Trying", 0, DateTime.Now.AddHours(1));
+            var customerBillingCompanyAccount1 = new CustomerBillingCompanyAccount(Guid.NewGuid(), "Username1", "Password", "Trying", "101", 0, DateTime.Now);
+            var customerBillingCompanyAccount2 = new CustomerBillingCompanyAccount(Guid.NewGuid(), "Username2", "Password", "Trying", "102", 0, DateTime.Now.AddHours(1));
 
 
             //act
@@ -90,8 +91,8 @@ namespace Aps.Shared.Tests.CustomerTests
                                                                             customerEmail, customerTelephone,
                                                                             customerAPSUsername, customerAPSPassword);
 
-            var customerBillingCompanyAccount1 = new CustomerBillingCompanyAccount(Guid.NewGuid(), "Username1", "Password", "Trying", 0, DateTime.Now);
-            var customerBillingCompanyAccount2 = new CustomerBillingCompanyAccount(Guid.NewGuid(), "Username2", "Password", "Trying", 0, DateTime.Now.AddHours(1));
+            var customerBillingCompanyAccount1 = new CustomerBillingCompanyAccount(Guid.NewGuid(), "Username1", "Password", "Trying", "101", 0, DateTime.Now);
+            var customerBillingCompanyAccount2 = new CustomerBillingCompanyAccount(Guid.NewGuid(), "Username2", "Password", "Trying", "102", 0, DateTime.Now.AddHours(1));
             customer.AddCustomerBillingCompanyAccount(customerBillingCompanyAccount1);
             customer.AddCustomerBillingCompanyAccount(customerBillingCompanyAccount2);
 

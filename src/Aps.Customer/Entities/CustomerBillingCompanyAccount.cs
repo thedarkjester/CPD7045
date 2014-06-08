@@ -1,16 +1,20 @@
 ﻿using System;
 using Seterlund.CodeGuard;
+using Aps.Customers.ValueObjects;
 
-namespace Aps.Customers.ValueObjects
+
+namespace Aps.Customers.Entities
 {
     public class CustomerBillingCompanyAccount
     {
         public readonly Guid billingCompanyId;
-        private readonly string billingCompanyUsername;
-        private readonly string billingCompanyPassword;
-        private string billingCompanyStatus;
-        private readonly int billingCompanyPIN;
-        private readonly DateTime dateBillingCompanyAdded;
+        public readonly string billingCompanyUsername;
+        public readonly string billingCompanyPassword;
+        public string billingCompanyStatus;
+        public string billingCompanyAccountNumber;
+        public readonly int billingCompanyPIN;
+        public readonly DateTime dateBillingCompanyAdded;
+        public CustomerStatement customerStatement;
 
         protected CustomerBillingCompanyAccount()
         {
@@ -18,12 +22,13 @@ namespace Aps.Customers.ValueObjects
         }
 
         public CustomerBillingCompanyAccount(Guid billingCompanyId, string billingCompanyUsername, string billingCompanyPassword, string billingCompanyStatus,
-                                             int billingCompanyPIN, DateTime dateBillingCompanyAdded)
+                                             string billingCompanyAccountNumber, int billingCompanyPIN, DateTime dateBillingCompanyAdded)
         {
             Guard.That(billingCompanyId).IsNotEmpty();
             Guard.That(billingCompanyUsername).IsNotNullOrEmpty();
             Guard.That(billingCompanyPassword).IsNotNullOrEmpty();
             Guard.That(billingCompanyStatus).IsNotNullOrEmpty();
+            Guard.That(billingCompanyAccountNumber).IsNotNullOrEmpty();
             Guard.That(billingCompanyPIN).IsGreaterThan(0);
             Guard.That(dateBillingCompanyAdded).IsTrue(date => date >= DateTime.Now, "dateBillingCompanyAdded cannot be in the past");
             
@@ -31,6 +36,7 @@ namespace Aps.Customers.ValueObjects
             this.billingCompanyUsername = billingCompanyUsername;
             this.billingCompanyPassword = billingCompanyPassword;
             this.billingCompanyStatus = billingCompanyStatus;
+            this.billingCompanyAccountNumber = billingCompanyAccountNumber;
             this.billingCompanyPIN = billingCompanyPIN;
             this.dateBillingCompanyAdded = dateBillingCompanyAdded;
         }

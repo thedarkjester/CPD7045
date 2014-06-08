@@ -16,16 +16,16 @@ namespace Aps.Integration.Events
     public class CustomerBillingAccountAdded
     {
 
-        public Guid customerID { get; set; }
-        public Guid billingCompanyID { get; set; }
+        public Guid customerId { get; set; }
+        public Guid billingCompanyId { get; set; }
 
         public CustomerBillingAccountAdded(Guid customerId, Guid billingCompanyId)
         {
             Guard.That(customerId).IsNotEmpty();
             Guard.That(billingCompanyId).IsNotEmpty();
 
-            this.customerID = customerId;
-            this.billingCompanyID = billingCompanyID;
+            this.customerId = customerId;
+            this.billingCompanyId = billingCompanyId;
         }
     }
 }

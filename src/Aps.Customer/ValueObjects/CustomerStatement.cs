@@ -9,8 +9,8 @@ namespace Aps.Customers.ValueObjects
 {
     public class CustomerStatement
     {
-        private readonly Guid statementId;
-        private readonly DateTime statementDate;
+        public Guid statementId;
+        public DateTime statementDate;
 
         protected CustomerStatement()
         {

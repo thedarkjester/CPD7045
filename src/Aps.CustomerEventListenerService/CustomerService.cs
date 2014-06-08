@@ -11,7 +11,7 @@ using Aps.Customers.Events;
 
 namespace Aps.CustomerEventListenerService
 {
-    public class CustomerService : IHandle<CustomerScrapeSessionFailed>,IHandle<AccountStatementGenerated>
+    public class CustomerService : IHandle<CustomerScrapeSessionFailed>,IHandle<AccountStatementGenerated>, IHandle<Aps.Customers.Events.CustomerBillingAccountAdded>
     {
         private readonly EventIntegrationService eventIntegrationService;
         private readonly IEventAggregator eventAggregator;
@@ -57,6 +57,11 @@ namespace Aps.CustomerEventListenerService
                 Console.WriteLine("Waiting for EventAggregator Events");
                 Thread.Sleep(1000);
             }
+        }
+
+        public void Handle(Customers.Events.CustomerBillingAccountAdded message)
+        {
+            eventIntegrationService.Publish(new Aps.Integration.Events.CustomerBillingAccountAdded(message.customerId, message.billingCompanyId));
         }
     }
 }
