@@ -51,7 +51,6 @@ namespace Aps.Scheduling.ApplicationService
         public void Start()
         {
             //messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(NewCustomerBillingCompanyAccount).FullName);
-            //messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(BillingAccountAddedToCustomer).FullName);
             Scrape();
         }
 
