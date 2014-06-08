@@ -1,8 +1,14 @@
-﻿using Aps.Scheduling.ApplicationService;
+﻿using System;
+using Aps.Scheduling.ApplicationService;
 using Aps.Scheduling.ApplicationService.Interpreters;
 using Aps.Scheduling.ApplicationService.Validation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+<<<<<<< HEAD
+=======
+using Aps.Scheduling.ApplicationService;
+>>>>>>> 19b5e25db3720bb94eab7fcb795fc6047458c906
 using System.Collections.Generic;
+using Aps.Scheduling.ApplicationService.Validation;
 
 namespace Aps.Shared.Tests.ValidatorTests
 {

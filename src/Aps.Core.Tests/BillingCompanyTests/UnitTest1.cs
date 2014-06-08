@@ -26,13 +26,14 @@ namespace Aps.Shared.Tests.BillingCompanyTests
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>();
             builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>();
-            builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>();
+            builder.RegisterType<BillingCompanyFactory>().As<BillingCompanyFactory>();
 
             container = builder.Build();
 
             IBillingCompanyRepository repository = container.Resolve<IBillingCompanyRepository>();
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
 
-            BillingCompany billingCompany = repository.BuildNewBillingCompany(new BillingCompanyName("test"), new BillingCompanyType(1), new BillingCompanyScrapingUrl("https://www.test.com"));
+            BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(new BillingCompanyName("test"), new BillingCompanyType(1), new BillingCompanyScrapingUrl("https://www.test.com"));
             addedBillingCompanyId = billingCompany.Id;
 
             repository.StoreBillingCompany(billingCompany);
@@ -48,13 +49,12 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             repository.RemoveBillingCompanyById(addedBillingCompanyId);
             
             //Assert
-            Assert.IsTrue(repository.GetAllBillingCompanies().Count() == 0);
+            Assert.IsTrue(!repository.GetAllBillingCompanies().Any());
         }
 
         [TestMethod]
         public void Given_A_BillingCompanyId_When_Calling_Delete_BillingCompanyDeleteEventIsPublished()
         {
-           
 
         }
     }

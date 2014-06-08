@@ -33,7 +33,7 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>();
             builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>().SingleInstance();
-            builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>().SingleInstance();
+            builder.RegisterType<BillingCompanyFactory>().As<BillingCompanyFactory>().SingleInstance();
             builder.RegisterType<BillingCompanyByIdQuery>().As<BillingCompanyByIdQuery>();
             builder.RegisterType<BillingCompanyBillingLifeCycleByCompanyIdQuery>().As<BillingCompanyBillingLifeCycleByCompanyIdQuery>();
             builder.RegisterType<BillingCompanyScrapingUrlQuery>().As<BillingCompanyScrapingUrlQuery>();
@@ -79,8 +79,9 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
         {
             //arrange
             IBillingCompanyRepository repository = container.Resolve<IBillingCompanyRepository>();
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
 
-            var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl,true);
+            var newBillingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl, true);
 
             repository.StoreBillingCompany(newBillingCompany);
 
@@ -101,8 +102,9 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
         {
             //arrange
             IBillingCompanyRepository repository = container.Resolve<IBillingCompanyRepository>();
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
 
-            var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
+            var newBillingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl, true);
 
             repository.StoreBillingCompany(newBillingCompany);
 
@@ -122,8 +124,9 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
         {
             //arrange
             IBillingCompanyRepository repository = container.Resolve<IBillingCompanyRepository>();
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
 
-            var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
+            var newBillingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl, true);
 
             newBillingCompany.SetBillingCompanyName(new BillingCompanyName("Company A"));
             newBillingCompany.SetBillingLifeCycle(new BillingLifeCycle(1, 2, 3));
@@ -148,8 +151,9 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
         {
             //arrange
             IBillingCompanyRepository repository = container.Resolve<IBillingCompanyRepository>();
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
 
-            var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
+            var newBillingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl, true);
 
             newBillingCompany.SetBillingCompanyName(new BillingCompanyName("Company A"));
             newBillingCompany.SetBillingCompanyType(new BillingCompanyType(1));
@@ -179,10 +183,11 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
         {
             //arrange
             IBillingCompanyRepository repository = container.Resolve<IBillingCompanyRepository>();
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
 
-            var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
-            var newBillingCompany2 = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
-            var newBillingCompany3 = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
+            var newBillingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl, true);
+            var newBillingCompany2 = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl, true);
+            var newBillingCompany3 = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl, true);
 
             repository.StoreBillingCompany(newBillingCompany);
             repository.StoreBillingCompany(newBillingCompany2);
@@ -202,15 +207,15 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
         {
             //arrange
             IBillingCompanyRepository repository = container.Resolve<IBillingCompanyRepository>();
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
 
-            var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
+            var newBillingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl, true);
 
             newBillingCompany.AddOpenClosedWindow(new OpenClosedWindow(DateTime.Now.AddHours(1), DateTime.Now.AddHours(2), true, 2));
             newBillingCompany.AddOpenClosedWindow(new OpenClosedWindow(DateTime.Now.AddHours(3), DateTime.Now.AddHours(4), false, 2));
             newBillingCompany.AddOpenClosedWindow(new OpenClosedWindow(DateTime.Now.AddHours(5), DateTime.Now.AddHours(6), false, 2));
 
             repository.StoreBillingCompany(newBillingCompany);
-
 
             //act
             BillingCompanyOpenClosedWindowsQuery query = container.Resolve<BillingCompanyOpenClosedWindowsQuery>();
@@ -226,8 +231,9 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
         {
             //arrange
             IBillingCompanyRepository repository = container.Resolve<IBillingCompanyRepository>();
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
 
-            var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
+            var newBillingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl, true);
 
             newBillingCompany.AddScrapingErrorRetryConfiguration(new ScrapingErrorRetryConfiguration(1, 1));
             newBillingCompany.AddScrapingErrorRetryConfiguration(new ScrapingErrorRetryConfiguration(2, 1));
@@ -249,8 +255,9 @@ namespace Aps.IntegrationTests.QueryTests.BillingCompanies
         {
             //arrange
             IBillingCompanyRepository repository = container.Resolve<IBillingCompanyRepository>();
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
 
-            var newBillingCompany = repository.BuildNewBillingCompany(companyName, companyType, companyUrl);
+            var newBillingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl, true);
 
             newBillingCompany.SetScrapingLoadManagementConfiguration(new ScrapingLoadManagementConfiguration(5));
 

@@ -30,7 +30,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>();
             builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>();
-            builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>();
+            builder.RegisterType<BillingCompanyFactory>().As<BillingCompanyFactory>();
 
             container = builder.Build();
         }
@@ -39,7 +39,9 @@ namespace Aps.Shared.Tests.BillingCompanyTests
         public void Given_An_OpenClosedWindow_When_AddingToTheBillingCompany_TheItemsInsideIncrease()
         {
             //arrange
-            BillingCompany billingCompany = container.Resolve<IBillingCompanyRepository>().BuildNewBillingCompany(companyName, companyType, companyUrl);
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
+            BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
+
             var openClosedWindow = new OpenClosedWindow(DateTime.Now.AddHours(1), DateTime.Now.AddHours(2), true, 2);
             //act
             billingCompany.AddOpenClosedWindow(openClosedWindow);
@@ -52,7 +54,9 @@ namespace Aps.Shared.Tests.BillingCompanyTests
         public void Given_Multiple_OpenClosedWindow_When_AddingToTheBillingCompany_TheItemsInsideIncrease()
         {
             //arrange
-            BillingCompany billingCompany = container.Resolve<IBillingCompanyRepository>().BuildNewBillingCompany(companyName, companyType, companyUrl);
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
+            BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
+
             var openClosedWindow = new OpenClosedWindow(DateTime.Now.AddHours(1), DateTime.Now.AddHours(2), true, 2);
             var openClosedWindow2 = new OpenClosedWindow(DateTime.Now.AddHours(3), DateTime.Now.AddHours(4), true, 2);
 
@@ -69,7 +73,8 @@ namespace Aps.Shared.Tests.BillingCompanyTests
         public void Given_Multiple_OpenClosedWindow_When_AddingToTheBillingCompanyLeftBasedOverlapsExist_ExceptionIsThrown()
         {
             //arrange
-            BillingCompany billingCompany = container.Resolve<IBillingCompanyRepository>().BuildNewBillingCompany(companyName, companyType, companyUrl);
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
+            BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
           
             var openClosedWindow = new OpenClosedWindow(DateTime.Now.AddHours(2), DateTime.Now.AddHours(4), true, 2);
             var openClosedWindow2 = new OpenClosedWindow(DateTime.Now.AddHours(1), DateTime.Now.AddHours(3), true, 2);
@@ -87,7 +92,8 @@ namespace Aps.Shared.Tests.BillingCompanyTests
         public void Given_Multiple_OpenClosedWindow_When_AddingToTheBillingCompanyRightBasedOverlapsExist_ExceptionIsThrown()
         {
             //arrange
-            BillingCompany billingCompany = container.Resolve<IBillingCompanyRepository>().BuildNewBillingCompany(companyName, companyType, companyUrl);
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
+            BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
 
             var openClosedWindow = new OpenClosedWindow(DateTime.Now.AddHours(2), DateTime.Now.AddHours(4), true, 2);
             var openClosedWindow2 = new OpenClosedWindow(DateTime.Now.AddHours(3), DateTime.Now.AddHours(5), true, 2);
@@ -105,7 +111,8 @@ namespace Aps.Shared.Tests.BillingCompanyTests
         public void Given_Multiple_OpenClosedWindow_When_AddingToTheBillingCompanyMiddleBasedOverlapsExist_ExceptionIsThrown()
         {
             //arrange
-            BillingCompany billingCompany = container.Resolve<IBillingCompanyRepository>().BuildNewBillingCompany(companyName, companyType, companyUrl);
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
+            BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
 
             var openClosedWindow = new OpenClosedWindow(DateTime.Now.AddHours(2), DateTime.Now.AddHours(5), true, 2);
             var openClosedWindow2 = new OpenClosedWindow(DateTime.Now.AddHours(3), DateTime.Now.AddHours(4), true, 2);
@@ -122,7 +129,9 @@ namespace Aps.Shared.Tests.BillingCompanyTests
         public void Given_Multiple_OpenClosedWindows_When_RemovingFromTheBillingCompany_TheItemsInsideDecrease()
         {
             //arrange
-            BillingCompany billingCompany = container.Resolve<IBillingCompanyRepository>().BuildNewBillingCompany(companyName, companyType, companyUrl);
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
+            BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
+
             var openClosedWindow = new OpenClosedWindow(DateTime.Now.AddHours(1), DateTime.Now.AddHours(2), true, 2);
             var openClosedWindow2 = new OpenClosedWindow(DateTime.Now.AddHours(3), DateTime.Now.AddHours(4), true, 2);
             billingCompany.AddOpenClosedWindow(openClosedWindow);

@@ -5,16 +5,16 @@ using Seterlund.CodeGuard;
 
 namespace Aps.BillingCompanies
 {
-    public class BillingCompanyCreator
+    public class BillingCompanyFactory
     {
         private readonly IEventAggregator eventAggregator;
 
-        public BillingCompanyCreator(IEventAggregator eventAggregator)
+        public BillingCompanyFactory(IEventAggregator eventAggregator)
         {
             this.eventAggregator = eventAggregator;
         }
 
-        public BillingCompany GetNewBillingCompany(BillingCompanyName billingCompanyName, BillingCompanyType billingCompanyType, BillingCompanyScrapingUrl billingCompanyScrapingUrl,bool crossCheckScrapeEnabled)
+        public BillingCompany ConstructBillingCompanyWithGivenValues(BillingCompanyName billingCompanyName, BillingCompanyType billingCompanyType, BillingCompanyScrapingUrl billingCompanyScrapingUrl,bool crossCheckScrapeEnabled=false)
         {
             Guard.That(billingCompanyName).IsNotNull();
             Guard.That(billingCompanyType).IsNotNull();
