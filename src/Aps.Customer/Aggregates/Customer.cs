@@ -1,8 +1,9 @@
-﻿using Aps.Customers.ValueObjects;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Aps.Customers.ValueObjects;
 using Aps.DomainBase;
 using Caliburn.Micro;
-using System;
-using System.Collections.Generic;
 using Aps.Integration;
 
 namespace Aps.Customers.Aggregates
@@ -10,8 +11,7 @@ namespace Aps.Customers.Aggregates
     public class Customer : Aggregate
     {
         private readonly IEventAggregator eventAggregator;
-        private readonly EventIntegrationService eventIntegrationService;
-
+        
         private CustomerFirstName customerFirstName;
         private CustomerLastName customerLastName;
         private CustomerEmailAddress customerEmailAddress;
@@ -21,12 +21,14 @@ namespace Aps.Customers.Aggregates
         private List<CustomerBillingCompanyAccount> customerBillingCompanyAccounts;
         private CustomerStatement customerStatement;
 
+        public IEnumerable<CustomerBillingCompanyAccount> CustomerBillingCompanyAccounts { get { return customerBillingCompanyAccounts; } }
+
         private Customer()
         {
 
         }
                 
-        public Customer(IEventAggregator aggregator, EventIntegrationService eventIntegrationService, CustomerFirstName customerFirstName, CustomerLastName customerLastName, CustomerEmailAddress customerEmailAddress,
+        public Customer(IEventAggregator aggregator, CustomerFirstName customerFirstName, CustomerLastName customerLastName, CustomerEmailAddress customerEmailAddress,
                         CustomerTelephone customerTelephone, CustomerAPSUsername customerAPSUsername, CustomerAPSPassword customerAPSPassword)
         {
             this.customerFirstName = customerFirstName;
@@ -40,8 +42,6 @@ namespace Aps.Customers.Aggregates
 
             this.eventAggregator = aggregator;
             this.eventAggregator.Subscribe(this);
-
-            this.eventIntegrationService = eventIntegrationService;
 
         }
 
@@ -132,7 +132,7 @@ namespace Aps.Customers.Aggregates
 
             CustomerBillingAccountAdded customerBillingAccountAddedEvent = new CustomerBillingAccountAdded();
 
-            eventIntegrationService.Publish(customerBillingAccountAddedEvent);
+            eventAggregator.Publish(customerBillingAccountAddedEvent);
 
         }
 
