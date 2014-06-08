@@ -4,22 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aps.Core.Interpreters
+namespace Aps.Core.Validation
 {
-    public class ScrapeSessionConversionException : Exception
+    public class ScrapeValidationException: Exception
     {
-        public ScrapeSessionConversionException()
+        public ScrapeValidationException()
         {
 
         }
 
-        public ScrapeSessionConversionException(string message)
+        public ScrapeValidationException(string message)
         : base(message)
         {
 
         }
 
-        public ScrapeSessionConversionException(string message, Exception inner)
+        public ScrapeValidationException(string message, Exception inner)
         : base(message, inner)
         {
 
