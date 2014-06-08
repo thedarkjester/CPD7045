@@ -9,36 +9,74 @@ namespace Aps.Fakes
 {
     public class ScrapingObjectRepositoryFake : IScrapingObjectRepository
     {
-        private readonly List<ScrapingObject> scrapingObjects;
+        public readonly List<ScrapingObject> scrapingMasterQueue;
+        public readonly List<ScrapingObject> scrapingCompletedQueue;
 
-        private readonly IEventAggregator eventAggregator;
-        private readonly ScrapingObjectCreator scrapingObjectCreator;
+        public readonly IEventAggregator eventAggregator;
+        public readonly ScrapingObjectCreator scrapingObjectCreator;
 
         public ScrapingObjectRepositoryFake(IEventAggregator eventAggregator, ScrapingObjectCreator scrapingObjectCreator)
         {
             this.eventAggregator = eventAggregator;
             this.scrapingObjectCreator = scrapingObjectCreator;
-            this.scrapingObjects = new List<ScrapingObject>();
+            this.scrapingMasterQueue = new List<ScrapingObject>();
+            this.scrapingCompletedQueue = new List<ScrapingObject>();
         }
 
         public void StoreScrapingObject(ScrapingObject scrapingObject)
         {
-            this.scrapingObjects.Add(scrapingObject);
+            this.scrapingMasterQueue.Add(scrapingObject);
         }
 
-        public ScrapingObject BuildNewScrapingObject(Guid customerId, Guid billingCompanyId, string URL, string plainText, string hiddenText)
+        public void AddScrapingItemToCompletedQueue(ScrapingObject scrapingObject)
         {
-            return this.scrapingObjectCreator.GetNewScrapingObject(customerId, billingCompanyId, URL, plainText, hiddenText);
+            this.scrapingCompletedQueue.Add(scrapingObject);
+        }
+
+        public void RemoveScrapingItemFromRepo(ScrapingObject scrapingObject)
+        {
+            this.scrapingMasterQueue.Remove(scrapingObject);
+        }
+
+        public ScrapingObject BuildNewScrapingObject(Guid customerId, Guid billingCompanyId, bool registrationType)
+        {
+            return this.scrapingObjectCreator.GetNewScrapingObject(customerId, billingCompanyId, registrationType);
         }
 
         public ScrapingObject GetScrapingObjectByCustomerAndBillingCompanyId(Guid customerId, Guid billingCompanyId)
         {
-            return this.scrapingObjects.FirstOrDefault(x => ((x.customerId == customerId) && (x.billingCompanyId == billingCompanyId)));
+            return this.scrapingMasterQueue.FirstOrDefault(x => ((x.customerId == customerId) && (x.billingCompanyId == billingCompanyId)));
         }
 
-        public IEnumerable<ScrapingObject> GetAllScrapingObjectsByBillingCompanyId()
+        public ScrapingObject GetScrapingObjectByQueueId(Guid queueId)
         {
-            return scrapingObjects; // currently returns all objects icorreclty - Need to fix it
+            return this.scrapingMasterQueue.FirstOrDefault(x => (x.queueId == queueId));
+        }
+
+        public IEnumerable<ScrapingObject> GetAllScrapingObjects()
+        {
+            //scrapingObjects.
+
+            return scrapingMasterQueue;
+        }
+
+        public IEnumerable<ScrapingObject> GetCompletedScrapeQueue()
+        {
+            //scrapingObjects.
+
+            return scrapingCompletedQueue;
+        }
+
+        public void ClearCompletedScrapeList()
+        {
+            scrapingCompletedQueue.Clear();
+        }
+
+       // IEnumerable<ScrapingObject> GetAllScrapingObjectsByBillingCompanyId(Guid billingCompanyId);
+
+        public IEnumerable<ScrapingObject> GetAllScrapingObjectsByBillingCompanyId(Guid billingCompanyId)
+        {
+            return scrapingMasterQueue; // currently returns all objects incorreclty - Need to fix it
         }
 
     }

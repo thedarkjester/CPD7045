@@ -72,8 +72,9 @@
     <Compile Include="BillingCompanyTests\BillingCompanyScrapingConfigurationTests.cs" />
     <Compile Include="BillingCompanyTests\ScrapingErrorRetryConfigurationTests.cs" />
     <Compile Include="BillingCompanyTests\ScrapingLoadManagementConfigurationTests.cs" />
-    <Compile Include="CoreTests\CreatingANewScrapingObjectTest.cs" />
+    <Compile Include="CoreTests\SchedulingEngineTest.cs" />
     <Compile Include="CoreTests\ScrapeSessionInitiatorTest.cs" />
+    <Compile Include="CoreTests\ScrapingObjectTest.cs" />
     <Compile Include="InterpreterTests\ScrapeSessionDataInterpreterTests.cs" />
     <Compile Include="RepositoryTests\EntityTests.cs" />
     <Compile Include="SampleTest.cs" />

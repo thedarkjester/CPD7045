@@ -22,7 +22,7 @@ namespace Aps.Integration.Events
         {
             this.scrapeSessionId = scrapeSessionId;
             this.customerId = customerId;
-            this.billingCompanyId = billingCompanyId;
+            this.billingCompanyId = billingComapnyId;
             dateCreated = DateTime.Now;
         }
     }
