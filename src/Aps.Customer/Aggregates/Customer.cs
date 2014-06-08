@@ -1,19 +1,28 @@
-﻿using Aps.Customers.ValueObjects;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Aps.Customers.ValueObjects;
+using Aps.Customers.Entities;
 using Aps.DomainBase;
 using Caliburn.Micro;
+using Aps.Customers.Events;
 
 namespace Aps.Customers.Aggregates
 {
     public class Customer : Aggregate
     {
         private readonly IEventAggregator eventAggregator;
-
+        
         private CustomerFirstName customerFirstName;
         private CustomerLastName customerLastName;
         private CustomerEmailAddress customerEmailAddress;
         private CustomerTelephone customerTelephone;
         private CustomerAPSUsername customerAPSUsername;
         private CustomerAPSPassword customerAPSPassword;
+        private List<CustomerBillingCompanyAccount> customerBillingCompanyAccounts;
+        private CustomerStatement customerStatement;
+
+        public IEnumerable<CustomerBillingCompanyAccount> CustomerBillingCompanyAccounts { get { return customerBillingCompanyAccounts; } }
 
         private Customer()
         {
@@ -29,6 +38,8 @@ namespace Aps.Customers.Aggregates
             this.customerTelephone = customerTelephone;
             this.customerAPSUsername = customerAPSUsername;
             this.customerAPSPassword = customerAPSPassword;
+            this.customerBillingCompanyAccounts = new List<CustomerBillingCompanyAccount>();
+            this.customerStatement = null;
 
             this.eventAggregator = aggregator;
             this.eventAggregator.Subscribe(this);
@@ -63,6 +74,11 @@ namespace Aps.Customers.Aggregates
         public CustomerAPSPassword CustomerAPSPassword
         {
             get { return this.customerAPSPassword; }
+        }
+
+        public CustomerStatement CustomerStatement
+        {
+            get { return this.CustomerStatement; }
         }
 
         public void SetCustomerFirstName(CustomerFirstName firstName)
@@ -107,5 +123,37 @@ namespace Aps.Customers.Aggregates
             this.customerAPSPassword = password;
         }
 
+        public void AddCustomerBillingCompanyAccount(CustomerBillingCompanyAccount customerBillingCompanyAccount)
+        {
+            //test  for signle acc
+            
+            this.customerBillingCompanyAccounts.Add(customerBillingCompanyAccount);
+
+            CustomerBillingAccountAdded customerBillingAccountAddedEvent = new CustomerBillingAccountAdded(this.Id, customerBillingCompanyAccount.billingCompanyId);
+
+            eventAggregator.Publish(customerBillingAccountAddedEvent);
+
+        }
+
+        public void RemoveCustomerBillingCompanyAccount(CustomerBillingCompanyAccount customerBillingCompanyAccount)
+        {
+            this.customerBillingCompanyAccounts.Remove(customerBillingCompanyAccount);
+        }
+
+        public void ChangeCustomerBillingCompanyAccountStatus(Guid billingCompanyId, string status)
+        {
+            foreach(CustomerBillingCompanyAccount cbca in customerBillingCompanyAccounts) 
+            {
+                if (cbca.getBillingCompanyId() == billingCompanyId)
+                {
+                    cbca.ChangeCustomerBillingAccountStatus(status);
+                }
+            }
+        }
+
+        public void SetCustomerStatement(CustomerStatement statement)
+        {
+            this.customerStatement = statement;
+        }
     }
 }

@@ -28,7 +28,7 @@ namespace Aps.Integration.Queries.CustomerQueries
             return dto; 
         }
 
-        public CustomerDto MapCustomerAggregateToCustomerDto(Customer customer)
+        private CustomerDto MapCustomerAggregateToCustomerDto(Customer customer)
         {
             CustomerDto dto = new CustomerDto
             {

@@ -8,7 +8,7 @@ namespace Aps.Customers
     public class CustomerCreator
     {
         private readonly IEventAggregator eventAggregator;
-
+        
         public CustomerCreator(IEventAggregator eventAggregator)
         {
             this.eventAggregator = eventAggregator;
