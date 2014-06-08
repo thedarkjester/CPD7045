@@ -2,15 +2,12 @@
 using Aps.Scheduling.ApplicationService;
 using Aps.Scheduling.ApplicationService.ScrapeOrchestrators;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Autofac;
 using Caliburn.Micro;
 using Aps.Integration.EnumTypes;
 using Autofac.Features.Indexed;
 using Moq;
-using Aps.Scheduling.ApplicationService;
 using Aps.Customers;
 using Aps.BillingCompanies;
-using Aps.Scheduling.ApplicationService.ScrapeOrchestrators;
 using Aps.Scraping;
 
 namespace Aps.Shared.Tests.CoreTests
