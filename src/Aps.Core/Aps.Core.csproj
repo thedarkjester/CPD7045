@@ -58,10 +58,10 @@
   <ItemGroup>
     <Compile Include="ErrorCode.cs" />
     <Compile Include="InternalEvents\ScrapeSessionFailed.cs" />
-    <Compile Include="Interpreters\Interpreter.cs" />
+    <Compile Include="Interpreters\ScrapeSessionXMLToDataPairConverter.cs" />
     <Compile Include="Interpreters\ScrapeDataPairsWithNoNameFoundException.cs" />
     <Compile Include="Interpreters\ScrapeNoDataPairsFoundException.cs" />
-    <Compile Include="KeyValuePair.cs" />
+    <Compile Include="InterpretedScrapeSessionDataPair.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SchedulingEngine.cs" />
     <Compile Include="TestConstructor.cs" />
