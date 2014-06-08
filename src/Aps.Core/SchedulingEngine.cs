@@ -26,7 +26,7 @@ namespace Aps.Core
         public Dictionary<Guid, int> currentNumberOfThreadsPerBillingCompany;
         //private Guid ScrapeQueueId;
         public int maxAllowedServerScrapes;
-        public IEnumerable<ScrapingObject> scrapeElementsQueue;
+        public List<ScrapingObject> scrapeElementsQueue;
         public List<ScrapingObject> scrapeElementsRunning;
         public CancellationToken cancellationToken;
         readonly ScrapeSessionInitiator scrapeSessionInitiator;
@@ -35,7 +35,7 @@ namespace Aps.Core
         {
             this.eventAggregator = eventAggregator;
             this.eventAggregator.Subscribe(this);
-
+            this.scrapeElementsQueue = new List<ScrapingObject>();
             this.billingCompanyOpenClosedWindowsQuery = billingCompanyOpenClosedWindowsQuery;
             this.scrapingObjectRepositoryFake = scrapingObjectRepositoryFake;
             this.billingCompanyScrapingLoadManagementConfigurationQuery = billingCompanyScrapingLoadManagementConfigurationQuery;
@@ -51,12 +51,10 @@ namespace Aps.Core
         public void Start()
         {
             //messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(NewCustomerBillingCompanyAccount).FullName);
-            messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(CustomerBillingAccountAdded).FullName);
+           // messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(CustomerBillingAccountAdded).FullName);
             Scrape();
         }
-
-
-
+        
         private void Scrape()
         {
             OpenClosedWindowDto openClosedWindowDto;
@@ -65,6 +63,10 @@ namespace Aps.Core
             while (true)
             {
                 scrapeElementsQueue = getNewScrapeQueueWithoutCompletedItems();
+                if (scrapeElementsQueue == null)
+                {
+                    continue;
+                }
 
                 foreach (var scrapingQueueElement in scrapeElementsQueue)
                 {
@@ -86,7 +88,7 @@ namespace Aps.Core
 
                     }
                 }
-                Thread.Sleep(6); // Entire QueueProcessed or threads full, sleep a while and then start with a new Queue
+                Thread.Sleep(6000); // Entire QueueProcessed or threads full, sleep a while and then start with a new Queue
             }
         }
 
@@ -102,7 +104,9 @@ namespace Aps.Core
             List<ScrapingObject> completedScrapingQueue = scrapingObjectRepositoryFake.GetCompletedScrapeQueue().ToList();
 
             if (sortedScrapingQueueItemsWithoutCompletedScrapes.Count() == 0)
-                return null;
+            {
+                return new List<ScrapingObject>();
+            }
 
             sortedScrapingQueueItemsWithoutCompletedScrapes.RemoveAll(x => !completedScrapingQueue.Any(y => y.queueId == x.queueId));
             sortedScrapingQueueItemsWithoutCompletedScrapes.RemoveAll(x => !scrapeElementsRunning.Any(y => y.queueId == x.queueId));
@@ -112,7 +116,9 @@ namespace Aps.Core
  
 
             if (sortedScrapingQueueItemsWithoutCompletedScrapes.Count() == 0)
-                return null;
+            {
+                return new List<ScrapingObject>();
+            }
 
             return sortedScrapingQueueItemsWithoutCompletedScrapes;
         }
@@ -128,8 +134,14 @@ namespace Aps.Core
         {
             OpenClosedWindowDto currentOpenClosedWindowDto = billingCompanyOpenClosedWindowsQuery.GetCurrentOpenClosedWindow(billingCompanyId);
             if (currentOpenClosedWindowDto == null)
-                return null;
-            else return currentOpenClosedWindowDto;
+            {
+                return new OpenClosedWindowDto();
+            }
+            else
+            {
+                return currentOpenClosedWindowDto;
+                
+            }
         }
 
         public int getMaxAllowedThreadsForSpecificBillingCompany(OpenClosedWindowDto openClosedWindowDto, Guid billingCompanyId)
