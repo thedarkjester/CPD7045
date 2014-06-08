@@ -6,6 +6,7 @@ using Aps.Scheduling.ApplicationService.ScrapeOrchestrators;
 using Aps.Scraping;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Autofac;
+using Aps.Scheduling.ApplicationService;
 using Caliburn.Micro;
 using Aps.Integration;
 using Aps.Integration.Queries.BillingCompanyQueries;
@@ -15,6 +16,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Aps.Integration.EnumTypes;
 using Aps.Customers;
+using Aps.Scheduling.ApplicationService.ScrapeOrchestrators;
 
 namespace Aps.Shared.Tests.CoreTests
 {

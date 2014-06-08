@@ -11,32 +11,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Aps.Scraping;
+using Aps.Integration.Queries.CustomerQueries.Dtos;
+using Aps.Scheduling.ApplicationService.Entities;
 
 namespace Aps.Scheduling.ApplicationService
 {
    
     public class ScrapeSessionInitiator
     {
-        private readonly IEventAggregator eventAggregator;
-        private readonly ICustomerRepository customerRepository;
-        private readonly IBillingCompanyRepository billingCompanyRepository;
+        private readonly Aps.Integration.Queries.CustomerQueries.Dtos.CustomerBillingCompanyAccountsById customerBillingCompanyAccountsById;
         private readonly IIndex<ScrapeSessionTypes, ScrapeOrchestrator> scrapeOrchestrators;
-        public ScrapeSessionInitiator(IEventAggregator eventAggregator, ICustomerRepository customerRepository, IBillingCompanyRepository billingCompanyRepository, IIndex<ScrapeSessionTypes, ScrapeOrchestrator> scrapeOrchestrators)
+        public ScrapeSessionInitiator(Aps.Integration.Queries.CustomerQueries.Dtos.CustomerBillingCompanyAccountsById customerBillingCompanyAccountsById, IIndex<ScrapeSessionTypes, ScrapeOrchestrator> scrapeOrchestrators)
         {
-            this.eventAggregator = eventAggregator;
-            this.customerRepository = customerRepository;
-            this.billingCompanyRepository = billingCompanyRepository;
+            this.customerBillingCompanyAccountsById = customerBillingCompanyAccountsById;
             this.scrapeOrchestrators = scrapeOrchestrators;
         }
 
-        public void InitiateNewScrapeSession(Guid billingCompanyId, Guid customerId, Guid queueId, ScrapeSessionTypes scrapeSessionType)
+        public void InitiateNewScrapeSession(ScrapingObject scrapingObject)
         {
-            ScrapeOrchestrator scrapeOrchestrator = scrapeOrchestrators[scrapeSessionType];
+            ScrapeOrchestrator scrapeOrchestrator = scrapeOrchestrators[scrapingObject.scrapeSessionTypes];
 
-
-            //get user credentials for billing company 
-            
-            Task.Run(() => scrapeOrchestrator.Orchestrate()/*(BillingCompanyId, CustomerId)*/);
+            CustomerBillingCompanyAccountDto customerBillingCompanyAccountDto = customerBillingCompanyAccountsById.GetCustomerBillingCompanyAccountByCustomerIdAndBillingCompanyId(scrapingObject.customerId, scrapingObject.billingCompanyId);
+            ScrapeOrchestratorEntity scrapeOrchestratorEntity = new ScrapeOrchestratorEntity(scrapingObject.queueId, scrapingObject.customerId, scrapingObject.billingCompanyId, string.Empty, customerBillingCompanyAccountDto.billingCompanyUsername, customerBillingCompanyAccountDto.billingCompanyPassword, customerBillingCompanyAccountDto.billingCompanyPIN, customerBillingCompanyAccountDto.billingCompanyAccountNumber);
+            Task.Run(() => scrapeOrchestrator.Orchestrate(scrapeOrchestratorEntity));
         }
     }
 }

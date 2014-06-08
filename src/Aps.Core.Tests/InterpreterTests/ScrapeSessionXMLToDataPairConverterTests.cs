@@ -1,6 +1,9 @@
 ﻿using System;
 using Aps.Scheduling.ApplicationService.Interpreters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Aps.Scheduling.ApplicationService;
+using Aps.Scheduling.ApplicationService.Interpreters;
+
 
 namespace Aps.Shared.Tests.InterpreterTests
 {
