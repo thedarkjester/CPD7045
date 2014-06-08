@@ -1,8 +1,8 @@
 ﻿using Aps.BillingCompanies;
-using Aps.Core.InternalEvents;
 using Aps.Customers;
 using Aps.Integration;
 using Aps.Integration.Events;
+using Aps.Scheduling.ApplicationService.InternalEvents;
 using Caliburn.Micro;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ using System;
 using Aps.Fakes;
 using Aps.Scraping;
 
-namespace Aps.Core
+namespace Aps.Scheduling.ApplicationService
 {
     public class SchedulingEngine : IHandle<ScrapeSessionFailed>
     {
@@ -26,7 +26,7 @@ namespace Aps.Core
         public Dictionary<Guid, int> currentNumberOfThreadsPerBillingCompany;
         //private Guid ScrapeQueueId;
         public int maxAllowedServerScrapes;
-        public List<ScrapingObject> scrapeElementsQueue;
+        public IEnumerable<ScrapingObject> scrapeElementsQueue;
         public List<ScrapingObject> scrapeElementsRunning;
         public CancellationToken cancellationToken;
         readonly ScrapeSessionInitiator scrapeSessionInitiator;
@@ -35,7 +35,7 @@ namespace Aps.Core
         {
             this.eventAggregator = eventAggregator;
             this.eventAggregator.Subscribe(this);
-            this.scrapeElementsQueue = new List<ScrapingObject>();
+
             this.billingCompanyOpenClosedWindowsQuery = billingCompanyOpenClosedWindowsQuery;
             this.scrapingObjectRepositoryFake = scrapingObjectRepositoryFake;
             this.billingCompanyScrapingLoadManagementConfigurationQuery = billingCompanyScrapingLoadManagementConfigurationQuery;
@@ -51,10 +51,12 @@ namespace Aps.Core
         public void Start()
         {
             //messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(NewCustomerBillingCompanyAccount).FullName);
-           // messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(CustomerBillingAccountAdded).FullName);
+            //messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(BillingAccountAddedToCustomer).FullName);
             Scrape();
         }
-        
+
+
+
         private void Scrape()
         {
             OpenClosedWindowDto openClosedWindowDto;
@@ -63,10 +65,6 @@ namespace Aps.Core
             while (true)
             {
                 scrapeElementsQueue = getNewScrapeQueueWithoutCompletedItems();
-                if (scrapeElementsQueue == null)
-                {
-                    continue;
-                }
 
                 foreach (var scrapingQueueElement in scrapeElementsQueue)
                 {
@@ -88,7 +86,7 @@ namespace Aps.Core
 
                     }
                 }
-                Thread.Sleep(6000); // Entire QueueProcessed or threads full, sleep a while and then start with a new Queue
+                Thread.Sleep(6); // Entire QueueProcessed or threads full, sleep a while and then start with a new Queue
             }
         }
 
@@ -104,9 +102,7 @@ namespace Aps.Core
             List<ScrapingObject> completedScrapingQueue = scrapingObjectRepositoryFake.GetCompletedScrapeQueue().ToList();
 
             if (sortedScrapingQueueItemsWithoutCompletedScrapes.Count() == 0)
-            {
-                return new List<ScrapingObject>();
-            }
+                return null;
 
             sortedScrapingQueueItemsWithoutCompletedScrapes.RemoveAll(x => !completedScrapingQueue.Any(y => y.queueId == x.queueId));
             sortedScrapingQueueItemsWithoutCompletedScrapes.RemoveAll(x => !scrapeElementsRunning.Any(y => y.queueId == x.queueId));
@@ -116,9 +112,7 @@ namespace Aps.Core
  
 
             if (sortedScrapingQueueItemsWithoutCompletedScrapes.Count() == 0)
-            {
-                return new List<ScrapingObject>();
-            }
+                return null;
 
             return sortedScrapingQueueItemsWithoutCompletedScrapes;
         }
@@ -134,14 +128,8 @@ namespace Aps.Core
         {
             OpenClosedWindowDto currentOpenClosedWindowDto = billingCompanyOpenClosedWindowsQuery.GetCurrentOpenClosedWindow(billingCompanyId);
             if (currentOpenClosedWindowDto == null)
-            {
-                return new OpenClosedWindowDto();
-            }
-            else
-            {
-                return currentOpenClosedWindowDto;
-                
-            }
+                return null;
+            else return currentOpenClosedWindowDto;
         }
 
         public int getMaxAllowedThreadsForSpecificBillingCompany(OpenClosedWindowDto openClosedWindowDto, Guid billingCompanyId)
@@ -200,7 +188,7 @@ namespace Aps.Core
 
         /*
         // This Handle's name will need to change to "CustomerBillingCompanyAccountAdded"
-        public void Handle(CustomerBillingAccountAdded message)
+        public void Handle(BillingAccountAddedToCustomer message)
         {
             // Store item in scrapingRepo
             ScrapingQueueElement scrapingQueueElement = scrapingObjectRepositoryFake.BuildNewScrapingObject(message.CustomerId, message.BillingCompanyId, message.RegistrationRequest);
@@ -220,9 +208,11 @@ namespace Aps.Core
         // This Handle's name will need to change to "CustomerScrapeSessionFailed"
         public void Handle(ScrapeSessionFailed message)
         {
+            //Input - QueueId , Failure Enum
+
             // Look at error code and decide what to do with error
             // For all error types do the following:
-            // currentNumberOfThreadsPerBillingCompany[scrapingQueueElement.billingCompanyId] -= 1;
+            // currentNumberOfThreadsPerBillingCompany[scrapingQueueElement.BillingCompanyId] -= 1;
             // scrapeElementsRunning.Remove(ScrapingQueueElement scrapingObject);
 
             /*
@@ -255,12 +245,21 @@ namespace Aps.Core
         }
 
         /*
+         * Jignesh Events
+        public void Handle(CrossCheckCompleted message){//Input - QueueId}
+        public void Handle(ScrapeSessionCompleted message){//Input - QueueId, statement Date}
+        public void Handle(ScrapeSessionDuplicateStatemsnt message){//Input - QueueId}
         
-        public void Handle(AccountStatementGenerated message){}
-        public void Handle(CustomerBillingCompanyAccountUpdated message){}
-        public void Handle(CustomerBillingCompanyAccountDeleted message){}
-        public void Handle(ScrapeSessionCompleted message){}
-        public void Handle(ScrapeSessionDuplicateStatemsnt message){}
+         * Carlos Events
+        public void Handle(CustomerBillingCompanyAccountDeleted message){//Input - CustomerId, BillingCompanyId}
+        public void Handle(BillingAccountAddedToCustomer message)
+         * {
+         * //Input - CustomerId, BillingCompanyId
+         * Need to get dto to set ScrapeSessionTypes scrapeSessionTypes enum variable.
+         * }
+ 
+         * Grant Events
+        public void Handle(AccountStatementGenerated message){} why do I need it?
         
     */
 

@@ -19,4 +19,4 @@ namespace Aps.Integration.Queries.CustomerQueries.Dtos
         public Guid statementId;
         public DateTime statementDate;
     }
-}
+ }

@@ -129,9 +129,9 @@ namespace Aps.Customers.Aggregates
             
             this.customerBillingCompanyAccounts.Add(customerBillingCompanyAccount);
 
-            CustomerBillingAccountAdded customerBillingAccountAddedEvent = new CustomerBillingAccountAdded(this.Id, customerBillingCompanyAccount.billingCompanyId);
+            BillingAccountAddedToCustomer billingAccountAddedToCustomerEvent = new BillingAccountAddedToCustomer(this.Id, customerBillingCompanyAccount.BillingCompanyId);
 
-            eventAggregator.Publish(customerBillingAccountAddedEvent);
+            eventAggregator.Publish(billingAccountAddedToCustomerEvent);
 
         }
 
@@ -144,7 +144,7 @@ namespace Aps.Customers.Aggregates
         {
             foreach(CustomerBillingCompanyAccount cbca in customerBillingCompanyAccounts) 
             {
-                if (cbca.getBillingCompanyId() == billingCompanyId)
+                if (cbca.BillingCompanyId == billingCompanyId)
                 {
                     cbca.ChangeCustomerBillingAccountStatus(status);
                 }

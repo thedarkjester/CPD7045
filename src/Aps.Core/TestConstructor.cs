@@ -1,7 +1,7 @@
 ﻿using System;
 using Seterlund.CodeGuard;
 
-namespace Aps.Core
+namespace Aps.Scheduling.ApplicationService
 {
     public class TestConstructor
     {

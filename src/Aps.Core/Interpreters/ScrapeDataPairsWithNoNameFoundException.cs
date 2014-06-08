@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aps.Core.Interpreters
+namespace Aps.Scheduling.ApplicationService.Interpreters
 {
     public class ScrapeSessionConversionException : Exception
     {

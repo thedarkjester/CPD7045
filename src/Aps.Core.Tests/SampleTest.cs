@@ -1,5 +1,5 @@
 ﻿using System;
-using Aps.Core;
+using Aps.Scheduling.ApplicationService;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Aps.Shared.Tests

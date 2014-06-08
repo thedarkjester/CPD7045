@@ -1,9 +1,9 @@
 ﻿using Aps.BillingCompanies;
-using Aps.Core.InternalEvents;
-using Aps.Core.ScrapeOrchestrators;
+using Aps.Scheduling.ApplicationService.InternalEvents;
 using Aps.Customers;
 using Aps.Integration;
 using Aps.Integration.EnumTypes;
+using Aps.Scheduling.ApplicationService.ScrapeOrchestrators;
 using Autofac.Features.Indexed;
 using Caliburn.Micro;
 using System;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aps.Core
+namespace Aps.Scheduling.ApplicationService
 {
    
     public class ScrapeSessionInitiator
@@ -36,7 +36,7 @@ namespace Aps.Core
 
             //get user credentials for billing company 
             
-            Task.Run(() => scrapeOrchestrator.Orchestrate()/*(billingCompanyId, customerId)*/);
+            Task.Run(() => scrapeOrchestrator.Orchestrate()/*(BillingCompanyId, CustomerId)*/);
         }
     }
 }

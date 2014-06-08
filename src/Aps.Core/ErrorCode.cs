@@ -1,5 +1,5 @@
 ﻿
-namespace Aps.Core
+namespace Aps.Scheduling.ApplicationService
 {
     public enum ErrorCode
     {

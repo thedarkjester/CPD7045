@@ -67,9 +67,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Aps.Core\Aps.Core.csproj">
+    <ProjectReference Include="..\Aps.Core\Aps.Scheduling.ApplicationService.csproj">
       <Project>{98ea6256-15b1-49c2-a405-a2e050d5741e}</Project>
-      <Name>Aps.Core</Name>
+      <Name>Aps.Scheduling.ApplicationService</Name>
     </ProjectReference>
     <ProjectReference Include="..\Aps.Scraping\Aps.Scraping.csproj">
       <Project>{ce43f772-47f0-4629-b9dc-74616b937556}</Project>

@@ -25,7 +25,7 @@ namespace Aps.Integration.Queries.CustomerQueries.Dtos
                 return null;
             }
 
-            CustomerBillingCompanyAccount account = customer.CustomerBillingCompanyAccounts.FirstOrDefault(customerBillingCompanyAccount => customerBillingCompanyAccount.billingCompanyId == billingCompanyId);
+            CustomerBillingCompanyAccount account = customer.CustomerBillingCompanyAccounts.FirstOrDefault(customerBillingCompanyAccount => customerBillingCompanyAccount.BillingCompanyId == billingCompanyId);
             
             if(account == null)
             {
@@ -41,15 +41,14 @@ namespace Aps.Integration.Queries.CustomerQueries.Dtos
         {
             CustomerBillingCompanyAccountDto dto = new CustomerBillingCompanyAccountDto
             {
-                billingCompanyId = customerBillingCompanyAccount.billingCompanyId,
-                billingCompanyUsername = customerBillingCompanyAccount.billingCompanyUsername,
-                billingCompanyPassword = customerBillingCompanyAccount.billingCompanyPassword,
-                billingCompanyStatus = customerBillingCompanyAccount.billingCompanyStatus,
-                billingCompanyAccountNumber = customerBillingCompanyAccount.billingCompanyAccountNumber,
-                billingCompanyPIN = customerBillingCompanyAccount.billingCompanyPIN,
-                dateBillingCompanyAdded = customerBillingCompanyAccount.dateBillingCompanyAdded,
-                statementId = customerBillingCompanyAccount.customerStatement.statementId,
-                statementDate = customerBillingCompanyAccount.customerStatement.statementDate
+                billingCompanyId = customerBillingCompanyAccount.BillingCompanyId,
+                billingCompanyUsername = customerBillingCompanyAccount.BillingCompanyUsername,
+                billingCompanyPassword = customerBillingCompanyAccount.BillingCompanyPassword,
+                billingCompanyStatus = customerBillingCompanyAccount.BillingCompanyStatus,
+                billingCompanyPIN = customerBillingCompanyAccount.BillingCompanyPIN,
+                dateBillingCompanyAdded = customerBillingCompanyAccount.DateBillingCompanyAdded,
+                statementId = customerBillingCompanyAccount.CustomerStatement.statementId,
+                statementDate = customerBillingCompanyAccount.CustomerStatement.statementDate
             };
 
             return dto;
