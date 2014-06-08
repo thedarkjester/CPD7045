@@ -1,6 +1,6 @@
-﻿using Aps.Core.InternalEvents;
-using Aps.Integration;
+﻿using Aps.Integration;
 using Aps.Integration.Events;
+using Aps.Scheduling.ApplicationService.InternalEvents;
 using Aps.Scraping.Scrapers;
 using Caliburn.Micro;
 using System;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aps.Core.ScrapeOrchestrators
+namespace Aps.Scheduling.ApplicationService.ScrapeOrchestrators
 {
     public class CrossCheckScrapeOrchestrator : ScrapeOrchestrator
     {

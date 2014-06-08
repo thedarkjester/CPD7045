@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Aps.Core
+namespace Aps.Scheduling.ApplicationService
 {
     public class InterpretedScrapeSessionDataPair
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Aps.Core.Constants
+namespace Aps.Scheduling.ApplicationService.Constants
 {
     //we could store this in the DB, but this is a prototype
     public static class StatementFields

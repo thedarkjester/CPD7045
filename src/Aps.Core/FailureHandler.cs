@@ -9,7 +9,7 @@ using Aps.Integration.Queries.BillingCompanyQueries;
 using Aps.Integration.Queries.BillingCompanyQueries.Dtos;
 using Aps.Integration.Events;
 
-namespace Aps.Core
+namespace Aps.Scheduling.ApplicationService
 {
     public class FailureHandler
     {

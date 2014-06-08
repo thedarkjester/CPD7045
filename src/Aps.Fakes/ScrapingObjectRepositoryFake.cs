@@ -73,7 +73,7 @@ namespace Aps.Fakes
             scrapingCompletedQueue.Clear();
         }
 
-       // IEnumerable<ScrapingObject> GetAllScrapingObjectsByBillingCompanyId(Guid billingCompanyId);
+       // IEnumerable<ScrapingObject> GetAllScrapingObjectsByBillingCompanyId(Guid BillingCompanyId);
 
         public IEnumerable<ScrapingObject> GetAllScrapingObjectsByBillingCompanyId(Guid billingCompanyId)
         {

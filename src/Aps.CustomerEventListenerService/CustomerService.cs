@@ -1,17 +1,14 @@
 ﻿using Aps.Customers;
-using Aps.Customers.Aggregates;
 using Aps.Customers.ValueObjects;
 using Aps.Integration;
 using Aps.Integration.Events;
-using Aps.Integration.Queries.CustomerQueries.Dtos;
 using Caliburn.Micro;
 using System;
 using System.Threading;
-using Aps.Customers.Events;
 
-namespace Aps.CustomerEventListenerService
+namespace Aps.Customer.ApplicationService
 {
-    public class CustomerService : IHandle<CustomerScrapeSessionFailed>,IHandle<AccountStatementGenerated>, IHandle<Aps.Customers.Events.CustomerBillingAccountAdded>
+    public class CustomerService : IHandle<CustomerScrapeSessionFailed>,IHandle<AccountStatementGenerated>, IHandle<Aps.Customers.Events.BillingAccountAddedToCustomer>
     {
         private readonly EventIntegrationService eventIntegrationService;
         private readonly IEventAggregator eventAggregator;
@@ -33,7 +30,7 @@ namespace Aps.CustomerEventListenerService
         public void Handle(CustomerScrapeSessionFailed message)
         {
             
-          Customer customer = customerRepository.GetCustomerById(message.customerId);
+          Customers.Aggregates.Customer customer = customerRepository.GetCustomerById(message.customerId);
           customer.ChangeCustomerBillingCompanyAccountStatus(message.billingCompanyId, message.status);
           
         }
@@ -45,7 +42,7 @@ namespace Aps.CustomerEventListenerService
             // is the statement an overall statement (outside BCA's - as is.) or per billing company (need bc id then and in BCA's)?
             // store on customer a statementId and date ( CustomerStatement Value Object )
 
-            Customer customer = customerRepository.GetCustomerById(message.CustomerId);
+            Customers.Aggregates.Customer customer = customerRepository.GetCustomerById(message.CustomerId);
             customer.SetCustomerStatement(new CustomerStatement(message.AccountStatementId, message.StatementDate));
 
         }
@@ -59,9 +56,9 @@ namespace Aps.CustomerEventListenerService
             }
         }
 
-        public void Handle(Customers.Events.CustomerBillingAccountAdded message)
+        public void Handle(Customers.Events.BillingAccountAddedToCustomer message)
         {
-            eventIntegrationService.Publish(new Aps.Integration.Events.CustomerBillingAccountAdded(message.customerId, message.billingCompanyId));
+            eventIntegrationService.Publish(new Aps.Integration.Events.CustomerBillingAccountAdded(message.CustomerId, message.BillingCompanyId));
         }
     }
 }

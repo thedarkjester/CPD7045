@@ -1,8 +1,8 @@
 ﻿using Aps.BillingCompanies;
-using Aps.Core.InternalEvents;
 using Aps.Customers;
 using Aps.Integration;
 using Aps.Integration.Events;
+using Aps.Scheduling.ApplicationService.InternalEvents;
 using Caliburn.Micro;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ using System;
 using Aps.Fakes;
 using Aps.Scraping;
 
-namespace Aps.Core
+namespace Aps.Scheduling.ApplicationService
 {
     public class SchedulingEngine : IHandle<ScrapeSessionFailed>
     {
@@ -51,7 +51,7 @@ namespace Aps.Core
         public void Start()
         {
             //messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(NewCustomerBillingCompanyAccount).FullName);
-            //messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(CustomerBillingAccountAdded).FullName);
+            //messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(BillingAccountAddedToCustomer).FullName);
             Scrape();
         }
 
@@ -188,7 +188,7 @@ namespace Aps.Core
 
         /*
         // This Handle's name will need to change to "CustomerBillingCompanyAccountAdded"
-        public void Handle(CustomerBillingAccountAdded message)
+        public void Handle(BillingAccountAddedToCustomer message)
         {
             // Store item in scrapingRepo
             ScrapingQueueElement scrapingQueueElement = scrapingObjectRepositoryFake.BuildNewScrapingObject(message.CustomerId, message.BillingCompanyId, message.RegistrationRequest);
@@ -212,7 +212,7 @@ namespace Aps.Core
 
             // Look at error code and decide what to do with error
             // For all error types do the following:
-            // currentNumberOfThreadsPerBillingCompany[scrapingQueueElement.billingCompanyId] -= 1;
+            // currentNumberOfThreadsPerBillingCompany[scrapingQueueElement.BillingCompanyId] -= 1;
             // scrapeElementsRunning.Remove(ScrapingQueueElement scrapingObject);
 
             /*
@@ -252,7 +252,7 @@ namespace Aps.Core
         
          * Carlos Events
         public void Handle(CustomerBillingCompanyAccountDeleted message){//Input - CustomerId, BillingCompanyId}
-        public void Handle(CustomerBillingAccountAdded message)
+        public void Handle(BillingAccountAddedToCustomer message)
          * {
          * //Input - CustomerId, BillingCompanyId
          * Need to get dto to set ScrapeSessionTypes scrapeSessionTypes enum variable.

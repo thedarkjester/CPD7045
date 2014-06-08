@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aps.Core.ScrapeOrchestrators
+namespace Aps.Scheduling.ApplicationService.ScrapeOrchestrators
 {
     public abstract class ScrapeOrchestrator
     {

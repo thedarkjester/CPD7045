@@ -1,20 +1,20 @@
 ﻿using System;
 using Aps.BillingCompanies;
-using Aps.Core.Services;
 using Aps.Fakes;
 using Aps.Integration;
 using Aps.Integration.Queries.BillingCompanyQueries;
 using Aps.Integration.Queries.Events;
 using Aps.Integration.Serialization;
+using Aps.Scheduling.ApplicationService.ScrapeOrchestrators;
+using Aps.Scheduling.ApplicationService.Services;
 using Autofac;
 using Caliburn.Micro;
 using Aps.Customers;
-using Aps.Core.ScrapeOrchestrators;
 using Aps.Integration.EnumTypes;
 using Aps.Scraping;
 using Aps.Scraping.Scrapers;
 
-namespace Aps.Core
+namespace Aps.Scheduling.ApplicationService
 {
     class Program
     {

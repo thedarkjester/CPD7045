@@ -1,8 +1,8 @@
 ﻿using Aps.AccountStatements.Entities;
-using Aps.Core.InternalEvents;
-using Aps.Core.Services;
 using Aps.Integration;
 using Aps.Integration.Events;
+using Aps.Scheduling.ApplicationService.InternalEvents;
+using Aps.Scheduling.ApplicationService.Services;
 using Aps.Scraping;
 using Aps.Scraping.Scrapers;
 using Caliburn.Micro;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aps.Core.ScrapeOrchestrators
+namespace Aps.Scheduling.ApplicationService.ScrapeOrchestrators
 {
     public class StatementScrapeOrchestrator : ScrapeOrchestrator
     {
@@ -55,7 +55,7 @@ namespace Aps.Core.ScrapeOrchestrators
                 {
                     eventAggregator.Publish(new ScrapeSessionDuplicateStatement(queueId));
                     eventIntegrationService.Publish(new ScrapeSessionDuplicateStatementReceived(scrapeSessionId, customerId, billingCompanyId));
-                    //failureHandler.ProcessNewFailure(customerId, billingCompanyId, Integration.EnumTypes.ScrapingErrorResponseCodes.Unknown);
+                    //failureHandler.ProcessNewFailure(CustomerId, BillingCompanyId, Integration.EnumTypes.ScrapingErrorResponseCodes.Unknown);
                     return;
                 }
 

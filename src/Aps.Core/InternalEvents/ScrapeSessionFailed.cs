@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Aps.Core.InternalEvents
+namespace Aps.Scheduling.ApplicationService.InternalEvents
 {
     public class ScrapeSessionFailed
     {

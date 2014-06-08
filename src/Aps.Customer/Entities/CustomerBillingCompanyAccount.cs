@@ -7,14 +7,14 @@ namespace Aps.Customers.Entities
 {
     public class CustomerBillingCompanyAccount
     {
-        public readonly Guid billingCompanyId;
-        public readonly string billingCompanyUsername;
-        public readonly string billingCompanyPassword;
-        public string billingCompanyStatus;
-        public string billingCompanyAccountNumber;
-        public readonly int billingCompanyPIN;
-        public readonly DateTime dateBillingCompanyAdded;
-        public CustomerStatement customerStatement;
+        public readonly Guid BillingCompanyId;
+        public readonly string BillingCompanyUsername;
+        public readonly string BillingCompanyPassword;
+        public string BillingCompanyStatus;
+        public string BillingCompanyAccountNumber;
+        public readonly int BillingCompanyPIN;
+        public readonly DateTime DateBillingCompanyAdded;
+        public CustomerStatement CustomerStatement;
 
         protected CustomerBillingCompanyAccount()
         {
@@ -22,33 +22,28 @@ namespace Aps.Customers.Entities
         }
 
         public CustomerBillingCompanyAccount(Guid billingCompanyId, string billingCompanyUsername, string billingCompanyPassword, string billingCompanyStatus,
-                                             string billingCompanyAccountNumber, int billingCompanyPIN, DateTime dateBillingCompanyAdded)
+                                             string billingCompanyAccountNumber, int billingCompanyPin, DateTime dateBillingCompanyAdded)
         {
             Guard.That(billingCompanyId).IsNotEmpty();
             Guard.That(billingCompanyUsername).IsNotNullOrEmpty();
             Guard.That(billingCompanyPassword).IsNotNullOrEmpty();
             Guard.That(billingCompanyStatus).IsNotNullOrEmpty();
             Guard.That(billingCompanyAccountNumber).IsNotNullOrEmpty();
-            Guard.That(billingCompanyPIN).IsGreaterThan(0);
-            Guard.That(dateBillingCompanyAdded).IsTrue(date => date >= DateTime.Now, "dateBillingCompanyAdded cannot be in the past");
+            Guard.That(billingCompanyPin).IsGreaterThan(0);
+            Guard.That(dateBillingCompanyAdded).IsTrue(date => date >= DateTime.Now, "DateBillingCompanyAdded cannot be in the past");
             
-            this.billingCompanyId = billingCompanyId;
-            this.billingCompanyUsername = billingCompanyUsername;
-            this.billingCompanyPassword = billingCompanyPassword;
-            this.billingCompanyStatus = billingCompanyStatus;
-            this.billingCompanyAccountNumber = billingCompanyAccountNumber;
-            this.billingCompanyPIN = billingCompanyPIN;
-            this.dateBillingCompanyAdded = dateBillingCompanyAdded;
+            this.BillingCompanyId = billingCompanyId;
+            this.BillingCompanyUsername = billingCompanyUsername;
+            this.BillingCompanyPassword = billingCompanyPassword;
+            this.BillingCompanyStatus = billingCompanyStatus;
+            this.BillingCompanyAccountNumber = billingCompanyAccountNumber;
+            this.BillingCompanyPIN = billingCompanyPin;
+            this.DateBillingCompanyAdded = dateBillingCompanyAdded;
         }
 
-        public Guid getBillingCompanyId()
+       public void ChangeCustomerBillingAccountStatus(string status)
         {
-            return billingCompanyId;
-        }
-
-        public void ChangeCustomerBillingAccountStatus(string status)
-        {
-            this.billingCompanyStatus = status;
+            this.BillingCompanyStatus = status;
         }
 
     }
