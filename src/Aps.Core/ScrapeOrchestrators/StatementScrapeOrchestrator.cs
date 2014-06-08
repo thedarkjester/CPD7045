@@ -1,4 +1,5 @@
-﻿using Aps.Core.InternalEvents;
+﻿using Aps.AccountStatements.Entities;
+using Aps.Core.InternalEvents;
 using Aps.Core.Services;
 using Aps.Integration;
 using Aps.Integration.Events;
@@ -61,8 +62,8 @@ namespace Aps.Core.ScrapeOrchestrators
                 //var validatedResults = new ScrapeSessionDataValidator().validateScrapeData(transformedResults);
                 eventIntegrationService.Publish(new ScrapeSessionDataValidated(scrapeSessionId, customerId, billingCompanyId));
 
-                accountStatementComposer.BuildAccountStatement(customerId, billingCompanyId, new List<KeyValuePair<string, object>>());
-                eventIntegrationService.Publish(new ScrapeSessionStatementComposed(scrapeSessionId, customerId, billingCompanyId));
+                AccountStatement accountStatement = accountStatementComposer.BuildAccountStatement(customerId, billingCompanyId, new List<KeyValuePair<string, object>>());
+                eventIntegrationService.Publish(new ScrapeSessionStatementComposed(scrapeSessionId, customerId, billingCompanyId, accountStatement.Id, accountStatement.StatementDate.DateOfStatement));
 
                 eventAggregator.Publish(new ScrapeSessionSuccessful(queueId));
                 eventIntegrationService.Publish(new ScrapeSessionCompletedSuccessfully(scrapeSessionId, customerId, billingCompanyId));

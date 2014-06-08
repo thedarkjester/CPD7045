@@ -47,5 +47,15 @@ namespace Aps.Fakes
         {
             return billingCompanies;
         }
+
+        public void RemoveBillingCompanyById(Guid billingCompanyId)
+        {
+            var billingCompany = billingCompanies.FirstOrDefault(company => company.Id == billingCompanyId);
+
+            if (billingCompany == null)
+            {
+                this.billingCompanies.Remove(billingCompany);
+            }
+        }
     }
 }

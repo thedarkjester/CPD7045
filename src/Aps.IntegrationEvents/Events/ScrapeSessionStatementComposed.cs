@@ -17,12 +17,16 @@ namespace Aps.Integration.Events
         public Guid CustomerId { get { return customerId; } }
         public Guid BillingCompanyId { get { return billingCompanyId; } }
         public DateTime DateCreated { get { return dateCreated; } }
+        Guid AccountStatementId { get; set; }
+        DateTime StatementDate { get; set; }
 
-        public ScrapeSessionStatementComposed(Guid scrapeSessionId, Guid customerId, Guid billingComapnyId)
+        public ScrapeSessionStatementComposed(Guid scrapeSessionId, Guid customerId, Guid billingComapnyId, Guid accountStatementId, DateTime statementDate)
         {
             this.scrapeSessionId = scrapeSessionId;
             this.customerId = customerId;
             this.billingCompanyId = billingComapnyId;
+            AccountStatementId = accountStatementId;
+            StatementDate = statementDate;
             dateCreated = DateTime.Now;
         }
     }

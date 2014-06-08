@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Aps.Integration.EnumTypes;
+using System;
 using System.Collections.Generic;
 
 namespace Aps.Scraping
 {
     public interface IScrapingObjectRepository
     {
-        
-        ScrapingObject BuildNewScrapingObject(Guid customerId, Guid billingCompanyId, bool registrationType);
+
+        ScrapingObject BuildNewScrapingObject(Guid customerId, Guid billingCompanyId, ScrapeSessionTypes scrapeSessionTypes);
         ScrapingObject GetScrapingObjectByCustomerAndBillingCompanyId(Guid customerId, Guid billingCompanyId);
         ScrapingObject GetScrapingObjectByQueueId(Guid queueId);
 

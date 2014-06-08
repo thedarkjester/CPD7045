@@ -70,6 +70,10 @@
       <Project>{16D706F7-AF2A-4838-AC14-8BC0607173CC}</Project>
       <Name>Aps.DomainBase</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Aps.IntegrationEvents\Aps.Integration.csproj">
+      <Project>{78059759-bf3d-471d-b88b-cd3aa1ec101b}</Project>
+      <Name>Aps.Integration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Aps.Scraping\Aps.Scraping.csproj">
       <Project>{CE43F772-47F0-4629-B9DC-74616B937556}</Project>
       <Name>Aps.Scraping</Name>
