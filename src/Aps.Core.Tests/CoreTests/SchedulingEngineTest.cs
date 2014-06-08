@@ -1,10 +1,11 @@
 ﻿using System;
 using Aps.AccountStatements;
 using Aps.Fakes;
+using Aps.Scheduling.ApplicationService;
+using Aps.Scheduling.ApplicationService.ScrapeOrchestrators;
 using Aps.Scraping;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Autofac;
-using Aps.Core;
 using Caliburn.Micro;
 using Aps.Integration;
 using Aps.Integration.Queries.BillingCompanyQueries;
@@ -14,7 +15,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Aps.Integration.EnumTypes;
 using Aps.Customers;
-using Aps.Core.ScrapeOrchestrators;
 
 namespace Aps.Shared.Tests.CoreTests
 {
@@ -48,7 +48,7 @@ namespace Aps.Shared.Tests.CoreTests
             builder.RegisterType<BinaryEventDeSerializer>().As<BinaryEventDeSerializer>();
             builder.RegisterType<EventIntegrationRepositoryFake>().As<EventIntegrationRepositoryFake>();
             builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>();
-            builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>();
+            builder.RegisterType<BillingCompanyFactory>().As<BillingCompanyFactory>();
             builder.RegisterType<ScrapeSessionInitiator>().As<ScrapeSessionInitiator>();
             builder.RegisterType<CustomerRepositoryFake>().As<ICustomerRepository>();
             builder.RegisterType<CrossCheckScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.CrossCheckScrapper);

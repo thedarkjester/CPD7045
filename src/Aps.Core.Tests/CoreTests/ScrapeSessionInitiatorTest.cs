@@ -1,13 +1,12 @@
 ﻿using System;
+using Aps.Scheduling.ApplicationService;
+using Aps.Scheduling.ApplicationService.ScrapeOrchestrators;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Autofac;
 using Caliburn.Micro;
-using Aps.Core.ScrapeOrchestrators;
 using Aps.Integration.EnumTypes;
 using Autofac.Features.Indexed;
 using Moq;
-using Aps.Core;
-using Aps.Core.ScrapeOrchestrators;
 using Aps.Customers;
 using Aps.BillingCompanies;
 

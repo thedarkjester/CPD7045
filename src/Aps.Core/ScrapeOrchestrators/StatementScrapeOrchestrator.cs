@@ -2,6 +2,7 @@
 using Aps.Integration;
 using Aps.Integration.Events;
 using Aps.Scheduling.ApplicationService.InternalEvents;
+using Aps.Scheduling.ApplicationService.Interpreters;
 using Aps.Scheduling.ApplicationService.Services;
 using Aps.Scraping;
 using Aps.Scraping.Scrapers;
