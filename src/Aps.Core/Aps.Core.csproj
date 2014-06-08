@@ -67,7 +67,6 @@
     <Compile Include="InternalEvents\ScrapeSessionSuccessful.cs" />
     <Compile Include="Interpreters\ScrapeSessionXMLToDataPairConverter.cs" />
     <Compile Include="Interpreters\ScrapeDataPairsWithNoNameFoundException.cs" />
-    <Compile Include="Interpreters\ScrapeNoDataPairsFoundException.cs" />
     <Compile Include="InterpretedScrapeSessionDataPair.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SchedulingEngine.cs" />
@@ -79,6 +78,7 @@
     <Compile Include="Services\AccountStatementComposer.cs" />
     <Compile Include="TestConstructor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validation\ScrapeValidationException.cs" />
     <Compile Include="Validation\ScrapeSessionDataValidator.cs" />
   </ItemGroup>
   <ItemGroup>
