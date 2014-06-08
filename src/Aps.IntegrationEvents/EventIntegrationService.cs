@@ -42,23 +42,28 @@ namespace Aps.Integration
             Thread.Sleep(1000);
         }
 
-        private void StartPolling()
+       protected virtual void StartPolling()
         {
             while (!cancellationToken.IsCancellationRequested)
             {
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine("Getting External Events");
+
                 foreach (var subscription in subscriptions)
                 {
                     IEnumerable<IntegrationEvent> events = eventIntegrationRepositoryFake.GetLatestEvents(currentProcessedEvent, subscription);
                     DispatchEventsInProcess(events);
                 }
 
-                Console.WriteLine("Getting External Events");
+                Console.WriteLine("Dispatching External Events Internally");
+                Console.WriteLine("Pausing for 2500 milliseconds post processing");
 
+                // this should be configurable
                 Thread.Sleep(2500);
             }
         }
 
-        private void DispatchEventsInProcess(IEnumerable<IntegrationEvent> events)
+        protected virtual void DispatchEventsInProcess(IEnumerable<IntegrationEvent> events)
         {
             foreach (var integrationEvent in events)
             {

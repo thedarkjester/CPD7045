@@ -64,8 +64,15 @@ namespace Aps.Scheduling.ApplicationService
 
             while (true)
             {
+                Console.WriteLine("Accepting EventAggregator Events");
                 scrapeElementsQueue = getNewScrapeQueueWithoutCompletedItems();
-
+                if (scrapeElementsQueue == null)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.WriteLine("No scrape sessions found, waiting 2 seconds");
+                    Thread.Sleep(2000);
+                    continue;
+                }
                 foreach (var scrapingQueueElement in scrapeElementsQueue)
                 {
                     if (getNumberOfThreadsAvailableOnServer() == 0)

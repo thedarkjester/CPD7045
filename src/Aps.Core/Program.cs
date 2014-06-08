@@ -85,10 +85,10 @@ namespace Aps.Scheduling.ApplicationService
 
         private static void StartMainApplication()
         {
+            Console.WriteLine("Starting scheduling engine");
+
             var schedulingEngine = Container.Resolve<SchedulingEngine>();
             schedulingEngine.Start();
         }
-
-    
     }
 }
