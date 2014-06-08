@@ -4,7 +4,7 @@ using System.Linq;
 using Aps.Customers.ValueObjects;
 using Aps.DomainBase;
 using Caliburn.Micro;
-using Aps.Integration;
+using Aps.Customers.Events;
 
 namespace Aps.Customers.Aggregates
 {
@@ -124,13 +124,13 @@ namespace Aps.Customers.Aggregates
 
         public void AddCustomerBillingCompanyAccount(CustomerBillingCompanyAccount customerBillingCompanyAccount)
         {
+            //test  for signle acc
+            
             this.customerBillingCompanyAccounts.Add(customerBillingCompanyAccount);
 
             Guid billingCompanyId = customerBillingCompanyAccount.getBillingCompanyId();
 
-            /// TODO: how do I get the customer ID here that Wynand is going to need?
-
-            CustomerBillingAccountAdded customerBillingAccountAddedEvent = new CustomerBillingAccountAdded();
+            CustomerBillingAccountAdded customerBillingAccountAddedEvent = new CustomerBillingAccountAdded(this.Id, customerBillingCompanyAccount.billingCompanyId);
 
             eventAggregator.Publish(customerBillingAccountAddedEvent);
 
