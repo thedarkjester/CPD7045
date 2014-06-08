@@ -128,8 +128,6 @@ namespace Aps.Customers.Aggregates
             
             this.customerBillingCompanyAccounts.Add(customerBillingCompanyAccount);
 
-            Guid billingCompanyId = customerBillingCompanyAccount.getBillingCompanyId();
-
             CustomerBillingAccountAdded customerBillingAccountAddedEvent = new CustomerBillingAccountAdded(this.Id, customerBillingCompanyAccount.billingCompanyId);
 
             eventAggregator.Publish(customerBillingAccountAddedEvent);

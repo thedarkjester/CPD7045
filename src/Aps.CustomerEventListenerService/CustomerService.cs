@@ -7,6 +7,7 @@ using Aps.Integration.Queries.CustomerQueries.Dtos;
 using Caliburn.Micro;
 using System;
 using System.Threading;
+using Aps.Customers.Events;
 
 namespace Aps.CustomerEventListenerService
 {

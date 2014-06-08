@@ -8,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace Aps.Customers.Events
 {
-    
     public class CustomerBillingAccountAdded
     {
-
         public Guid customerID { get; set; }
         public Guid billingCompanyID { get; set; }
 
