@@ -75,7 +75,7 @@
     <Compile Include="CoreTests\SchedulingEngineTest.cs" />
     <Compile Include="CoreTests\ScrapeSessionInitiatorTest.cs" />
     <Compile Include="CoreTests\ScrapingObjectTest.cs" />
-    <Compile Include="InterpreterTests\ScrapeSessionDataInterpreterTests.cs" />
+    <Compile Include="InterpreterTests\ScrapeSessionXMLToDataPairConverterTests.cs" />
     <Compile Include="RepositoryTests\EntityTests.cs" />
     <Compile Include="SampleTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
