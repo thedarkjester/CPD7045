@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Aps.Integration;
+using Aps.Integration.Events;
 using Aps.Integration.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
