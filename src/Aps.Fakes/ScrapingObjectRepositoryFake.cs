@@ -4,6 +4,7 @@ using System.Linq;
 using Aps.AccountStatements;
 using Aps.Scraping;
 using Caliburn.Micro;
+using Aps.Integration.EnumTypes;
 
 namespace Aps.Fakes
 {
@@ -38,9 +39,9 @@ namespace Aps.Fakes
             this.scrapingMasterQueue.Remove(scrapingObject);
         }
 
-        public ScrapingObject BuildNewScrapingObject(Guid customerId, Guid billingCompanyId, bool registrationType)
+        public ScrapingObject BuildNewScrapingObject(Guid customerId, Guid billingCompanyId, ScrapeSessionTypes scrapeSessionTypes)
         {
-            return this.scrapingObjectCreator.GetNewScrapingObject(customerId, billingCompanyId, registrationType);
+            return this.scrapingObjectCreator.GetNewScrapingObject(customerId, billingCompanyId, scrapeSessionTypes);
         }
 
         public ScrapingObject GetScrapingObjectByCustomerAndBillingCompanyId(Guid customerId, Guid billingCompanyId)
