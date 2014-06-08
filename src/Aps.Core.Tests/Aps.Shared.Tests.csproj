@@ -78,6 +78,7 @@
     <Compile Include="CustomerTests\CustomerAggregateTests.cs" />
     <Compile Include="CustomerTests\CustomerAPSPasswordTests.cs" />
     <Compile Include="CustomerTests\CustomerAPSUsernameTests.cs" />
+    <Compile Include="CustomerTests\CustomerBillingCompanyAccountTests.cs" />
     <Compile Include="CustomerTests\CustomerEmailAddressTests.cs" />
     <Compile Include="CustomerTests\CustomerFirstNameTests.cs" />
     <Compile Include="CustomerTests\CustomerLastNameTests.cs" />
