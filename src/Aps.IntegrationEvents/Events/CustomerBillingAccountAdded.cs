@@ -13,27 +13,19 @@ using System.Threading.Tasks;
 namespace Aps.Integration.Events
 {
     [Serializable]
-    public class CustomerScrapeSessionFailed
+    public class CustomerBillingAccountAdded
     {
 
         public Guid customerId { get; set; }
         public Guid billingCompanyId { get; set; }
-        public ScrapingErrorResponseCodes errorNum { get; set; }
-        public string status { get; set; }
 
-
-        public CustomerScrapeSessionFailed(Guid customerId, Guid billingCompanyId, ScrapingErrorResponseCodes errorNum, string status)
+        public CustomerBillingAccountAdded(Guid customerId, Guid billingCompanyId)
         {
             Guard.That(customerId).IsNotEmpty();
             Guard.That(billingCompanyId).IsNotEmpty();
-            Guard.That(status).IsNotNullOrEmpty();
 
             this.customerId = customerId;
             this.billingCompanyId = billingCompanyId;
-            this.errorNum = errorNum;
-            this.status = status;
-
         }
-
     }
 }

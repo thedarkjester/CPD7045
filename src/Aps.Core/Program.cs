@@ -66,10 +66,13 @@ namespace Aps.Core
 
         private static void RegisterIntegrationDependencies(ContainerBuilder builder)
         {
+            builder.RegisterType<ScrapingObjectRepositoryFake>().As<IScrapingObjectRepository>().SingleInstance();
+            builder.RegisterType<ScrapingObjectCreator>().As<ScrapingObjectCreator>().SingleInstance();
             builder.RegisterType<EventIntegrationService>().As<EventIntegrationService>().SingleInstance();
             builder.RegisterType<BinaryEventSerializer>().As<BinaryEventSerializer>().InstancePerDependency();
             builder.RegisterType<BinaryEventDeSerializer>().As<BinaryEventDeSerializer>().InstancePerDependency();
             builder.RegisterType<EventIntegrationRepositoryFake>().As<EventIntegrationRepositoryFake>().InstancePerDependency();
+            builder.RegisterType<ScrapeSessionInitiator>().As<ScrapeSessionInitiator>().InstancePerDependency();
             builder.RegisterType<GetLatestEventsBySubScribedEventTypeQuery>()
                    .As<GetLatestEventsBySubScribedEventTypeQuery>()
                    .InstancePerDependency();

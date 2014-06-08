@@ -53,6 +53,7 @@
     <Compile Include="Events\CrossCheckSessionCompletedSuccesfully.cs" />
     <Compile Include="Events\CrossCheckSessionCompletedWithErrors.cs" />
     <Compile Include="Events\CrossCheckSessionStarted.cs" />
+    <Compile Include="Events\CustomerBillingAccountAdded.cs" />
     <Compile Include="Events\CustomerScrapeSessionFailed.cs" />
     <Compile Include="Events\AccountStatementGenerated.cs" />
     <Compile Include="Events\ScrapeSessionCompletedSuccessfully.cs">
@@ -81,10 +82,11 @@
     <Compile Include="Queries\BillingCompanyQueries\Dtos\BillingCompanyBillingLifeCycleDto.cs" />
     <Compile Include="Queries\BillingCompanyQueries\BillingCompanyByIdQuery.cs" />
     <Compile Include="Queries\BillingCompanyQueries\Dtos\BillingCompanyDto.cs" />
-    <Compile Include="Queries\CustomerQueries\Dtos\CustomerChangeStatusDto.cs" />
+    <Compile Include="Queries\CustomerQueries\Dtos\CustomerBillingCompanyAccountDto.cs" />
     <Compile Include="Queries\BillingCompanyQueries\Dtos\OpenClosedWindowDto.cs" />
     <Compile Include="Queries\BillingCompanyQueries\Dtos\ScrapingErrorRetryConfigurationDto.cs" />
     <Compile Include="Queries\BillingCompanyQueries\ScrapingErrorRetryConfigurationQuery.cs" />
+    <Compile Include="Queries\CustomerQueries\CustomerBillingCompanyAccountsById.cs" />
     <Compile Include="Queries\Events\GetLatestEventsBySubScribedEventTypeQuery.cs" />
     <Compile Include="Events\BillingCompanyAddedOpenClosedWindow.cs" />
     <Compile Include="EventIntegrationService.cs" />

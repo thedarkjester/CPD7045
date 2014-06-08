@@ -72,9 +72,18 @@
     <Compile Include="BillingCompanyTests\BillingCompanyScrapingConfigurationTests.cs" />
     <Compile Include="BillingCompanyTests\ScrapingErrorRetryConfigurationTests.cs" />
     <Compile Include="BillingCompanyTests\ScrapingLoadManagementConfigurationTests.cs" />
+    <Compile Include="BillingCompanyTests\UnitTest1.cs" />
     <Compile Include="CoreTests\SchedulingEngineTest.cs" />
     <Compile Include="CoreTests\ScrapeSessionInitiatorTest.cs" />
     <Compile Include="CoreTests\ScrapingObjectTest.cs" />
+    <Compile Include="CustomerTests\CustomerAggregateTests.cs" />
+    <Compile Include="CustomerTests\CustomerAPSPasswordTests.cs" />
+    <Compile Include="CustomerTests\CustomerAPSUsernameTests.cs" />
+    <Compile Include="CustomerTests\CustomerBillingCompanyAccountTests.cs" />
+    <Compile Include="CustomerTests\CustomerEmailAddressTests.cs" />
+    <Compile Include="CustomerTests\CustomerFirstNameTests.cs" />
+    <Compile Include="CustomerTests\CustomerLastNameTests.cs" />
+    <Compile Include="CustomerTests\CustomerTelephoneTests.cs" />
     <Compile Include="InterpreterTests\ScrapeSessionXMLToDataPairConverterTests.cs" />
     <Compile Include="RepositoryTests\EntityTests.cs" />
     <Compile Include="SampleTest.cs" />
@@ -115,9 +124,7 @@
       <Name>Aps.Scraping</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CustomerTests\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
