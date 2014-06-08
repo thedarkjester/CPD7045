@@ -5,7 +5,7 @@ namespace Aps.Customers.ValueObjects
 {
     public class CustomerBillingCompanyAccount
     {
-        private readonly Guid billingCompanyId;
+        public readonly Guid billingCompanyId;
         private readonly string billingCompanyUsername;
         private readonly string billingCompanyPassword;
         private string billingCompanyStatus;
