@@ -102,7 +102,8 @@ namespace Aps.Core
             sortedScrapingQueueItemsWithoutCompletedScrapes.RemoveAll(x => !completedScrapingQueue.Any(y => y.queueId == x.queueId));
             sortedScrapingQueueItemsWithoutCompletedScrapes.RemoveAll(x => !scrapeElementsRunning.Any(y => y.queueId == x.queueId));
             scrapingObjectRepositoryFake.ClearCompletedScrapeList();
-            sortedScrapingQueueItemsWithoutCompletedScrapes = sortedScrapingQueueItemsWithoutCompletedScrapes.OrderByDescending(item => item.registrationType).ThenBy(item => item.ScheduledDate).ThenBy(item => item.createdDate).ToList();
+           // sortedScrapingQueueItemsWithoutCompletedScrapes = sortedScrapingQueueItemsWithoutCompletedScrapes.OrderBy(item => (int)item.scrapeSessionTypes).ThenBy(item => item.ScheduledDate).ThenBy(item => item.createdDate).ToList();
+            sortedScrapingQueueItemsWithoutCompletedScrapes = sortedScrapingQueueItemsWithoutCompletedScrapes.OrderBy(item => item.scrapeSessionTypes).ThenBy(item => item.ScheduledDate).ThenBy(item => item.createdDate).ToList();
  
 
             if (sortedScrapingQueueItemsWithoutCompletedScrapes.Count() == 0)
@@ -188,7 +189,8 @@ namespace Aps.Core
             ScrapingQueueElement scrapingQueueElement = scrapingObjectRepositoryFake.BuildNewScrapingObject(message.CustomerId, message.BillingCompanyId, message.RegistrationRequest);
             scrapingObjectRepositoryFake.StoreScrapingObject(scrapingQueueElement);
         }
-         * */
+        
+         */
         public void mockAddBillingCompanyAccountAdded(ScrapingObject scrapingObject)
         {
             scrapingObjectRepositoryFake.StoreScrapingObject(scrapingObject);

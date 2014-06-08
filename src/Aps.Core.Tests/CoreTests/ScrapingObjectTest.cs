@@ -4,6 +4,7 @@ using Autofac;
 using Caliburn.Micro;
 using Aps.Scraping;
 using Aps.Fakes;
+using Aps.Integration.EnumTypes;
 
 namespace Aps.Shared.Tests.CoreTests
 {
@@ -15,20 +16,23 @@ namespace Aps.Shared.Tests.CoreTests
         private Guid billingCompanyId;
         private Guid customerId;
 
-        public string scrapeType;
+     //   public string scrapeType;
         public string scrapeStatus;
 
         public DateTime createdDate;
         public DateTime ScheduledDate;
 
-        public bool registrationType;
+        ScrapeSessionTypes scrapeSessionTypes;
+
+       // public bool registrationType;
 
         [TestInitialize]
         public void Setup()
         {
             customerId = Guid.NewGuid();
             billingCompanyId = Guid.NewGuid();
-            registrationType = false;
+            scrapeSessionTypes = ScrapeSessionTypes.CrossCheckScrapper;
+            
 
 
             var builder = new ContainerBuilder();
@@ -45,11 +49,11 @@ namespace Aps.Shared.Tests.CoreTests
         public void TestConstructionOfNewScrapingObject()
         {
             // act
-            ScrapingObject scrapingObject = container.Resolve<IScrapingObjectRepository>().BuildNewScrapingObject(customerId, billingCompanyId, registrationType);
+            ScrapingObject scrapingObject = container.Resolve<IScrapingObjectRepository>().BuildNewScrapingObject(customerId, billingCompanyId, scrapeSessionTypes);
 
             Assert.IsTrue(scrapingObject.billingCompanyId == billingCompanyId);
             Assert.IsTrue(scrapingObject.customerId == customerId);
-            Assert.IsTrue(scrapingObject.registrationType == registrationType);
+            Assert.IsTrue(scrapingObject.scrapeSessionTypes == scrapeSessionTypes);
 
            // Assert.IsTrue(scrapingObject.scrapeType == "Register");
             // Assert.IsTrue(scrapingObject.scrapeStatus == "Active");

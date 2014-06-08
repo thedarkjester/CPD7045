@@ -11,6 +11,8 @@ using Aps.Integration.Queries.BillingCompanyQueries;
 using Aps.Integration.Serialization;
 using Aps.BillingCompanies;
 using System.Collections.Generic;
+using System.ComponentModel;
+using Aps.Integration.EnumTypes;
 
 namespace Aps.Shared.Tests.CoreTests
 {
@@ -18,17 +20,19 @@ namespace Aps.Shared.Tests.CoreTests
     public class SchedulingEngineTest
     {
 
-        IContainer container;
+        Autofac.IContainer container;
         private Guid billingCompanyId;
         private Guid customerId;
-        private bool registrationType;
+        //private bool registrationType;
+        ScrapeSessionTypes scrapeSessionTypes;
 
         [TestInitialize]
         public void Setup()
         {
             customerId = Guid.NewGuid();
             billingCompanyId = Guid.NewGuid();
-            registrationType = false;
+            //registrationType = false;
+            scrapeSessionTypes = ScrapeSessionTypes.StatementScrapper;
 
             var builder = new ContainerBuilder();
             builder.RegisterType<EventAggregator>().As<IEventAggregator>();
@@ -117,7 +121,7 @@ namespace Aps.Shared.Tests.CoreTests
             // arrange
             List<ScrapingObject> myList;
             SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>());
-            ScrapingObject myScrapingObject = new ScrapingObject(customerId, billingCompanyId, registrationType);
+            ScrapingObject myScrapingObject = new ScrapingObject(customerId, billingCompanyId, scrapeSessionTypes);
             //IScrapingObjectRepository myRepo = new ScrapingObjectRepositoryFake(container.Resolve<IEventAggregator>(), container.Resolve<ScrapingObjectCreator>());
 
             // act
