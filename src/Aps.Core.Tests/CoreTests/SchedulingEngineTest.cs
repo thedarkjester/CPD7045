@@ -44,7 +44,7 @@ namespace Aps.Shared.Tests.CoreTests
 
             builder.RegisterType<BinaryEventSerializer>().As<BinaryEventSerializer>();
             builder.RegisterType<BinaryEventDeSerializer>().As<BinaryEventDeSerializer>();
-            builder.RegisterType<EventIntegrationRepositoryFake>().As<EventIntegrationRepositoryFake>();
+            builder.RegisterType<IEventIntegrationRepository>().As<IEventIntegrationRepository>();
             builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>();
             builder.RegisterType<BillingCompanyFactory>().As<BillingCompanyFactory>();
             builder.RegisterType<ScrapeSessionInitiator>().As<ScrapeSessionInitiator>();

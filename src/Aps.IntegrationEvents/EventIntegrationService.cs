@@ -19,19 +19,19 @@ namespace Aps.Integration
         private readonly IEventAggregator eventAggregator;
         private readonly BinaryEventSerializer eventSerializer;
         private readonly BinaryEventDeSerializer binaryEventDeSerializer;
-        private readonly EventIntegrationRepositoryFake eventIntegrationRepositoryFake;
+        private readonly IEventIntegrationRepository eventIntegrationRepository;
         private readonly List<string> subscriptions;
         CancellationToken cancellationToken;
 
         public EventIntegrationService(IEventAggregator eventAggregator,
             BinaryEventSerializer eventSerializer,
             BinaryEventDeSerializer binaryEventDeSerializer,
-            EventIntegrationRepositoryFake eventIntegrationRepositoryFake)
+            IEventIntegrationRepository eventIntegrationRepository)
         {
             this.eventAggregator = eventAggregator;
             this.eventSerializer = eventSerializer;
             this.binaryEventDeSerializer = binaryEventDeSerializer;
-            this.eventIntegrationRepositoryFake = eventIntegrationRepositoryFake;
+            this.eventIntegrationRepository = eventIntegrationRepository;
             this.eventAggregator.Subscribe(this);
 
             subscriptions = new List<string>();
@@ -51,7 +51,7 @@ namespace Aps.Integration
 
                 foreach (var subscription in subscriptions)
                 {
-                    IEnumerable<IntegrationEvent> events = eventIntegrationRepositoryFake.GetLatestEvents(currentProcessedEvent, subscription);
+                    IEnumerable<IntegrationEvent> events = eventIntegrationRepository.GetLatestEvents(currentProcessedEvent, subscription);
                     DispatchEventsInProcess(events);
                 }
 
@@ -93,7 +93,7 @@ namespace Aps.Integration
             byte[] data = eventSerializer.SerializeMessage(message);
 
             // store for someone to pick up serializing the data based on the type
-            eventIntegrationRepositoryFake.StoreEvent(new IntegrationEvent(messageType, data));
+            eventIntegrationRepository.StoreEvent(new IntegrationEvent(messageType, data));
         }
 
     }

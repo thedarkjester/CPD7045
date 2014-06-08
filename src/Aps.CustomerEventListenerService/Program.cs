@@ -34,7 +34,7 @@ namespace Aps.Customer.ApplicationService
             builder.RegisterType<EventIntegrationService>().As<EventIntegrationService>().SingleInstance();
             builder.RegisterType<BinaryEventSerializer>().As<BinaryEventSerializer>().InstancePerDependency();
             builder.RegisterType<BinaryEventDeSerializer>().As<BinaryEventDeSerializer>().InstancePerDependency();
-            builder.RegisterType<EventIntegrationRepositoryFake>().As<EventIntegrationRepositoryFake>().InstancePerDependency();
+            builder.RegisterType<EventIntegrationRepositoryFake>().As<IEventIntegrationRepository>().InstancePerDependency();
             builder.RegisterType<CustomerCreator>().As<CustomerCreator>().InstancePerDependency();
             builder.RegisterType<GetLatestEventsBySubScribedEventTypeQuery>()
                    .As<GetLatestEventsBySubScribedEventTypeQuery>()
