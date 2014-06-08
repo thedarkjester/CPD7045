@@ -51,6 +51,7 @@
     <Compile Include="EventIntegrationRepositoryFake.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScrapeLoggingRepositoryFake.cs" />
+    <Compile Include="ScrapeSessionInitiatorFake.cs" />
     <Compile Include="ScrapingObjectRepositoryFake.cs" />
     <Compile Include="WebScraperFake.cs" />
   </ItemGroup>

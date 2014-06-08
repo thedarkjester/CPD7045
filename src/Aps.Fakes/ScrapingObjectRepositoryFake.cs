@@ -57,6 +57,8 @@ namespace Aps.Fakes
         public IEnumerable<ScrapingObject> GetAllScrapingObjects()
         {
             //scrapingObjects.
+            if (scrapingMasterQueue.Count == 0)
+            return new List<ScrapingObject>();
 
             return scrapingMasterQueue;
         }
