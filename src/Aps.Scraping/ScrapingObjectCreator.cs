@@ -1,5 +1,6 @@
 ﻿using System;
 using Caliburn.Micro;
+using Aps.Integration.EnumTypes;
 
 namespace Aps.Scraping
 {
@@ -12,9 +13,9 @@ namespace Aps.Scraping
             this.eventAggregator = eventAggregator;
         }
 
-        public ScrapingObject GetNewScrapingObject(Guid customerId, Guid billingCompanyId, bool registrationType)
+        public ScrapingObject GetNewScrapingObject(Guid customerId, Guid billingCompanyId, ScrapeSessionTypes scrapeSessionTypes)
         {
-            return new ScrapingObject(customerId, billingCompanyId, registrationType);
+            return new ScrapingObject(customerId, billingCompanyId, scrapeSessionTypes);
         }
     }
 }

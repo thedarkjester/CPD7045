@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Aps.Integration.EnumTypes;
+using System;
+
 
 namespace Aps.Scraping
 {
@@ -7,20 +9,20 @@ namespace Aps.Scraping
         public Guid queueId;
         public Guid customerId;
         public Guid billingCompanyId;
-        public string scrapeType;
         public string scrapeStatus;
         public DateTime createdDate;
         public DateTime ScheduledDate;
-        public bool registrationType;
+        public ScrapeSessionTypes scrapeSessionTypes;
 
-        public ScrapingObject(Guid customerId, Guid billingCompanyId, bool registrationType)
+        public ScrapingObject(Guid customerId, Guid billingCompanyId, ScrapeSessionTypes scrapeSessionTypes)
         {
             this.queueId = Guid.NewGuid();
             this.customerId = customerId;
             this.billingCompanyId = billingCompanyId;
-            this.registrationType = registrationType;
             this.createdDate = DateTime.UtcNow;
             this.ScheduledDate = DateTime.UtcNow;
+            this.scrapeSessionTypes = scrapeSessionTypes;
+
         }
     }
 }
