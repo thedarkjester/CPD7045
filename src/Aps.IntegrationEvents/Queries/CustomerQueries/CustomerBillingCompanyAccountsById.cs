@@ -45,6 +45,7 @@ namespace Aps.Integration.Queries.CustomerQueries.Dtos
                 billingCompanyUsername = customerBillingCompanyAccount.billingCompanyUsername,
                 billingCompanyPassword = customerBillingCompanyAccount.billingCompanyPassword,
                 billingCompanyStatus = customerBillingCompanyAccount.billingCompanyStatus,
+                billingCompanyAccountNumber = customerBillingCompanyAccount.billingCompanyAccountNumber,
                 billingCompanyPIN = customerBillingCompanyAccount.billingCompanyPIN,
                 dateBillingCompanyAdded = customerBillingCompanyAccount.dateBillingCompanyAdded,
                 statementId = customerBillingCompanyAccount.customerStatement.statementId,

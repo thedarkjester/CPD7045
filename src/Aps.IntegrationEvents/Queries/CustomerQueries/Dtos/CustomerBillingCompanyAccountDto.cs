@@ -13,6 +13,7 @@ namespace Aps.Integration.Queries.CustomerQueries.Dtos
         public string billingCompanyUsername;
         public string billingCompanyPassword;
         public string billingCompanyStatus;
+        public string billingCompanyAccountNumber;
         public int billingCompanyPIN;
         public DateTime dateBillingCompanyAdded;
         public Guid statementId;
