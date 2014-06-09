@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace Aps.Customer.ApplicationService
 {
-    public class CustomerService : IHandle<CustomerScrapeSessionFailed>,IHandle<AccountStatementGenerated>, IHandle<Aps.Customers.Events.BillingAccountAddedToCustomer>
+    public class CustomerService : IHandle<CustomerScrapeSessionFailed>,IHandle<AccountStatementGenerated>, IHandle<BillingAccountAddedToCustomer>
     {
         private readonly EventIntegrationService eventIntegrationService;
         private readonly IEventAggregator eventAggregator;
