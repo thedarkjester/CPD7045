@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,19 +8,18 @@ namespace Aps.Core.Validation
 {
     public class ScrapeSessionDataValidator
     {
+        readonly IEnumerable<IValidator> validators;
 
-        public void validateScrapeData(IList<InterpretedScrapeSessionDataPair> interpretedScrapeSessionDataPair)
+        public ScrapeSessionDataValidator(IEnumerable<IValidator> validatorList)
         {
-            var errors = interpretedScrapeSessionDataPair.Where(a => a.keyValuePair.Key.Equals("Error Code", StringComparison.OrdinalIgnoreCase));
+            validators = validatorList;
+        }
 
-            if (errors.Count() > 0)
+        public void ValidateScrapeData(IList<InterpretedScrapeSessionDataPair> interpretedScrapeSessionDataPair, Guid customerId, Guid billingCompanyId)
+        {
+            foreach (var validator in validators)
             {
-                if (interpretedScrapeSessionDataPair.Where(a => a.keyValuePair.Value.Equals("2")).Count() > 0)
-                {
-                    ScrapeValidationException exception = new ScrapeValidationException();
-                    exception.ErrorCode = ErrorCode.InvalidCredentials;
-                    throw exception;
-                }
+                validator.Validate(interpretedScrapeSessionDataPair,customerId,billingCompanyId);
             }
         }
     }

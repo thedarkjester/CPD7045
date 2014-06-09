@@ -16,8 +16,7 @@ namespace Aps.Core
             var xMembers = doc.Root.Elements("datapair").Elements().ToList();
             if (xMembers.Count.Equals(0))
             {
-                ScrapeSessionConversionException exception = new ScrapeSessionConversionException();
-                exception.ErrorCode = ErrorCode.NoDataPairs;
+                DataScraperException exception = new DataScraperException(Integration.EnumTypes.ScrapingErrorResponseCodes.Unknown);
                 throw exception;
             }
             LoadDataPairs(dataPairs, xMembers);
@@ -45,7 +44,7 @@ namespace Aps.Core
         {
             if (dataPair != null)
             {
-                dataPair.keyValuePair = new KeyValuePair<string, string>(key, x.Value);
+                dataPair.keyValuePair = new KeyValuePair<string, object>(key, x.Value);
                 dataPairs.Add(dataPair);
             }
         }

@@ -13,6 +13,7 @@ using Aps.Core.ScrapeOrchestrators;
 using Aps.Integration.EnumTypes;
 using Aps.Scraping;
 using Aps.Scraping.Scrapers;
+using Aps.Core.Validation;
 
 namespace Aps.Core
 {
@@ -48,6 +49,7 @@ namespace Aps.Core
             builder.RegisterType<CrossCheckScraperFake>().As<ICrossCheckScraper>().InstancePerDependency();
             builder.RegisterType<CrossCheckScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.CrossCheckScrapper);
             builder.RegisterType<StatementScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.StatementScrapper);
+            builder.RegisterType<InvalidCredentialsValidator>().As<IValidator>();
             RegisterIntegrationDependencies(builder);
 
             Container = builder.Build();
