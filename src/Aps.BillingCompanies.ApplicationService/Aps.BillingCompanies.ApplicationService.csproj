@@ -67,6 +67,10 @@
       <Project>{16D706F7-AF2A-4838-AC14-8BC0607173CC}</Project>
       <Name>Aps.DomainBase</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Aps.Fakes\Aps.Fakes.csproj">
+      <Project>{BD1C6AE0-A019-4090-8E07-31D1F2641936}</Project>
+      <Name>Aps.Fakes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Aps.IntegrationEvents\Aps.Integration.csproj">
       <Project>{78059759-BF3D-471D-B88B-CD3AA1EC101B}</Project>
       <Name>Aps.Integration</Name>

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Aps.Fakes;
 using Aps.Integration;
 using Aps.Integration.Events;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,7 +10,7 @@ namespace Aps.IntegrationTests.RepositoryTests
     [TestClass]
     public class EventIntegrationRepositoryTests
     {
-        private EventIntegrationRepositoryFake repository = new EventIntegrationRepositoryFake();
+        private IEventIntegrationRepository repository = new EventIntegrationRepositoryFake();
 
         [TestMethod]
         public void GivenARepository_Adding_To_The_EventRepository_IncreasesTheEventCount()

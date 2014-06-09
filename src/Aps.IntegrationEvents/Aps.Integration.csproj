@@ -49,7 +49,7 @@
     <Compile Include="EnumTypes\ScrapeSessionTypes.cs" />
     <Compile Include="EnumTypes\ScrapingErrorResponseCodes.cs" />
     <Compile Include="EnumTypes\ServiceProviderTypes.cs" />
-    <Compile Include="EventIntegrationRepositoryFake.cs" />
+    <Compile Include="IEventIntegrationRepository.cs" />
     <Compile Include="Events\CrossCheckSessionCompletedSuccesfully.cs" />
     <Compile Include="Events\CrossCheckSessionCompletedWithErrors.cs" />
     <Compile Include="Events\CrossCheckSessionStarted.cs" />
@@ -74,9 +74,11 @@
     <Compile Include="Events\ScrapeSessionStatementComposed.cs" />
     <Compile Include="Queries\BillingCompanyQueries\AllBillingCompaniesQuery.cs" />
     <Compile Include="Queries\BillingCompanyQueries\BillingCompanyBillingLifeCycleByCompanyIdQuery.cs" />
+    <Compile Include="Queries\BillingCompanyQueries\BillingCompanyCrossCheckEnabledByIdQuery.cs" />
     <Compile Include="Queries\BillingCompanyQueries\BillingCompanyOpenClosedWindowsQuery.cs" />
     <Compile Include="Queries\BillingCompanyQueries\BillingCompanyScrapingLoadManagementConfigurationQuery.cs" />
     <Compile Include="Queries\BillingCompanyQueries\BillingCompanyScrapingUrlQuery.cs" />
+    <Compile Include="Queries\BillingCompanyQueries\Dtos\BillingCompanyCrossCheckDto.cs" />
     <Compile Include="Queries\BillingCompanyQueries\Dtos\BillingCompanyScrapingLoadManagementConfigurationDto.cs" />
     <Compile Include="Queries\BillingCompanyQueries\Dtos\BillingCompanyScrapingUrlDto.cs" />
     <Compile Include="Queries\BillingCompanyQueries\Dtos\BillingCompanyBillingLifeCycleDto.cs" />

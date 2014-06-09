@@ -13,6 +13,8 @@ using Aps.Customers;
 using Aps.Integration.EnumTypes;
 using Aps.Scraping;
 using Aps.Scraping.Scrapers;
+using Aps.Core.Validation;
+using Aps.Integration.Queries.CustomerQueries.Dtos;
 
 namespace Aps.Scheduling.ApplicationService
 {
@@ -41,13 +43,14 @@ namespace Aps.Scheduling.ApplicationService
             builder.RegisterType<CustomerRepositoryFake>().As<ICustomerRepository>().InstancePerDependency();
             builder.RegisterType<CustomerCreator>().As<CustomerCreator>().InstancePerDependency();
             builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>().InstancePerDependency();
-            builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>().InstancePerDependency();
+            builder.RegisterType<BillingCompanyFactory>().As<BillingCompanyFactory>().InstancePerDependency();
             builder.RegisterType<AccountStatementComposer>().As<AccountStatementComposer>().InstancePerDependency();
             builder.RegisterType<ScrapeLoggingRepositoryFake>().As<IScrapeLoggingRepository>().InstancePerDependency();
             builder.RegisterType<WebScraperFake>().As<IWebScraper>().InstancePerDependency();
             builder.RegisterType<CrossCheckScraperFake>().As<ICrossCheckScraper>().InstancePerDependency();
             builder.RegisterType<CrossCheckScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.CrossCheckScrapper);
             builder.RegisterType<StatementScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.StatementScrapper);
+            builder.RegisterType<InvalidCredentialsValidator>().As<IValidator>();
             RegisterIntegrationDependencies(builder);
 
             Container = builder.Build();
@@ -62,6 +65,9 @@ namespace Aps.Scheduling.ApplicationService
             builder.RegisterType<BillingCompanyOpenClosedWindowsQuery>().As<BillingCompanyOpenClosedWindowsQuery>();
             builder.RegisterType<ScrapingErrorRetryConfigurationQuery>().As<ScrapingErrorRetryConfigurationQuery>();
             builder.RegisterType<BillingCompanyScrapingLoadManagementConfigurationQuery>().As<BillingCompanyScrapingLoadManagementConfigurationQuery>();
+            builder.RegisterType<CustomerBillingCompanyAccountsById>().As<CustomerBillingCompanyAccountsById>();
+            builder.RegisterType<BillingCompanyCrossCheckEnabledByIdQuery>().As<BillingCompanyCrossCheckEnabledByIdQuery>();
+            
         }
 
         private static void RegisterIntegrationDependencies(ContainerBuilder builder)
@@ -71,7 +77,7 @@ namespace Aps.Scheduling.ApplicationService
             builder.RegisterType<EventIntegrationService>().As<EventIntegrationService>().SingleInstance();
             builder.RegisterType<BinaryEventSerializer>().As<BinaryEventSerializer>().InstancePerDependency();
             builder.RegisterType<BinaryEventDeSerializer>().As<BinaryEventDeSerializer>().InstancePerDependency();
-            builder.RegisterType<EventIntegrationRepositoryFake>().As<EventIntegrationRepositoryFake>().InstancePerDependency();
+            builder.RegisterType<EventIntegrationRepositoryFake>().As<IEventIntegrationRepository>().InstancePerDependency();
             builder.RegisterType<ScrapeSessionInitiator>().As<ScrapeSessionInitiator>().InstancePerDependency();
             builder.RegisterType<GetLatestEventsBySubScribedEventTypeQuery>()
                    .As<GetLatestEventsBySubScribedEventTypeQuery>()
@@ -82,10 +88,10 @@ namespace Aps.Scheduling.ApplicationService
 
         private static void StartMainApplication()
         {
+            Console.WriteLine("Starting scheduling engine");
+
             var schedulingEngine = Container.Resolve<SchedulingEngine>();
             schedulingEngine.Start();
         }
-
-    
     }
 }

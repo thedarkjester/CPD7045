@@ -19,19 +19,19 @@ namespace Aps.Integration
         private readonly IEventAggregator eventAggregator;
         private readonly BinaryEventSerializer eventSerializer;
         private readonly BinaryEventDeSerializer binaryEventDeSerializer;
-        private readonly EventIntegrationRepositoryFake eventIntegrationRepositoryFake;
+        private readonly IEventIntegrationRepository eventIntegrationRepository;
         private readonly List<string> subscriptions;
         CancellationToken cancellationToken;
 
         public EventIntegrationService(IEventAggregator eventAggregator,
             BinaryEventSerializer eventSerializer,
             BinaryEventDeSerializer binaryEventDeSerializer,
-            EventIntegrationRepositoryFake eventIntegrationRepositoryFake)
+            IEventIntegrationRepository eventIntegrationRepository)
         {
             this.eventAggregator = eventAggregator;
             this.eventSerializer = eventSerializer;
             this.binaryEventDeSerializer = binaryEventDeSerializer;
-            this.eventIntegrationRepositoryFake = eventIntegrationRepositoryFake;
+            this.eventIntegrationRepository = eventIntegrationRepository;
             this.eventAggregator.Subscribe(this);
 
             subscriptions = new List<string>();
@@ -42,23 +42,28 @@ namespace Aps.Integration
             Thread.Sleep(1000);
         }
 
-        private void StartPolling()
+       protected virtual void StartPolling()
         {
             while (!cancellationToken.IsCancellationRequested)
             {
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine("Getting External Events");
+
                 foreach (var subscription in subscriptions)
                 {
-                    IEnumerable<IntegrationEvent> events = eventIntegrationRepositoryFake.GetLatestEvents(currentProcessedEvent, subscription);
+                    IEnumerable<IntegrationEvent> events = eventIntegrationRepository.GetLatestEvents(currentProcessedEvent, subscription);
                     DispatchEventsInProcess(events);
                 }
 
-                Console.WriteLine("Getting External Events");
+                Console.WriteLine("Dispatching External Events Internally");
+                Console.WriteLine("Pausing for 2500 milliseconds post processing");
 
+                // this should be configurable
                 Thread.Sleep(2500);
             }
         }
 
-        private void DispatchEventsInProcess(IEnumerable<IntegrationEvent> events)
+        protected virtual void DispatchEventsInProcess(IEnumerable<IntegrationEvent> events)
         {
             foreach (var integrationEvent in events)
             {
@@ -88,7 +93,7 @@ namespace Aps.Integration
             byte[] data = eventSerializer.SerializeMessage(message);
 
             // store for someone to pick up serializing the data based on the type
-            eventIntegrationRepositoryFake.StoreEvent(new IntegrationEvent(messageType, data));
+            eventIntegrationRepository.StoreEvent(new IntegrationEvent(messageType, data));
         }
 
     }

@@ -89,6 +89,7 @@
     <Compile Include="SampleTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValidatorTests\ScrapeSessionDataValidatorTests.cs" />
+    <Compile Include="ValidatorTests\Validator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aps.AccountStatements\Aps.AccountStatements.csproj">

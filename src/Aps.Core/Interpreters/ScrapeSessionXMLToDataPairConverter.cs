@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
-using Aps.Scheduling.ApplicationService.Interpreters;
 
-namespace Aps.Scheduling.ApplicationService
+namespace Aps.Scheduling.ApplicationService.Interpreters
 {
     public class ScrapeSessionXMLToDataPairConverter
     {
@@ -16,8 +14,7 @@ namespace Aps.Scheduling.ApplicationService
             var xMembers = doc.Root.Elements("datapair").Elements().ToList();
             if (xMembers.Count.Equals(0))
             {
-                ScrapeSessionConversionException exception = new ScrapeSessionConversionException();
-                exception.ErrorCode = ErrorCode.NoDataPairs;
+                DataScraperException exception = new DataScraperException(Integration.EnumTypes.ScrapingErrorResponseCodes.Unknown);
                 throw exception;
             }
             LoadDataPairs(dataPairs, xMembers);
@@ -45,7 +42,7 @@ namespace Aps.Scheduling.ApplicationService
         {
             if (dataPair != null)
             {
-                dataPair.keyValuePair = new KeyValuePair<string, string>(key, x.Value);
+                dataPair.keyValuePair = new KeyValuePair<string, object>(key, x.Value);
                 dataPairs.Add(dataPair);
             }
         }

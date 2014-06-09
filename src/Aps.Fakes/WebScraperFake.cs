@@ -10,7 +10,7 @@ namespace Aps.Fakes
 {
     public class WebScraperFake : IWebScraper
     {
-        public string Scrape(string url, string username, string password)
+        public string Scrape(string url, string username, string password, int pin)
         {
             Guard.That(url).IsNotNullOrEmpty().IsTrue(x => Uri.IsWellFormedUriString(url, UriKind.Absolute), "Invalid url");
             Guard.That(username).IsNotNullOrEmpty();

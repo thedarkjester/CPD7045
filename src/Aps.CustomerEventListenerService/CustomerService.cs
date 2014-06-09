@@ -51,7 +51,9 @@ namespace Aps.Customer.ApplicationService
         {
             while (!cancellationToken.IsCancellationRequested)
             {
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("Waiting for EventAggregator Events");
+                Console.WriteLine("Pausing, and then redistributing internal events");
                 Thread.Sleep(1000);
             }
         }

@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Aps.Integration;
 using Aps.Integration.Events;
 
-namespace Aps.Integration
+namespace Aps.Fakes
 {
-    // currently this is not talking to a DB and a temporary list is used for testing
-    // is effectively A Fake.
-    public class EventIntegrationRepositoryFake
+    public class EventIntegrationRepositoryFake : IEventIntegrationRepository
     {
         private readonly List<IntegrationEvent> events;
 

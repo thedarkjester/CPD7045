@@ -1,7 +1,12 @@
-﻿using Aps.Scheduling.ApplicationService;
+﻿using System;
 using Aps.Scheduling.ApplicationService.Interpreters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+<<<<<<< HEAD
+=======
+using Aps.Scheduling.ApplicationService;
+using Aps.Scheduling.ApplicationService.Interpreters;
 
+>>>>>>> 19b5e25db3720bb94eab7fcb795fc6047458c906
 
 namespace Aps.Shared.Tests.InterpreterTests
 {
@@ -30,7 +35,7 @@ namespace Aps.Shared.Tests.InterpreterTests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(DataScraperException), "There were no data pairs in the xml")]
+        [ExpectedException(typeof(ScrapeSessionConversionException), "There were no data pairs in the xml")]
         public void GivenValidXmlWithNoDataPairs_WhenConvertingToDataPairs_ScrapeNoDataPairsFoundExceptionShouldBeReturned()
         {
             //Arrange
@@ -38,8 +43,6 @@ namespace Aps.Shared.Tests.InterpreterTests
             ScrapeSessionXMLToDataPairConverter interpreter = new ScrapeSessionXMLToDataPairConverter();
             //Act
             var dataPairs = interpreter.ConvertXmlToScrapeSessionDataPairs(xml);
-            //Assert
-            //There is an expected exception thrown
 
         }
 

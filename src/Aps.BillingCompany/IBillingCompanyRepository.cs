@@ -8,7 +8,6 @@ namespace Aps.BillingCompanies
     public interface IBillingCompanyRepository
     {
         void StoreBillingCompany(BillingCompany billingCompany);
-        BillingCompany BuildNewBillingCompany(BillingCompanyName billingCompanyName, BillingCompanyType billingCompanyType, BillingCompanyScrapingUrl billingCompanyScrapingUrl, bool crossCheckScrapeEnabled = false);
         BillingCompany GetBillingCompanyById(Guid id);
         IEnumerable<BillingCompany> GetAllBillingCompanies();
         void RemoveBillingCompanyById(Guid addedBillingCompanyId);

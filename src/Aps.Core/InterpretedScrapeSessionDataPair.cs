@@ -9,7 +9,7 @@ namespace Aps.Scheduling.ApplicationService
     {
         public int Id { get; set; }
 
-        public KeyValuePair<string, string> keyValuePair { get; set; }
+        public KeyValuePair<string, object> keyValuePair { get; set; }
 
     }
 }
