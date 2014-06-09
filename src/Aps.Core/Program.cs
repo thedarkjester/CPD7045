@@ -77,6 +77,7 @@ namespace Aps.Scheduling.ApplicationService
             builder.RegisterType<BinaryEventDeSerializer>().As<BinaryEventDeSerializer>().InstancePerDependency();
             builder.RegisterType<EventIntegrationRepositoryFake>().As<IEventIntegrationRepository>().InstancePerDependency();
             builder.RegisterType<ScrapeSessionInitiator>().As<ScrapeSessionInitiator>().InstancePerDependency();
+            builder.RegisterType<ScrapeSessionInitiatorFake>().As<ScrapeSessionInitiatorFake>().InstancePerDependency();
             builder.RegisterType<GetLatestEventsBySubScribedEventTypeQuery>()
                    .As<GetLatestEventsBySubScribedEventTypeQuery>()
                    .InstancePerDependency();

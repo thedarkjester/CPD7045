@@ -13,6 +13,7 @@ using Aps.BillingCompanies;
 using System.Collections.Generic;
 using Aps.Integration.EnumTypes;
 using Aps.Customers;
+using System.Linq;
 
 namespace Aps.Shared.Tests.CoreTests
 {
@@ -101,13 +102,10 @@ namespace Aps.Shared.Tests.CoreTests
 
             // act
             Guid billingCompanyId = Guid.NewGuid();
-            schedulingEngine.addNewCurrentNumberOfThreadsPerBillingCompany(billingCompanyId);
+            schedulingEngine.IncreaseNumberOfThreadsUsedByCompany(billingCompanyId);
 
             Guid billingCompanyId2 = Guid.NewGuid();
-            schedulingEngine.addNewCurrentNumberOfThreadsPerBillingCompany(billingCompanyId2);
-
-            schedulingEngine.currentNumberOfThreadsPerBillingCompany[billingCompanyId] += 1;
-            schedulingEngine.currentNumberOfThreadsPerBillingCompany[billingCompanyId2] += 1;
+            schedulingEngine.IncreaseNumberOfThreadsUsedByCompany(billingCompanyId2);
 
             int i = schedulingEngine.getNumberOfThreadsAvailableOnServer();
 
@@ -123,7 +121,7 @@ namespace Aps.Shared.Tests.CoreTests
 
             SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiatorFake>(), container.Resolve<ScrapingErrorRetryConfigurationQuery>(), container.Resolve<ScrapingObjectCreator>(), container.Resolve<BillingCompanyCrossCheckEnabledByIdQuery>(), container.Resolve<BillingCompanyBillingLifeCycleByCompanyIdQuery>());
             // act
-            myList = schedulingEngine.MockGetAllScrapingObjects();
+            myList = schedulingEngine.MockGetAllScrapingObjectsScheduledInPast();
 
             // assert
             Assert.AreEqual(myList.Count, 0);
@@ -135,19 +133,141 @@ namespace Aps.Shared.Tests.CoreTests
             // arrange
             List<ScrapingObject> myList;
             SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiatorFake>(), container.Resolve<ScrapingErrorRetryConfigurationQuery>(), container.Resolve<ScrapingObjectCreator>(), container.Resolve<BillingCompanyCrossCheckEnabledByIdQuery>(), container.Resolve<BillingCompanyBillingLifeCycleByCompanyIdQuery>());
-            ScrapingObject myScrapingObject = new ScrapingObject(customerId, billingCompanyId, scrapeSessionTypes);
+            //ScrapingObject myScrapingObject = new ScrapingObject(customerId, billingCompanyId, scrapeSessionTypes);
+            ScrapingObjectCreator scrapingObjectCreator = new ScrapingObjectCreator(container.Resolve<IEventAggregator>());
+            ScrapingObject myScrapingObject = scrapingObjectCreator.GetNewScrapingObject(customerId, billingCompanyId, scrapeSessionTypes);
             
 
             // act
             schedulingEngine.mockAddBillingCompanyAccountAdded(myScrapingObject);
-            myList = schedulingEngine.MockGetAllScrapingObjects();
+            myList = schedulingEngine.MockGetAllScrapingObjectsScheduledInPast();
 
             // assert
             Assert.AreEqual(myList.Count, 1);
         }
 
 
-        
+        [TestMethod]
+        public void getNewScrapeQueueWithoutCompletedItemsContainingOneValidObjectIgnoringFutureSchedulesTest()
+        {
+            // arrange
+            List<ScrapingObject> myList;
+            SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiatorFake>(), container.Resolve<ScrapingErrorRetryConfigurationQuery>(), container.Resolve<ScrapingObjectCreator>(), container.Resolve<BillingCompanyCrossCheckEnabledByIdQuery>(), container.Resolve<BillingCompanyBillingLifeCycleByCompanyIdQuery>());
+            ScrapingObjectCreator scrapingObjectCreator = new ScrapingObjectCreator(container.Resolve<IEventAggregator>());
+            ScrapingObject myScrapingObject = scrapingObjectCreator.GetNewScrapingObject(customerId, billingCompanyId, scrapeSessionTypes);
+            ScrapingObject myScrapingObject2 = scrapingObjectCreator.GetNewScrapingObject(customerId, billingCompanyId, scrapeSessionTypes);
+
+            
+            myScrapingObject2.ScheduledDate = DateTime.UtcNow.AddDays(1);     
+
+
+            // act
+            schedulingEngine.mockAddBillingCompanyAccountAdded(myScrapingObject);
+            schedulingEngine.mockAddBillingCompanyAccountAdded(myScrapingObject2);
+            myList = schedulingEngine.getNewScrapeQueueWithoutCompletedItems();
+
+            // assert
+            Assert.AreEqual(myList.Count, 1);
+            Assert.AreEqual(myList.ElementAt(0).queueId, myScrapingObject.queueId);
+            Assert.AreNotEqual(myList.ElementAt(0).queueId, myScrapingObject2.queueId);
+        }
+
+         [TestMethod]
+        public void IncreaseNumberOfThreadsUsedByCompanyByCreatingFirstValueTest()
+        {
+            // arrange
+            SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiatorFake>(), container.Resolve<ScrapingErrorRetryConfigurationQuery>(), container.Resolve<ScrapingObjectCreator>(), container.Resolve<BillingCompanyCrossCheckEnabledByIdQuery>(), container.Resolve<BillingCompanyBillingLifeCycleByCompanyIdQuery>());
+
+            // act
+            Guid billingId = Guid.NewGuid();
+            schedulingEngine.IncreaseNumberOfThreadsUsedByCompany(billingId);
+
+            // assert
+            Assert.AreEqual(schedulingEngine.currentNumberOfThreadsPerBillingCompany.ContainsKey(billingId), true);
+        }
+
+         [TestMethod]
+         public void IncreaseNumberOfThreadsUsedByCompanyByCreatingMultipleThreadsTest()
+         {
+             // arrange
+             SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiatorFake>(), container.Resolve<ScrapingErrorRetryConfigurationQuery>(), container.Resolve<ScrapingObjectCreator>(), container.Resolve<BillingCompanyCrossCheckEnabledByIdQuery>(), container.Resolve<BillingCompanyBillingLifeCycleByCompanyIdQuery>());
+
+             // act
+             Guid billingId = Guid.NewGuid();
+             schedulingEngine.IncreaseNumberOfThreadsUsedByCompany(billingId);
+             schedulingEngine.IncreaseNumberOfThreadsUsedByCompany(billingId);
+             schedulingEngine.IncreaseNumberOfThreadsUsedByCompany(billingId);
+
+             // assert
+             Assert.AreEqual(schedulingEngine.currentNumberOfThreadsPerBillingCompany[billingId], 3);
+         }
+
+         [TestMethod]
+         public void CheckDecreaseNumberOfThreadsUsedByCompanyIsZeroWhenIfKeyDoesNotExistTest()
+         {
+             // arrange
+             SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiatorFake>(), container.Resolve<ScrapingErrorRetryConfigurationQuery>(), container.Resolve<ScrapingObjectCreator>(), container.Resolve<BillingCompanyCrossCheckEnabledByIdQuery>(), container.Resolve<BillingCompanyBillingLifeCycleByCompanyIdQuery>());
+
+             // act
+             Guid billingId = Guid.NewGuid();
+             schedulingEngine.DecreaseNumberOfThreadsUsedByCompany(billingId);
+
+             // assert
+             Assert.AreEqual(schedulingEngine.currentNumberOfThreadsPerBillingCompany[billingId], 0);
+         }
+
+         [TestMethod]
+         public void DecreaseNumberOfThreadsUsedByCompanyByCreatingAndRemovingMultipleThreadsTest()
+         {
+             // arrange
+             SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiatorFake>(), container.Resolve<ScrapingErrorRetryConfigurationQuery>(), container.Resolve<ScrapingObjectCreator>(), container.Resolve<BillingCompanyCrossCheckEnabledByIdQuery>(), container.Resolve<BillingCompanyBillingLifeCycleByCompanyIdQuery>());
+
+             // act
+             Guid billingId = Guid.NewGuid();
+             schedulingEngine.IncreaseNumberOfThreadsUsedByCompany(billingId);
+             schedulingEngine.IncreaseNumberOfThreadsUsedByCompany(billingId);
+             schedulingEngine.IncreaseNumberOfThreadsUsedByCompany(billingId);
+             schedulingEngine.DecreaseNumberOfThreadsUsedByCompany(billingId);
+
+             // assert
+             Assert.AreEqual(schedulingEngine.currentNumberOfThreadsPerBillingCompany[billingId], 2);
+         }
+
+         [TestMethod]
+         public void NumberOfThreadsCurrentlyUsedByBillingCompanyTest()
+         {
+             // arrange
+             SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiatorFake>(), container.Resolve<ScrapingErrorRetryConfigurationQuery>(), container.Resolve<ScrapingObjectCreator>(), container.Resolve<BillingCompanyCrossCheckEnabledByIdQuery>(), container.Resolve<BillingCompanyBillingLifeCycleByCompanyIdQuery>());
+
+             // act
+             Guid billingId = Guid.NewGuid();
+             schedulingEngine.IncreaseNumberOfThreadsUsedByCompany(billingId);
+             schedulingEngine.IncreaseNumberOfThreadsUsedByCompany(billingId);
+             schedulingEngine.IncreaseNumberOfThreadsUsedByCompany(billingId);
+             schedulingEngine.DecreaseNumberOfThreadsUsedByCompany(billingId);
+
+             // assert
+             Assert.AreEqual(schedulingEngine.NumberOfThreadsCurrentlyUsedByBillingCompanyId(billingId), 2);
+         }
+
+         [TestMethod]
+         public void RescheduleItemTest()
+         {
+             // arrange
+             SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiatorFake>(), container.Resolve<ScrapingErrorRetryConfigurationQuery>(), container.Resolve<ScrapingObjectCreator>(), container.Resolve<BillingCompanyCrossCheckEnabledByIdQuery>(), container.Resolve<BillingCompanyBillingLifeCycleByCompanyIdQuery>());
+             ScrapingObjectCreator scrapingObjectCreator = new ScrapingObjectCreator(container.Resolve<IEventAggregator>());
+             ScrapingObject myScrapingObject = scrapingObjectCreator.GetNewScrapingObject(customerId, billingCompanyId, scrapeSessionTypes);
+             DateTime myDate = myScrapingObject.ScheduledDate.AddDays(1);
+
+
+             // act
+             schedulingEngine.RescheduleItem(myScrapingObject, myDate);
+
+             
+
+             // assert
+             Assert.AreEqual(myScrapingObject.ScheduledDate, myDate);
+         }
 
     }
 }

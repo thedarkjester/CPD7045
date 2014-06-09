@@ -22,7 +22,7 @@ namespace Aps.Scraping
             this.createdDate = DateTime.UtcNow;
             this.ScheduledDate = DateTime.UtcNow;
             this.scrapeSessionTypes = scrapeSessionTypes;
-
+            this.scrapeStatus = "active";
         }
     }
 }
