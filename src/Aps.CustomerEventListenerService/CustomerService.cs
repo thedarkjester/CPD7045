@@ -1,5 +1,6 @@
 ﻿using Aps.Customers;
 using Aps.Customers.ValueObjects;
+using Aps.Customers.Events;
 using Aps.Integration;
 using Aps.Integration.Events;
 using Caliburn.Micro;
@@ -8,7 +9,8 @@ using System.Threading;
 
 namespace Aps.Customer.ApplicationService
 {
-    public class CustomerService : IHandle<CustomerScrapeSessionFailed>,IHandle<AccountStatementGenerated>, IHandle<Aps.Customers.Events.BillingAccountAddedToCustomer>
+    public class CustomerService : IHandle<CustomerScrapeSessionFailed>, IHandle<AccountStatementGenerated>, IHandle<BillingAccountAddedToCustomer>,
+                                   IHandle<CrossCheckSessionCompletedWithErrors>, IHandle<CustomerBillingCompanyAccountDeleted>
     {
         private readonly EventIntegrationService eventIntegrationService;
         private readonly IEventAggregator eventAggregator;
@@ -38,10 +40,7 @@ namespace Aps.Customer.ApplicationService
 
         public void Handle(AccountStatementGenerated message)
         {
-               
-            // is the statement an overall statement (outside BCA's - as is.) or per billing company (need bc id then and in BCA's)?
-            // store on customer a statementId and date ( CustomerStatement Value Object )
-
+            
             Customers.Aggregates.Customer customer = customerRepository.GetCustomerById(message.CustomerId);
             customer.SetCustomerStatement(new CustomerStatement(message.AccountStatementId, message.StatementDate));
 
@@ -58,9 +57,20 @@ namespace Aps.Customer.ApplicationService
             }
         }
 
-        public void Handle(Customers.Events.BillingAccountAddedToCustomer message)
+        public void Handle(BillingAccountAddedToCustomer message)
         {
-            eventIntegrationService.Publish(new Aps.Integration.Events.CustomerBillingAccountAdded(message.CustomerId, message.BillingCompanyId));
+            eventIntegrationService.Publish(new CustomerBillingAccountAdded(message.CustomerId, message.BillingCompanyId));
+        }
+
+        public void Handle(CrossCheckSessionCompletedWithErrors message)
+        {
+            Customers.Aggregates.Customer customer = customerRepository.GetCustomerById(message.CustomerId);
+            customer.ChangeCustomerBillingCompanyAccountStatus(message.BillingCompanyId, "Inactive");
+        }
+
+        public void Handle(CustomerBillingCompanyAccountDeleted message)
+        {
+            eventIntegrationService.Publish(new BillingAccountDeletedFromCustomer(message.CustomerId, message.BillingCompanyId));
         }
     }
 }

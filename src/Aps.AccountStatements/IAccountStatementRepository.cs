@@ -7,8 +7,7 @@ namespace Aps.AccountStatements
     public interface IAccountStatementRepository
     {
         AccountStatement GetAccountStatementById(Guid id);
-        void StoreBillingCompany(AccountStatement accountStatement);
-        AccountStatement GetBillingCompanyById(Guid id);
+        void StoreAccountStatement(AccountStatement accountStatement);
         IEnumerable<AccountStatement> GetAllAccountStatements();
         bool AccountStatementExistsForCustomer(Guid customerId, Guid billingCompanyId, DateTime statementDate);
     }

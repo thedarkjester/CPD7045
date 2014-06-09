@@ -11,7 +11,7 @@ namespace Aps.Fakes
     {
         public AccountStatement GetAccountStatementById(Guid id)
         {
-            throw new NotImplementedException();
+            return this.accountStatements.FirstOrDefault(x => x.Id == id);
         }
 
         private readonly List<AccountStatement> accountStatements;
@@ -24,16 +24,10 @@ namespace Aps.Fakes
             this.accountStatements = new List<AccountStatement>();
         }
 
-        public void StoreBillingCompany(AccountStatement accountStatement)
+        public void StoreAccountStatement(AccountStatement accountStatement)
         {
             // validate Ids?
             this.accountStatements.Add(accountStatement);
-        }
-
-
-        public AccountStatement GetBillingCompanyById(Guid id)
-        {
-            return this.accountStatements.FirstOrDefault(x => x.Id == id);
         }
 
         public IEnumerable<AccountStatement> GetAllAccountStatements()

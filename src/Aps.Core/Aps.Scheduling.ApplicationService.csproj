@@ -67,6 +67,7 @@
     <Compile Include="InternalEvents\ScrapeSessionDuplicateStatement.cs" />
     <Compile Include="InternalEvents\ScrapeSessionFailed.cs" />
     <Compile Include="InternalEvents\ScrapeSessionSuccessful.cs" />
+    <Compile Include="InternalEvents\ScrapingScriptUpdated.cs" />
     <Compile Include="Interpreters\ScrapeSessionXMLToDataPairConverter.cs" />
     <Compile Include="Interpreters\ScrapeDataPairsWithNoNameFoundException.cs" />
     <Compile Include="InterpretedScrapeSessionDataPair.cs" />
