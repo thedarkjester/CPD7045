@@ -40,5 +40,11 @@ namespace Aps.Fakes
         {
             return accountStatements;
         }
+
+
+        public bool AccountStatementExistsForCustomer(Guid customerId, Guid billingCompanyId, DateTime statementDate)
+        {
+            return accountStatements.Contains(accountStatements.FirstOrDefault(x => x.CustomerDetails.CustomerId == customerId && x.BillingCompanyDetails.BillingCompanyId == billingCompanyId && x.StatementDate.DateOfStatement == statementDate));
+        }
     }
 }

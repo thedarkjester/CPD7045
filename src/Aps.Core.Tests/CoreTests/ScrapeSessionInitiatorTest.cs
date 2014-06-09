@@ -9,6 +9,9 @@ using Moq;
 using Aps.Customers;
 using Aps.BillingCompanies;
 using Aps.Scraping;
+using Aps.Integration.Queries.BillingCompanyQueries;
+using Aps.Integration.Queries.CustomerQueries.Dtos;
+using Aps.Integration.Queries.BillingCompanyQueries.Dtos;
 
 namespace Aps.Shared.Tests.CoreTests
 {
@@ -16,9 +19,8 @@ namespace Aps.Shared.Tests.CoreTests
     public class ScrapeSessionInitiatorTest
     {
 
-        Mock eventAggregatorMock;
-        Mock customerRepositoryMock;
-        Mock billingCompanyRepositoryMock;
+        Mock<CustomerBillingCompanyAccountsById> customerBillingCompanyAccountsByIdMock;
+        Mock<BillingCompanyScrapingUrlQuery> billingCompanyScrapingUrlQueryMock;
         Mock<IIndex<ScrapeSessionTypes, ScrapeOrchestrator>> mockIndex;
         Mock<StatementScrapeOrchestrator> mockStatementScrapeOrchestrator;
         Mock<CrossCheckScrapeOrchestrator> mockCrossCheckScrapeOrchestrator;
@@ -32,12 +34,30 @@ namespace Aps.Shared.Tests.CoreTests
             billingCompanyId = Guid.NewGuid();
             customerId = Guid.NewGuid();
             queueId = Guid.NewGuid();
-            eventAggregatorMock = new Mock<IEventAggregator>();
-            customerRepositoryMock = new Mock<ICustomerRepository>();
-            billingCompanyRepositoryMock = new Mock<IBillingCompanyRepository>();
+            var eventAggregator = new Mock<IEventAggregator>();
+            var customerRepository =  new Mock<ICustomerRepository>();
+
+            var customer =new Customers.Aggregates.Customer(eventAggregator.Object, new Customers.ValueObjects.CustomerFirstName("User"), new Customers.ValueObjects.CustomerLastName("Test"), null, null, null, null);
+            var customerBillingCompanyAccount = new Customers.Entities.CustomerBillingCompanyAccount(billingCompanyId, "x", "y", "active", "1235", 1, DateTime.Now.AddHours(1));
+            customerBillingCompanyAccount.CustomerStatement = new Customers.ValueObjects.CustomerStatement(Guid.NewGuid(), DateTime.Now.AddHours(1));
+            customer.AddCustomerBillingCompanyAccount(customerBillingCompanyAccount);
+
+            customerRepository.Setup(x => x.GetCustomerById(customerId)).Returns(customer);
+          
+            
+            customerBillingCompanyAccountsByIdMock = new Mock<CustomerBillingCompanyAccountsById>(customerRepository.Object);
+            customerBillingCompanyAccountsByIdMock.SetReturnsDefault<CustomerBillingCompanyAccountDto>(new CustomerBillingCompanyAccountDto());
+            
+            var billingCompanyRepository = new Mock<IBillingCompanyRepository>();
+            billingCompanyRepository.Setup(x => x.GetBillingCompanyById(billingCompanyId)).Returns(new BillingCompanies.Aggregates.BillingCompany(eventAggregator.Object, new BillingCompanies.ValueObjects.BillingCompanyName("Telkom"), new BillingCompanies.ValueObjects.BillingCompanyType(1), new BillingCompanies.ValueObjects.BillingCompanyScrapingUrl("https://www.telkom.co.za"), false));
+            
+            billingCompanyScrapingUrlQueryMock = new Mock<BillingCompanyScrapingUrlQuery>(billingCompanyRepository.Object);
+            billingCompanyScrapingUrlQueryMock.SetReturnsDefault<BillingCompanyScrapingUrlDto>(new BillingCompanyScrapingUrlDto());
+          
+            
             mockIndex = new Mock<IIndex<ScrapeSessionTypes, ScrapeOrchestrator>>();
 
-            mockStatementScrapeOrchestrator = new Mock<StatementScrapeOrchestrator>(null, null, null, null);
+            mockStatementScrapeOrchestrator = new Mock<StatementScrapeOrchestrator>(null, null, null, null, null, null, null, null);
             mockCrossCheckScrapeOrchestrator = new Mock<CrossCheckScrapeOrchestrator>(null, null, null);
             mockIndex.Setup(x => x[ScrapeSessionTypes.StatementScrapper]).Returns(mockStatementScrapeOrchestrator.Object);
             mockIndex.Setup(x => x[ScrapeSessionTypes.CrossCheckScrapper]).Returns(mockCrossCheckScrapeOrchestrator.Object);
@@ -47,12 +67,15 @@ namespace Aps.Shared.Tests.CoreTests
         [TestMethod]
         public void Given_StatementScrapeType_Then_Initiate_NewStatementScrapeSession()
         {
-            var mockScrapeSessionInitiator = new Mock<ScrapeSessionInitiator>(eventAggregatorMock.Object, customerRepositoryMock.Object, billingCompanyRepositoryMock.Object, mockIndex.Object);
+            //arrange
+            var mockScrapeSessionInitiator = new Mock<ScrapeSessionInitiator>(customerBillingCompanyAccountsByIdMock.Object, billingCompanyScrapingUrlQueryMock.Object, mockIndex.Object);
             
             ScrapeSessionInitiator scrapeSessionInitiator = mockScrapeSessionInitiator.Object;
-
+            
+            //act
             scrapeSessionInitiator.InitiateNewScrapeSession(new ScrapingObject(customerId, billingCompanyId, ScrapeSessionTypes.StatementScrapper));
 
+            //assert (verify)
             mockScrapeSessionInitiator.Verify();
 
         }
@@ -60,12 +83,14 @@ namespace Aps.Shared.Tests.CoreTests
         [TestMethod]
         public void Given_CrossCheckScrapeType_Then_Initiate_NewStatementScrapeSession()
         {
-            var mockScrapeSessionInitiator = new Mock<ScrapeSessionInitiator>(eventAggregatorMock.Object, customerRepositoryMock.Object, billingCompanyRepositoryMock.Object, mockIndex.Object);
-
+            //arrange
+            var mockScrapeSessionInitiator = new Mock<ScrapeSessionInitiator>(customerBillingCompanyAccountsByIdMock.Object, billingCompanyScrapingUrlQueryMock.Object, mockIndex.Object);
             ScrapeSessionInitiator scrapeSessionInitiator = mockScrapeSessionInitiator.Object;
-
+            
+            //act
             scrapeSessionInitiator.InitiateNewScrapeSession(new ScrapingObject(customerId, billingCompanyId, ScrapeSessionTypes.CrossCheckScrapper));
-
+            
+            //assert (verify)
             mockScrapeSessionInitiator.Verify();
         }
 

@@ -13,8 +13,11 @@ using Aps.Customers;
 using Aps.Integration.EnumTypes;
 using Aps.Scraping;
 using Aps.Scraping.Scrapers;
-using Aps.Core.Validation;
 using Aps.Integration.Queries.CustomerQueries.Dtos;
+using Aps.Scheduling.ApplicationService.Extensions;
+using Aps.Scheduling.ApplicationService.Validation;
+using Aps.AccountStatements;
+using Autofac.Core;
 
 namespace Aps.Scheduling.ApplicationService
 {
@@ -43,6 +46,7 @@ namespace Aps.Scheduling.ApplicationService
             builder.RegisterType<CustomerRepositoryFake>().As<ICustomerRepository>().InstancePerDependency();
             builder.RegisterType<CustomerCreator>().As<CustomerCreator>().InstancePerDependency();
             builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>().InstancePerDependency();
+            builder.RegisterType<AccountStatementRepositoryFake>().As<IAccountStatementRepository>().InstancePerDependency();            
             builder.RegisterType<BillingCompanyFactory>().As<BillingCompanyFactory>().InstancePerDependency();
             builder.RegisterType<AccountStatementComposer>().As<AccountStatementComposer>().InstancePerDependency();
             builder.RegisterType<ScrapeLoggingRepositoryFake>().As<IScrapeLoggingRepository>().InstancePerDependency();
@@ -50,7 +54,8 @@ namespace Aps.Scheduling.ApplicationService
             builder.RegisterType<CrossCheckScraperFake>().As<ICrossCheckScraper>().InstancePerDependency();
             builder.RegisterType<CrossCheckScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.CrossCheckScrapper);
             builder.RegisterType<StatementScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.StatementScrapper);
-            builder.RegisterType<InvalidCredentialsValidator>().As<IValidator>();
+
+            RegisterValidators(builder);
             RegisterIntegrationDependencies(builder);
 
             Container = builder.Build();
@@ -84,6 +89,15 @@ namespace Aps.Scheduling.ApplicationService
                    .InstancePerDependency();
 
             RegisterQueries(builder);
+        }
+
+        private static void RegisterValidators(ContainerBuilder builder)
+        {
+            builder.RegisterType<InvalidCredentialsValidator>().As<IValidator>().WithOrder();
+            builder.RegisterType<DuplicateStatementValidator>().As<IValidator>().WithOrder();
+
+            builder.RegisterType<ScrapeSessionDataValidator>().As<ScrapeSessionDataValidator>()
+                .WithParameter(new ResolvedParameter((info, context) => true, (info, context) => context.ResolveOrdered<IValidator>()));
         }
 
         private static void StartMainApplication()

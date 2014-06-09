@@ -1,5 +1,4 @@
-﻿using Aps.Core.Validation;
-using Aps.Scheduling.ApplicationService;
+﻿using Aps.Scheduling.ApplicationService;
 using Aps.Scheduling.ApplicationService.Interpreters;
 using Aps.Scheduling.ApplicationService.Validation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;

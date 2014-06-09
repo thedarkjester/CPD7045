@@ -14,17 +14,21 @@ using System.Threading.Tasks;
 using Aps.Scraping;
 using Aps.Integration.Queries.CustomerQueries.Dtos;
 using Aps.Scheduling.ApplicationService.Entities;
+using Aps.Integration.Queries.BillingCompanyQueries;
+using Aps.Integration.Queries.BillingCompanyQueries.Dtos;
 
 namespace Aps.Scheduling.ApplicationService
 {
    
     public class ScrapeSessionInitiator
     {
-        private readonly Aps.Integration.Queries.CustomerQueries.Dtos.CustomerBillingCompanyAccountsById customerBillingCompanyAccountsById;
-        private readonly IIndex<ScrapeSessionTypes, ScrapeOrchestrator> scrapeOrchestrators;
-        public ScrapeSessionInitiator(Aps.Integration.Queries.CustomerQueries.Dtos.CustomerBillingCompanyAccountsById customerBillingCompanyAccountsById, IIndex<ScrapeSessionTypes, ScrapeOrchestrator> scrapeOrchestrators)
+        readonly CustomerBillingCompanyAccountsById customerBillingCompanyAccountsById;
+        readonly BillingCompanyScrapingUrlQuery billingCompanyScrapingUrlQuery;
+        readonly IIndex<ScrapeSessionTypes, ScrapeOrchestrator> scrapeOrchestrators;
+        public ScrapeSessionInitiator(CustomerBillingCompanyAccountsById customerBillingCompanyAccountsById, BillingCompanyScrapingUrlQuery billingCompanyScrapingUrlQuery, IIndex<ScrapeSessionTypes, ScrapeOrchestrator> scrapeOrchestrators)
         {
             this.customerBillingCompanyAccountsById = customerBillingCompanyAccountsById;
+            this.billingCompanyScrapingUrlQuery = billingCompanyScrapingUrlQuery;
             this.scrapeOrchestrators = scrapeOrchestrators;
         }
 
@@ -33,7 +37,8 @@ namespace Aps.Scheduling.ApplicationService
             ScrapeOrchestrator scrapeOrchestrator = scrapeOrchestrators[scrapingObject.scrapeSessionTypes];
 
             CustomerBillingCompanyAccountDto customerBillingCompanyAccountDto = customerBillingCompanyAccountsById.GetCustomerBillingCompanyAccountByCustomerIdAndBillingCompanyId(scrapingObject.customerId, scrapingObject.billingCompanyId);
-            ScrapeOrchestratorEntity scrapeOrchestratorEntity = new ScrapeOrchestratorEntity(scrapingObject.queueId, scrapingObject.customerId, scrapingObject.billingCompanyId, string.Empty, customerBillingCompanyAccountDto.billingCompanyUsername, customerBillingCompanyAccountDto.billingCompanyPassword, customerBillingCompanyAccountDto.billingCompanyPIN, customerBillingCompanyAccountDto.billingCompanyAccountNumber);
+            BillingCompanyScrapingUrlDto billingCompanyScrapingUrlDto = billingCompanyScrapingUrlQuery.GetBillingCompanyScrapingUrlById(scrapingObject.billingCompanyId);
+            ScrapeOrchestratorEntity scrapeOrchestratorEntity = new ScrapeOrchestratorEntity(scrapingObject.queueId, scrapingObject.customerId, scrapingObject.billingCompanyId, billingCompanyScrapingUrlDto.Url, customerBillingCompanyAccountDto.billingCompanyUsername, customerBillingCompanyAccountDto.billingCompanyPassword, customerBillingCompanyAccountDto.billingCompanyPIN, customerBillingCompanyAccountDto.billingCompanyAccountNumber);
             Task.Run(() => scrapeOrchestrator.Orchestrate(scrapeOrchestratorEntity));
         }
     }

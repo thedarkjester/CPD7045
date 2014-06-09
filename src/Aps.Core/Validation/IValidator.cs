@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aps.Core.Validation
+namespace Aps.Scheduling.ApplicationService.Validation
 {
     public interface IValidator
     {

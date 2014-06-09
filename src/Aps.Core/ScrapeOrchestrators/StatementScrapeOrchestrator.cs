@@ -1,10 +1,12 @@
-﻿using Aps.AccountStatements.Entities;
+﻿using Aps.AccountStatements;
+using Aps.AccountStatements.Entities;
 using Aps.Integration;
 using Aps.Integration.Events;
 using Aps.Scheduling.ApplicationService.Entities;
 using Aps.Scheduling.ApplicationService.InternalEvents;
 using Aps.Scheduling.ApplicationService.Interpreters;
 using Aps.Scheduling.ApplicationService.Services;
+using Aps.Scheduling.ApplicationService.Validation;
 using Aps.Scraping;
 using Aps.Scraping.Scrapers;
 using Caliburn.Micro;
@@ -24,7 +26,9 @@ namespace Aps.Scheduling.ApplicationService.ScrapeOrchestrators
         readonly EventIntegrationService eventIntegrationService;
         readonly IScrapeLoggingRepository scrapeLoggingRepository;
         readonly IWebScraper webScraper;
-        public StatementScrapeOrchestrator(IEventAggregator eventAggregator, EventIntegrationService eventIntegrationService, AccountStatementComposer accountStatementComposer, FailureHandler failureHandler, IScrapeLoggingRepository scrapeLoggingRepository, IWebScraper webScraper)
+        readonly ScrapeSessionDataValidator scrapeSessionDataValidator;
+        readonly IAccountStatementRepository accountStatementRepository;
+        public StatementScrapeOrchestrator(IEventAggregator eventAggregator, EventIntegrationService eventIntegrationService, AccountStatementComposer accountStatementComposer, FailureHandler failureHandler, IScrapeLoggingRepository scrapeLoggingRepository, IWebScraper webScraper, ScrapeSessionDataValidator scrapeSessionDataValidator, IAccountStatementRepository accountStatementRepository)
         {
             this.eventAggregator = eventAggregator;
             this.eventIntegrationService = eventIntegrationService;
@@ -32,6 +36,8 @@ namespace Aps.Scheduling.ApplicationService.ScrapeOrchestrators
             this.failureHandler = failureHandler;
             this.scrapeLoggingRepository = scrapeLoggingRepository;
             this.webScraper = webScraper;
+            this.scrapeSessionDataValidator = scrapeSessionDataValidator;
+            this.accountStatementRepository = accountStatementRepository;
         }
 
         public override void Orchestrate(ScrapeOrchestratorEntity scrapeOrchestratorEntity)
@@ -40,7 +46,6 @@ namespace Aps.Scheduling.ApplicationService.ScrapeOrchestrators
             Guid customerId = scrapeOrchestratorEntity.CustomerId;
             Guid billingCompanyId = scrapeOrchestratorEntity.BillingCompanyId;            
             Guid queueId = scrapeOrchestratorEntity.QueueId;
-            bool isDuplicateStatment = false;
             bool hasFailed = false;
             var scrapeSessionData = string.Empty;
             try
@@ -52,19 +57,11 @@ namespace Aps.Scheduling.ApplicationService.ScrapeOrchestrators
                 var transformedResults = new ScrapeSessionXMLToDataPairConverter().ConvertXmlToScrapeSessionDataPairs(scrapeSessionData);
                 eventIntegrationService.Publish(new ScrapeSessionDataInterpretered(scrapeSessionId, customerId, billingCompanyId));
 
-                //check if duplicate statement
-                if (isDuplicateStatment)
-                {
-                    eventAggregator.Publish(new ScrapeSessionDuplicateStatement(queueId));
-                    eventIntegrationService.Publish(new ScrapeSessionDuplicateStatementReceived(scrapeSessionId, customerId, billingCompanyId));
-                    //failureHandler.ProcessNewFailure(CustomerId, BillingCompanyId, Integration.EnumTypes.ScrapingErrorResponseCodes.Unknown);
-                    return;
-                }
-
-                //var validatedResults = new ScrapeSessionDataValidator().validateScrapeData(transformedResults);
+                scrapeSessionDataValidator.ValidateScrapeData(transformedResults, customerId, billingCompanyId);
                 eventIntegrationService.Publish(new ScrapeSessionDataValidated(scrapeSessionId, customerId, billingCompanyId));
-                //TODO: Fix key value pair parameter use linq selectmany
-                AccountStatement accountStatement = accountStatementComposer.BuildAccountStatement(customerId, billingCompanyId, new List<KeyValuePair<string, object>>());
+
+                AccountStatement accountStatement = accountStatementComposer.BuildAccountStatement(customerId, billingCompanyId, transformedResults.Select(x => x.keyValuePair).ToList());
+                accountStatementRepository.StoreBillingCompany(accountStatement);
                 eventIntegrationService.Publish(new ScrapeSessionStatementComposed(scrapeSessionId, customerId, billingCompanyId, accountStatement.Id, accountStatement.StatementDate.DateOfStatement));
 
                 eventAggregator.Publish(new ScrapeSessionSuccessful(queueId, accountStatement.StatementDate.DateOfStatement));
@@ -75,6 +72,12 @@ namespace Aps.Scheduling.ApplicationService.ScrapeOrchestrators
                 failureHandler.ProcessNewFailure(customerId, billingCompanyId, dse.Error);
                 eventIntegrationService.Publish(new ScrapeSessionCompletedWithErrors(scrapeSessionId, customerId, billingCompanyId, dse.Error.ToString()));
                 eventAggregator.Publish(new ScrapeSessionFailed(queueId, dse.Error));
+                hasFailed = true;
+            }
+            catch (DuplicateStatementException)
+            {
+                eventAggregator.Publish(new ScrapeSessionDuplicateStatement(queueId));
+                eventIntegrationService.Publish(new ScrapeSessionDuplicateStatementReceived(scrapeSessionId, customerId, billingCompanyId));
                 hasFailed = true;
             }
             catch (Exception e)
