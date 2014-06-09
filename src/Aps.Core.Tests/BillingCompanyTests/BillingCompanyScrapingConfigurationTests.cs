@@ -30,7 +30,7 @@ namespace Aps.Shared.Tests.BillingCompanyTests
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>();
             builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>();
-            builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>();
+            builder.RegisterType<BillingCompanyFactory>().As<BillingCompanyFactory>();
 
             container = builder.Build();
         }
@@ -39,7 +39,9 @@ namespace Aps.Shared.Tests.BillingCompanyTests
         public void Given_An_AddScrapingErrorRetryConfiguration_When_AddingToTheBillingCompany_TheItemsInsideIncrease()
         {
             //arrange
-            BillingCompany billingCompany = container.Resolve<IBillingCompanyRepository>().BuildNewBillingCompany(companyName, companyType, companyUrl);
+                        BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
+
+            BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
 
             //act
             billingCompany.AddScrapingErrorRetryConfiguration(new ScrapingErrorRetryConfiguration(0, 2));
@@ -52,7 +54,9 @@ namespace Aps.Shared.Tests.BillingCompanyTests
         public void Given_Multiple_AddScrapingErrorRetryConfiguration_When_AddingToTheBillingCompany_TheItemsInsideIncrease()
         {
             //arrange
-            BillingCompany billingCompany = container.Resolve<IBillingCompanyRepository>().BuildNewBillingCompany(companyName, companyType, companyUrl);
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
+
+            BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
 
             //act
             billingCompany.AddScrapingErrorRetryConfiguration(new ScrapingErrorRetryConfiguration(0, 2));
@@ -67,7 +71,8 @@ namespace Aps.Shared.Tests.BillingCompanyTests
         public void Given_DuplicateErrorCodesOn_AddScrapingErrorRetryConfigurations_When_AddingToTheBillingCompany_ExceptionIsThrown()
         {
             //arrange
-            BillingCompany billingCompany = container.Resolve<IBillingCompanyRepository>().BuildNewBillingCompany(companyName, companyType, companyUrl);
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
+            BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
 
             //act
             billingCompany.AddScrapingErrorRetryConfiguration(new ScrapingErrorRetryConfiguration(0, 2));
@@ -81,7 +86,9 @@ namespace Aps.Shared.Tests.BillingCompanyTests
         public void Given_A_AddScrapingErrorRetryConfiguration_When_RemovingFromTheBillingCompany_TheItemsInsideDecrease()
         {
             //arrange
-            BillingCompany billingCompany = container.Resolve<IBillingCompanyRepository>().BuildNewBillingCompany(companyName, companyType, companyUrl);
+            BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
+            BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
+
             billingCompany.AddScrapingErrorRetryConfiguration(new ScrapingErrorRetryConfiguration(0, 2));
 
             var configuration = new ScrapingErrorRetryConfiguration(1, 2);

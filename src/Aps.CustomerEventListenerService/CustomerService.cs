@@ -1,13 +1,14 @@
 ﻿using Aps.Customers;
+using Aps.Customers.ValueObjects;
 using Aps.Integration;
 using Aps.Integration.Events;
 using Caliburn.Micro;
 using System;
 using System.Threading;
 
-namespace Aps.CustomerEventListenerService
+namespace Aps.Customer.ApplicationService
 {
-    public class CustomerService : IHandle<CustomerScrapeSessionFailed>,IHandle<AccountStatementGenerated>
+    public class CustomerService : IHandle<CustomerScrapeSessionFailed>,IHandle<AccountStatementGenerated>, IHandle<Aps.Customers.Events.BillingAccountAddedToCustomer>
     {
         private readonly EventIntegrationService eventIntegrationService;
         private readonly IEventAggregator eventAggregator;
@@ -28,23 +29,38 @@ namespace Aps.CustomerEventListenerService
 
         public void Handle(CustomerScrapeSessionFailed message)
         {
-           // Customer customer = customerRepository.GetAccountStatement();
-          //  customer.SetStatus();
+            
+          Customers.Aggregates.Customer customer = customerRepository.GetCustomerById(message.customerId);
+          customer.ChangeCustomerBillingCompanyAccountStatus(message.billingCompanyId, message.status);
+          
         }
 
 
         public void Handle(AccountStatementGenerated message)
         {
+               
+            // is the statement an overall statement (outside BCA's - as is.) or per billing company (need bc id then and in BCA's)?
             // store on customer a statementId and date ( CustomerStatement Value Object )
+
+            Customers.Aggregates.Customer customer = customerRepository.GetCustomerById(message.CustomerId);
+            customer.SetCustomerStatement(new CustomerStatement(message.AccountStatementId, message.StatementDate));
+
         }
 
         public void Start(System.Threading.CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
+                Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine("Waiting for EventAggregator Events");
+                Console.WriteLine("Pausing, and then redistributing internal events");
                 Thread.Sleep(1000);
             }
+        }
+
+        public void Handle(Customers.Events.BillingAccountAddedToCustomer message)
+        {
+            eventIntegrationService.Publish(new Aps.Integration.Events.CustomerBillingAccountAdded(message.CustomerId, message.BillingCompanyId));
         }
     }
 }

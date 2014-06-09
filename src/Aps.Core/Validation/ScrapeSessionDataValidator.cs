@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Aps.Core.Validation;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Aps.Core.Validation
+namespace Aps.Scheduling.ApplicationService.Validation
 {
     public class ScrapeSessionDataValidator
     {

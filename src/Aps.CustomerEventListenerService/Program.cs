@@ -6,13 +6,10 @@ using Aps.Integration.Serialization;
 using Autofac;
 using Caliburn.Micro;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Aps.CustomerEventListenerService
+namespace Aps.Customer.ApplicationService
 {
     class Program
     {
@@ -37,7 +34,7 @@ namespace Aps.CustomerEventListenerService
             builder.RegisterType<EventIntegrationService>().As<EventIntegrationService>().SingleInstance();
             builder.RegisterType<BinaryEventSerializer>().As<BinaryEventSerializer>().InstancePerDependency();
             builder.RegisterType<BinaryEventDeSerializer>().As<BinaryEventDeSerializer>().InstancePerDependency();
-            builder.RegisterType<EventIntegrationRepositoryFake>().As<EventIntegrationRepositoryFake>().InstancePerDependency();
+            builder.RegisterType<EventIntegrationRepositoryFake>().As<IEventIntegrationRepository>().InstancePerDependency();
             builder.RegisterType<CustomerCreator>().As<CustomerCreator>().InstancePerDependency();
             builder.RegisterType<GetLatestEventsBySubScribedEventTypeQuery>()
                    .As<GetLatestEventsBySubScribedEventTypeQuery>()

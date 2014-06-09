@@ -21,7 +21,7 @@ namespace Aps.Shared.Tests.RepositoryTests
 
             builder.RegisterType<EventAggregator>().As<IEventAggregator>();
             builder.RegisterType<CustomerRepositoryFake>().As<ICustomerRepository>();
-            builder.RegisterType<BillingCompanyCreator>().As<BillingCompanyCreator>();
+            builder.RegisterType<BillingCompanyFactory>().As<BillingCompanyFactory>();
 
             container = builder.Build();
 

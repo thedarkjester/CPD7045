@@ -48,8 +48,10 @@
     <Compile Include="BillingCompanyRepositoryFake.cs" />
     <Compile Include="CrossCheckScraperFake.cs" />
     <Compile Include="CustomerRepositoryFake.cs" />
+    <Compile Include="EventIntegrationRepositoryFake.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScrapeLoggingRepositoryFake.cs" />
+    <Compile Include="ScrapeSessionInitiatorFake.cs" />
     <Compile Include="ScrapingObjectRepositoryFake.cs" />
     <Compile Include="WebScraperFake.cs" />
   </ItemGroup>
@@ -69,6 +71,10 @@
     <ProjectReference Include="..\Aps.DomainBase\Aps.DomainBase.csproj">
       <Project>{16D706F7-AF2A-4838-AC14-8BC0607173CC}</Project>
       <Name>Aps.DomainBase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Aps.IntegrationEvents\Aps.Integration.csproj">
+      <Project>{78059759-bf3d-471d-b88b-cd3aa1ec101b}</Project>
+      <Name>Aps.Integration</Name>
     </ProjectReference>
     <ProjectReference Include="..\Aps.Scraping\Aps.Scraping.csproj">
       <Project>{CE43F772-47F0-4629-B9DC-74616B937556}</Project>

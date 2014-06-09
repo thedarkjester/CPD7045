@@ -14,12 +14,12 @@ namespace Aps.Fakes
         private readonly List<BillingCompany> billingCompanies;
 
         private readonly IEventAggregator eventAggregator;
-        private readonly BillingCompanyCreator billingCompanyCreator;
+        private readonly BillingCompanyFactory billingCompanyFactory;
 
-        public BillingCompanyRepositoryFake(IEventAggregator eventAggregator, BillingCompanyCreator billingCompanyCreator)
+        public BillingCompanyRepositoryFake(IEventAggregator eventAggregator, BillingCompanyFactory billingCompanyFactory)
         {
             this.eventAggregator = eventAggregator;
-            this.billingCompanyCreator = billingCompanyCreator;
+            this.billingCompanyFactory = billingCompanyFactory;
             this.billingCompanies = new List<BillingCompany>();
         }
 
@@ -35,7 +35,7 @@ namespace Aps.Fakes
             Guard.That(billingCompanyType).IsNotNull();
             Guard.That(billingCompanyScrapingUrl).IsNotNull();
 
-            return this.billingCompanyCreator.GetNewBillingCompany(billingCompanyName, billingCompanyType, billingCompanyScrapingUrl, crossCheckScrapeEnabled);
+            return this.billingCompanyFactory.ConstructBillingCompanyWithGivenValues(billingCompanyName, billingCompanyType, billingCompanyScrapingUrl, crossCheckScrapeEnabled);
         }
 
         public BillingCompany GetBillingCompanyById(Guid id)
@@ -46,6 +46,16 @@ namespace Aps.Fakes
         public IEnumerable<BillingCompany> GetAllBillingCompanies()
         {
             return billingCompanies;
+        }
+
+        public void RemoveBillingCompanyById(Guid billingCompanyId)
+        {
+            var billingCompany = billingCompanies.FirstOrDefault(company => company.Id == billingCompanyId);
+
+            if (billingCompany != null)
+            {
+                this.billingCompanies.Remove(billingCompany);
+            }
         }
     }
 }

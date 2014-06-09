@@ -72,14 +72,24 @@
     <Compile Include="BillingCompanyTests\BillingCompanyScrapingConfigurationTests.cs" />
     <Compile Include="BillingCompanyTests\ScrapingErrorRetryConfigurationTests.cs" />
     <Compile Include="BillingCompanyTests\ScrapingLoadManagementConfigurationTests.cs" />
+    <Compile Include="BillingCompanyTests\UnitTest1.cs" />
     <Compile Include="CoreTests\SchedulingEngineTest.cs" />
     <Compile Include="CoreTests\ScrapeSessionInitiatorTest.cs" />
     <Compile Include="CoreTests\ScrapingObjectTest.cs" />
+    <Compile Include="CustomerTests\CustomerAggregateTests.cs" />
+    <Compile Include="CustomerTests\CustomerAPSPasswordTests.cs" />
+    <Compile Include="CustomerTests\CustomerAPSUsernameTests.cs" />
+    <Compile Include="CustomerTests\CustomerBillingCompanyAccountTests.cs" />
+    <Compile Include="CustomerTests\CustomerEmailAddressTests.cs" />
+    <Compile Include="CustomerTests\CustomerFirstNameTests.cs" />
+    <Compile Include="CustomerTests\CustomerLastNameTests.cs" />
+    <Compile Include="CustomerTests\CustomerTelephoneTests.cs" />
     <Compile Include="InterpreterTests\ScrapeSessionXMLToDataPairConverterTests.cs" />
     <Compile Include="RepositoryTests\EntityTests.cs" />
     <Compile Include="SampleTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValidatorTests\ScrapeSessionDataValidatorTests.cs" />
+    <Compile Include="ValidatorTests\Validator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aps.AccountStatements\Aps.AccountStatements.csproj">
@@ -90,13 +100,13 @@
       <Project>{2B24072A-26C9-4A39-82E6-CABF65C1E0A8}</Project>
       <Name>Aps.BillingCompanies</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Aps.Core\Aps.Core.csproj">
+    <ProjectReference Include="..\Aps.Core\Aps.Scheduling.ApplicationService.csproj">
       <Project>{98EA6256-15B1-49C2-A405-A2E050D5741E}</Project>
-      <Name>Aps.Core</Name>
+      <Name>Aps.Scheduling.ApplicationService</Name>
     </ProjectReference>
     <ProjectReference Include="..\Aps.Customer\Aps.Customers.csproj">
       <Project>{D3540939-6FEA-41F8-BA61-335EC08EC7CE}</Project>
-      <Name>Aps.Customer</Name>
+      <Name>Aps.Customers</Name>
     </ProjectReference>
     <ProjectReference Include="..\Aps.DomainBase\Aps.DomainBase.csproj">
       <Project>{16D706F7-AF2A-4838-AC14-8BC0607173CC}</Project>
@@ -115,9 +125,7 @@
       <Name>Aps.Scraping</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CustomerTests\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

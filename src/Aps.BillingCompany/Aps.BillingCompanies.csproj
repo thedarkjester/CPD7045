@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Aggregates\BillingCompany.cs" />
-    <Compile Include="BillingCompanyCreator.cs" />
+    <Compile Include="BillingCompanyFactory.cs" />
     <Compile Include="IBillingCompanyRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValueObjects\BillingCompanyName.cs" />

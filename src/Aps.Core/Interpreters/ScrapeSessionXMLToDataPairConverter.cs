@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
-using Aps.Core.Interpreters;
 
-namespace Aps.Core
+namespace Aps.Scheduling.ApplicationService.Interpreters
 {
     public class ScrapeSessionXMLToDataPairConverter
     {

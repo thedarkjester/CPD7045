@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Aps.Core.Validation;
+using Aps.Scheduling.ApplicationService;
+using Aps.Scheduling.ApplicationService.Interpreters;
+using Aps.Scheduling.ApplicationService.Validation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Aps.Core;
-using Aps.Core.Validation;
+using System;
 using System.Collections.Generic;
 
 namespace Aps.Shared.Tests.ValidatorTests
