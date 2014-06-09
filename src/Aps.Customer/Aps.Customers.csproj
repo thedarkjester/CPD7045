@@ -50,6 +50,7 @@
     <Compile Include="Aggregates\Customer.cs" />
     <Compile Include="CustomerCreator.cs" />
     <Compile Include="Events\BillingAccountAddedToCustomer.cs" />
+    <Compile Include="Events\CustomerBillingCompanyAccountDeleted.cs" />
     <Compile Include="ICustomerRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ValueObjects\CustomerAPSPassword.cs" />

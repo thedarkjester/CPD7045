@@ -130,7 +130,6 @@ namespace Aps.Customers.Aggregates
             this.customerBillingCompanyAccounts.Add(customerBillingCompanyAccount);
 
             BillingAccountAddedToCustomer billingAccountAddedToCustomerEvent = new BillingAccountAddedToCustomer(this.Id, customerBillingCompanyAccount.BillingCompanyId);
-
             eventAggregator.Publish(billingAccountAddedToCustomerEvent);
 
         }
@@ -138,6 +137,9 @@ namespace Aps.Customers.Aggregates
         public void RemoveCustomerBillingCompanyAccount(CustomerBillingCompanyAccount customerBillingCompanyAccount)
         {
             this.customerBillingCompanyAccounts.Remove(customerBillingCompanyAccount);
+
+            CustomerBillingCompanyAccountDeleted customerBillingCompanyAccountDeleted = new CustomerBillingCompanyAccountDeleted(this.Id, customerBillingCompanyAccount.BillingCompanyId);
+            eventAggregator.Publish(customerBillingCompanyAccountDeleted);
         }
 
         public void ChangeCustomerBillingCompanyAccountStatus(Guid billingCompanyId, string status)
