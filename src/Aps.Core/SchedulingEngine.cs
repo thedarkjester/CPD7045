@@ -17,7 +17,7 @@ using Aps.Integration.EnumTypes;
 
 namespace Aps.Scheduling.ApplicationService
 {
-    public class SchedulingEngine : IHandle<ScrapeSessionFailed>
+    public class SchedulingEngine : IHandle<ScrapeSessionFailed>, IHandle<CrossCheckCompleted>, IHandle<ScrapeSessionDuplicateStatement>, IHandle<ScrapeSessionSuccessfull>
     {
         private readonly IEventAggregator eventAggregator;
         private readonly EventIntegrationService messageSendAndReceiver;
@@ -217,12 +217,18 @@ namespace Aps.Scheduling.ApplicationService
             scrapingObjectRepositoryFake.StoreScrapingObject(scrapingObject);
         }
 
+        public ScrapingObject mockGetScrapeObjectByQueueId(Guid queueId)
+        {
+            return scrapingObjectRepositoryFake.GetScrapingObjectByQueueId(queueId);
+        }
+
         public List<ScrapingObject> MockGetAllScrapingObjectsScheduledInPast()
         {
             return scrapingObjectRepositoryFake.GetAllScrapingObjects().Where(item => item.ScheduledDate <= DateTime.UtcNow).ToList();
             //return scrapingObjectRepositoryFake.GetAllScrapingObjects().ToList();
         }
 
+        // Jignesh Event - Internal
         public void Handle(ScrapeSessionFailed message)
         {
             ScrapingErrorRetryConfigurationDto retryDto;
@@ -269,7 +275,6 @@ namespace Aps.Scheduling.ApplicationService
         {
             ScrapingObject scrapingObject = scrapingObjectRepositoryFake.GetScrapingObjectByQueueId(message.QueueId);
             DecreaseNumberOfThreadsUsedByCompany(scrapingObject.billingCompanyId);
-            //currentNumberOfThreadsPerBillingCompany[scrapingObject.billingCompanyId] -= 1;
             scrapeElementsRunning.Remove(scrapingObject);
 
             if (message.Successful)
@@ -284,17 +289,21 @@ namespace Aps.Scheduling.ApplicationService
         }
 
         // Jignesh Event - Internal
-        public void Handle(ScrapeSessionSuccessful message)
+        public void Handle(ScrapeSessionSuccessfull message)
         {
             ScrapingObject scrapingObject = scrapingObjectRepositoryFake.GetScrapingObjectByQueueId(message.QueueId);
             DecreaseNumberOfThreadsUsedByCompany(scrapingObject.billingCompanyId);
-            //currentNumberOfThreadsPerBillingCompany[scrapingObject.billingCompanyId] -= 1;
             scrapeElementsRunning.Remove(scrapingObject);
             scrapingObjectRepositoryFake.AddScrapingItemToCompletedQueue(scrapingObject);
 
             BillingCompanyBillingLifeCycleDto dto = billingCompanyBillingLifeCycleByCompanyIdQuery.GetBillingCompanyBillingLifeCycleByCompanyId(scrapingObject.billingCompanyId);
+            DateTime dateTime;
 
-            DateTime dateTime = message.StatementDate.AddDays(dto.DaysPerBillingCycle).AddDays(-1 * dto.LeadTimeInterval);
+            if (dto == null)
+                dateTime = message.StatementDate.AddDays(28); // if no life-cycle parameters are found reschedule scrape for statement date + 28 days
+            else 
+            dateTime = message.StatementDate.AddDays(dto.DaysPerBillingCycle).AddDays(-1 * dto.LeadTimeInterval);
+
             RescheduleItem(scrapingObject, dateTime);
             
         }
@@ -304,17 +313,22 @@ namespace Aps.Scheduling.ApplicationService
         {
             ScrapingObject scrapingObject = scrapingObjectRepositoryFake.GetScrapingObjectByQueueId(message.QueueId);
             DecreaseNumberOfThreadsUsedByCompany(scrapingObject.billingCompanyId);
-            //currentNumberOfThreadsPerBillingCompany[scrapingObject.billingCompanyId] -= 1;
             scrapeElementsRunning.Remove(scrapingObject);
             scrapingObjectRepositoryFake.AddScrapingItemToCompletedQueue(scrapingObject);
 
             BillingCompanyBillingLifeCycleDto dto = billingCompanyBillingLifeCycleByCompanyIdQuery.GetBillingCompanyBillingLifeCycleByCompanyId(scrapingObject.billingCompanyId);
+            DateTime dateTime;
 
-            DateTime dateTime = DateTime.UtcNow.AddDays(dto.RetryInterval);
+            if (dto == null)
+                dateTime = DateTime.UtcNow.AddDays(2); // default time added is 2 days if no dto is found
+            else 
+            dateTime = DateTime.UtcNow.AddDays(dto.RetryInterval);
+
             RescheduleItem(scrapingObject, dateTime);
         }
 
         // Carlos Events - - External; Completed, but Carlos still to create class
+        
         /*
         public void Handle(BillingAccountDeletedFromCustomer message)
         {

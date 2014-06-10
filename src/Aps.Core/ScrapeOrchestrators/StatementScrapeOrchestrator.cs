@@ -67,7 +67,7 @@ namespace Aps.Scheduling.ApplicationService.ScrapeOrchestrators
                 AccountStatement accountStatement = accountStatementComposer.BuildAccountStatement(customerId, billingCompanyId, new List<KeyValuePair<string, object>>());
                 eventIntegrationService.Publish(new ScrapeSessionStatementComposed(scrapeSessionId, customerId, billingCompanyId, accountStatement.Id, accountStatement.StatementDate.DateOfStatement));
 
-                eventAggregator.Publish(new ScrapeSessionSuccessful(queueId, accountStatement.StatementDate.DateOfStatement));
+                eventAggregator.Publish(new ScrapeSessionSuccessfull(queueId, accountStatement.StatementDate.DateOfStatement));
                 eventIntegrationService.Publish(new ScrapeSessionCompletedSuccessfully(scrapeSessionId, customerId, billingCompanyId));
             }
             catch (DataScraperException dse)
