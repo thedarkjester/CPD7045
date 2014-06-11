@@ -61,6 +61,7 @@
     <Compile Include="EmailMessage.cs" />
     <Compile Include="Entities\ScrapeOrchestratorEntity.cs" />
     <Compile Include="ErrorCode.cs" />
+    <Compile Include="Extensions\AutofacExtensions.cs" />
     <Compile Include="FailureHandler.cs" />
     <Compile Include="InternalEvents\CrossCheckCompleted.cs" />
     <Compile Include="InternalEvents\ScrapeSessionDuplicateStatement.cs" />
