@@ -16,7 +16,7 @@ namespace Aps.Shared.Tests.ValidatorTests
         [TestInitialize]
         public void Setup()
         {
-            xml = @"<scrape-session><base-url>www.telkom.co.za</base-url><date>10/01/2008</date><time>13:50:00</time><datapair id=""001""><text>Error Code</text><value>2</value></datapair></scrape-session>";
+            xml = @"<scrape-session><base-url>www.telkom.co.za</base-url><date>10/01/2008</date><time>13:50:00</time><datapair id=""001""><text>Error Code</text><value>1</value></datapair></scrape-session>";
             ScrapeSessionXMLToDataPairConverter converter = new ScrapeSessionXMLToDataPairConverter();
             interpretedScrapeSessionDataPair = converter.ConvertXmlToScrapeSessionDataPairs(xml);
         }
