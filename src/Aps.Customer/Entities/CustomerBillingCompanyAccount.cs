@@ -29,9 +29,7 @@ namespace Aps.Customers.Entities
             Guard.That(billingCompanyPassword).IsNotNullOrEmpty();
             Guard.That(billingCompanyStatus).IsNotNullOrEmpty();
             Guard.That(billingCompanyAccountNumber).IsNotNullOrEmpty();
-            Guard.That(billingCompanyPin).IsGreaterThan(0);
-            Guard.That(dateBillingCompanyAdded).IsTrue(date => date >= DateTime.Now, "DateBillingCompanyAdded cannot be in the past");
-            
+                        
             this.BillingCompanyId = billingCompanyId;
             this.BillingCompanyUsername = billingCompanyUsername;
             this.BillingCompanyPassword = billingCompanyPassword;

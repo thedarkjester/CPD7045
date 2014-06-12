@@ -1,4 +1,4 @@
-﻿using Aps.Core.Validation;
+﻿using Aps.Scheduling.ApplicationService.Validation;
 using Aps.Integration.EnumTypes;
 using System;
 using System.Collections.Generic;
