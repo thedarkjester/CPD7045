@@ -31,13 +31,14 @@ namespace Aps.Scheduling.ApplicationService
         public IEnumerable<ScrapingObject> scrapeElementsQueue;
         public List<ScrapingObject> scrapeElementsRunning;
         public CancellationToken cancellationToken;
-        //readonly ScrapeSessionInitiator scrapeSessionInitiator; // Add this when Jignesh's stuff is done.
-        readonly ScrapeSessionInitiatorFake scrapeSessionInitiator;
+        readonly ScrapeSessionInitiator scrapeSessionInitiator; // Add this when Jignesh's stuff is done.
+        //readonly ScrapeSessionInitiatorFake scrapeSessionInitiator;
 
         readonly ScrapingErrorRetryConfigurationQuery scrapingErrorRetryConfigurationQuery;
         public ScrapingObjectCreator scrapingObjectCreator;
 
-        public SchedulingEngine(IEventAggregator eventAggregator, EventIntegrationService messageSendAndReceiver, IScrapingObjectRepository scrapingObjectRepositoryFake, BillingCompanyOpenClosedWindowsQuery billingCompanyOpenClosedWindowsQuery, BillingCompanyScrapingLoadManagementConfigurationQuery billingCompanyScrapingLoadManagementConfigurationQuery, ScrapeSessionInitiatorFake scrapeSessionInitiator, ScrapingErrorRetryConfigurationQuery scrapingErrorRetryConfigurationQuery, ScrapingObjectCreator scrapingObjectCreator, BillingCompanyCrossCheckEnabledByIdQuery billingCompanyCrossCheckEnabledByIdQuery, BillingCompanyBillingLifeCycleByCompanyIdQuery billingCompanyBillingLifeCycleByCompanyIdQuery)
+       // public SchedulingEngine(IEventAggregator eventAggregator, EventIntegrationService messageSendAndReceiver, IScrapingObjectRepository scrapingObjectRepositoryFake, BillingCompanyOpenClosedWindowsQuery billingCompanyOpenClosedWindowsQuery, BillingCompanyScrapingLoadManagementConfigurationQuery billingCompanyScrapingLoadManagementConfigurationQuery, ScrapeSessionInitiatorFake scrapeSessionInitiator, ScrapingErrorRetryConfigurationQuery scrapingErrorRetryConfigurationQuery, ScrapingObjectCreator scrapingObjectCreator, BillingCompanyCrossCheckEnabledByIdQuery billingCompanyCrossCheckEnabledByIdQuery, BillingCompanyBillingLifeCycleByCompanyIdQuery billingCompanyBillingLifeCycleByCompanyIdQuery)
+        public SchedulingEngine(IEventAggregator eventAggregator, EventIntegrationService messageSendAndReceiver, IScrapingObjectRepository scrapingObjectRepositoryFake, BillingCompanyOpenClosedWindowsQuery billingCompanyOpenClosedWindowsQuery, BillingCompanyScrapingLoadManagementConfigurationQuery billingCompanyScrapingLoadManagementConfigurationQuery, ScrapeSessionInitiator scrapeSessionInitiator, ScrapingErrorRetryConfigurationQuery scrapingErrorRetryConfigurationQuery, ScrapingObjectCreator scrapingObjectCreator, BillingCompanyCrossCheckEnabledByIdQuery billingCompanyCrossCheckEnabledByIdQuery, BillingCompanyBillingLifeCycleByCompanyIdQuery billingCompanyBillingLifeCycleByCompanyIdQuery)  
         {
             this.eventAggregator = eventAggregator;
             this.eventAggregator.Subscribe(this);
@@ -60,7 +61,10 @@ namespace Aps.Scheduling.ApplicationService
 
         public void Start()
         {
-            //messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(NewCustomerBillingCompanyAccount).FullName);
+            messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(CustomerBillingAccountAdded).FullName);
+            messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(ScrapingScriptUpdated).FullName);
+            messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(BillingAccountDeletedFromCustomer).FullName);
+            
             Scrape();
         }
 
@@ -97,8 +101,7 @@ namespace Aps.Scheduling.ApplicationService
                     {
                         IncreaseNumberOfThreadsUsedByCompany(scrapingQueueElement.billingCompanyId);
                         scrapeElementsRunning.Add(scrapingQueueElement);
-                        // This is where I pass the work to Jignesh! Once it exists, add it. 
-                        //scrapeSessionInitiator.InitiateNewScrapeSession(scrapingQueueElement);
+                        scrapeSessionInitiator.InitiateNewScrapeSession(scrapingQueueElement); // This is where I pass the work to Jignesh! Once it exists, add it. 
 
                     }
                 }
@@ -117,7 +120,6 @@ namespace Aps.Scheduling.ApplicationService
             sortedScrapingQueueItemsWithoutCompletedScrapes.RemoveAll(x => completedScrapingQueue.Any(y => y.queueId == x.queueId));
             sortedScrapingQueueItemsWithoutCompletedScrapes.RemoveAll(x => scrapeElementsRunning.Any(y => y.queueId == x.queueId));
             scrapingObjectRepositoryFake.ClearCompletedScrapeList();
-           // sortedScrapingQueueItemsWithoutCompletedScrapes = sortedScrapingQueueItemsWithoutCompletedScrapes.OrderBy(item => (int)item.scrapeSessionTypes).ThenBy(item => item.ScheduledDate).ThenBy(item => item.createdDate).ToList();
             sortedScrapingQueueItemsWithoutCompletedScrapes = sortedScrapingQueueItemsWithoutCompletedScrapes.OrderBy(item => item.scrapeSessionTypes).ThenBy(item => item.ScheduledDate).ThenBy(item => item.createdDate).ToList();
  
 
@@ -197,21 +199,6 @@ namespace Aps.Scheduling.ApplicationService
             return billingCompanyScrapingLoadManagementConfigurationDto.ConcurrentScrapes;
         }
 
-
-        /*
-        public void Stop()
-        {
-
-        }
-        */
-
-        /*
-         * public List<ScrapingQueueElement> getNewScrapeQueueWithoutCompletedItems()
-        { 
-            
-        }
-         * */
-
         public void mockAddBillingCompanyAccountAdded(ScrapingObject scrapingObject)
         {
             scrapingObjectRepositoryFake.StoreScrapingObject(scrapingObject);
@@ -234,7 +221,6 @@ namespace Aps.Scheduling.ApplicationService
             ScrapingErrorRetryConfigurationDto retryDto;
             ScrapingObject scrapingObject = scrapingObjectRepositoryFake.GetScrapingObjectByQueueId(message.QueueId);
             DecreaseNumberOfThreadsUsedByCompany(scrapingObject.billingCompanyId);
-            //currentNumberOfThreadsPerBillingCompany[scrapingObject.billingCompanyId] -= 1;
             scrapeElementsRunning.Remove(scrapingObject);
 
             switch (message.ScrapingErrorResponseCode)
@@ -257,14 +243,18 @@ namespace Aps.Scheduling.ApplicationService
 
                 case ScrapingErrorResponseCodes.BillingCompanySiteDown:
                     retryDto = scrapingErrorRetryConfigurationQuery.GetAllScrapingErrorRetryConfigurations(scrapingObject.billingCompanyId).FirstOrDefault(x => (x.ResponseCode == ScrapingErrorResponseCodes.BillingCompanySiteDown));
+                    if (retryDto == null)
+                        RescheduleItem(scrapingObject, DateTime.UtcNow.AddHours(12)); // default time added is 12 hours if no dto is found
+                    else
                     RescheduleItem(scrapingObject, DateTime.UtcNow.AddHours(retryDto.RetryInterval));
-                    //RescheduleItem(scrapingObject, DateTime.UtcNow.AddHours(12));
                     break;
 
                 case ScrapingErrorResponseCodes.ErrorPageEncountered:
                     retryDto = scrapingErrorRetryConfigurationQuery.GetAllScrapingErrorRetryConfigurations(scrapingObject.billingCompanyId).FirstOrDefault(x => (x.ResponseCode == ScrapingErrorResponseCodes.ErrorPageEncountered));
+                    if (retryDto == null)
+                        RescheduleItem(scrapingObject, DateTime.UtcNow.AddHours(6)); // default time added is 6 hours if no dto is found
+                    else
                     RescheduleItem(scrapingObject, DateTime.UtcNow.AddHours(retryDto.RetryInterval));
-                    //RescheduleItem(scrapingObject, DateTime.UtcNow.AddHours(6));
                     break;
 
             }
@@ -327,15 +317,13 @@ namespace Aps.Scheduling.ApplicationService
             RescheduleItem(scrapingObject, dateTime);
         }
 
-        // Carlos Events - - External; Completed, but Carlos still to create class
-        
-        /*
+        // Carlos Events - - External;     
         public void Handle(BillingAccountDeletedFromCustomer message)
         {
-            ScrapingObject scrapingObject = scrapingObjectRepositoryFake.GetScrapingObjectByCustomerAndBillingCompanyId(message.customerId, message.billingCompanyId);
+            ScrapingObject scrapingObject = scrapingObjectRepositoryFake.GetScrapingObjectByCustomerAndBillingCompanyId(message.CustomerId, message.BillingCompanyId);
             scrapingObjectRepositoryFake.RemoveScrapingItemFromRepo(scrapingObject);
         }  
-         */
+         
 
         // Carlos Event - External
          public void Handle(CustomerBillingAccountAdded message)
@@ -353,6 +341,7 @@ namespace Aps.Scheduling.ApplicationService
              scrapingObjectRepositoryFake.StoreScrapingObject(scrapingObject);
          }
 
+         // External Event
          public void Handle(ScrapingScriptUpdated message)
          {
              List<ScrapingObject> myList = scrapingObjectRepositoryFake.GetAllScrapingObjectsByBillingCompanyId(message.BillingId).ToList();
