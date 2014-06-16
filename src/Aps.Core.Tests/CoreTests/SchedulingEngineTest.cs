@@ -14,6 +14,16 @@ using System.Collections.Generic;
 using Aps.Integration.EnumTypes;
 using Aps.Customers;
 using System.Linq;
+using Moq;
+using Aps.Scheduling.ApplicationService.Extensions;
+using Autofac.Features.Indexed;
+using Aps.Scheduling.ApplicationService.Validation;
+using Autofac.Core;
+using Aps.Integration.Queries.Events;
+using Aps.Integration.Queries.CustomerQueries.Dtos;
+using Aps.Scheduling.ApplicationService.Services;
+using Aps.AccountStatements;
+using Aps.Scraping.Scrapers;
 
 namespace Aps.Shared.Tests.CoreTests
 {
@@ -26,6 +36,9 @@ namespace Aps.Shared.Tests.CoreTests
         private Guid customerId;
         ScrapeSessionTypes scrapeSessionTypes;
 
+        Mock<IIndex<ScrapeSessionTypes, ScrapeOrchestrator>> mockIndex;
+        
+
         [TestInitialize]
         public void Setup()
         {
@@ -33,6 +46,7 @@ namespace Aps.Shared.Tests.CoreTests
             billingCompanyId = Guid.NewGuid();
             //registrationType = false;
             scrapeSessionTypes = ScrapeSessionTypes.StatementScrapper;
+            mockIndex = new Mock<IIndex<ScrapeSessionTypes, ScrapeOrchestrator>>();
 
             var builder = new ContainerBuilder();
             builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
@@ -41,29 +55,45 @@ namespace Aps.Shared.Tests.CoreTests
             builder.RegisterType<EventIntegrationService>().As<EventIntegrationService>();
             builder.RegisterType<ScrapingObjectRepositoryFake>().As<IScrapingObjectRepository>().SingleInstance();
             builder.RegisterType<ScrapingObjectCreator>().As<ScrapingObjectCreator>();
-
             builder.RegisterType<BinaryEventSerializer>().As<BinaryEventSerializer>();
             builder.RegisterType<BinaryEventDeSerializer>().As<BinaryEventDeSerializer>();
-
             builder.RegisterType<EventIntegrationRepositoryFake>().As<IEventIntegrationRepository>();
-
             builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>();
             builder.RegisterType<BillingCompanyFactory>().As<BillingCompanyFactory>();
-
+            
+            ////////////////////////////////////////////////////////////////////////////////////////////
             builder.RegisterType<ScrapeSessionInitiator>().As<ScrapeSessionInitiator>(); // Jignesh's stuff that doesn't yet exist
             //builder.RegisterType<ScrapeSessionInitiatorFake>().As<ScrapeSessionInitiatorFake>(); // Mock object for testing
-
+            builder.RegisterType<InvalidCredentialsValidator>().As<IValidator>().WithOrder();
+            builder.RegisterType<DuplicateStatementValidator>().As<IValidator>().WithOrder();
+            builder.RegisterType<ScrapeSessionDataValidator>().As<ScrapeSessionDataValidator>()
+                .WithParameter(new ResolvedParameter((info, context) => true, (info, context) => context.ResolveOrdered<IValidator>()));
+            builder.RegisterType<GetLatestEventsBySubScribedEventTypeQuery>()
+                   .As<GetLatestEventsBySubScribedEventTypeQuery>()
+                   .InstancePerDependency();
+            builder.RegisterType<BillingCompanyByIdQuery>().As<BillingCompanyByIdQuery>();
+            builder.RegisterType<BillingCompanyScrapingUrlQuery>().As<BillingCompanyScrapingUrlQuery>();
+            builder.RegisterType<AllBillingCompaniesQuery>().As<AllBillingCompaniesQuery>();
+            builder.RegisterType<CustomerBillingCompanyAccountsById>().As<CustomerBillingCompanyAccountsById>();
+            //builder.RegisterType<SchedulingEngine>().As<SchedulingEngine>().InstancePerDependency();
+            builder.RegisterType<CustomerRepositoryFake>().As<ICustomerRepository>().InstancePerDependency();
+            builder.RegisterType<CustomerCreator>().As<CustomerCreator>().InstancePerDependency();
+            builder.RegisterType<AccountStatementComposer>().As<AccountStatementComposer>().InstancePerDependency();
+            builder.RegisterType<ScrapeLoggingRepositoryFake>().As<IScrapeLoggingRepository>().InstancePerDependency();
+            builder.RegisterType<WebScraperFake>().As<IWebScraper>().InstancePerDependency();
+            builder.RegisterType<CrossCheckScraperFake>().As<ICrossCheckScraper>().InstancePerDependency();
+            /////////////////////////////////////////////////////////////////////////
             builder.RegisterType<CustomerRepositoryFake>().As<ICustomerRepository>();
-
             builder.RegisterType<CrossCheckScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.CrossCheckScrapper);
             builder.RegisterType<StatementScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.StatementScrapper);
-
             builder.RegisterType<ScrapingErrorRetryConfigurationQuery>().As<ScrapingErrorRetryConfigurationQuery>();
             builder.RegisterType<ScrapingObjectCreator>().As<ScrapingObjectCreator>();
             builder.RegisterType<BillingCompanyCrossCheckEnabledByIdQuery>().As<BillingCompanyCrossCheckEnabledByIdQuery>();
             builder.RegisterType<BillingCompanyBillingLifeCycleByCompanyIdQuery>().As<BillingCompanyBillingLifeCycleByCompanyIdQuery>();
 
             container = builder.Build();
+
+            
 
         }
 
@@ -444,6 +474,134 @@ namespace Aps.Shared.Tests.CoreTests
              ScrapingObject repoObject = schedulingEngine.mockGetScrapeObjectByQueueId(myScrapingObject.queueId);
              Assert.AreNotEqual(repoObject.ScheduledDate, temp);
          }
+
+         [TestMethod]
+         public void ScrapeSessionFailedDueToScraperErrorTest()
+         {
+             // arrange
+             SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiator>(), container.Resolve<ScrapingErrorRetryConfigurationQuery>(), container.Resolve<ScrapingObjectCreator>(), container.Resolve<BillingCompanyCrossCheckEnabledByIdQuery>(), container.Resolve<BillingCompanyBillingLifeCycleByCompanyIdQuery>());
+             ScrapingObjectCreator scrapingObjectCreator = new ScrapingObjectCreator(container.Resolve<IEventAggregator>());
+             InternalSchedularEventsMock mock = new InternalSchedularEventsMock(container.Resolve<IEventAggregator>());
+             ScrapingObject myScrapingObject = scrapingObjectCreator.GetNewScrapingObject(customerId, billingCompanyId, scrapeSessionTypes);
+
+             schedulingEngine.mockAddBillingCompanyAccountAdded(myScrapingObject);
+             schedulingEngine.IncreaseNumberOfThreadsUsedByCompany(billingCompanyId);
+             schedulingEngine.MockAddScrapingElementtoElementsRunning(myScrapingObject);
+
+             // act
+             // Decrease number of threads being used
+             // Remove from Running List
+             // reschedule scrape to DateTime.Max
+             // Make scrapeStatus Inactive
+             // Keep in Repo
+
+
+             mock.getScrapeSessionFailedEvent(myScrapingObject.queueId, ScrapingErrorResponseCodes.Unknown);
+             // Error code tested: ScrapingErrorResponseCodes.Unknown
+             // Error code tested: ScrapingErrorResponseCodes.UnhandledDataCondition
+             // Error code tested: ScrapingErrorResponseCodes.BrokenScript
+
+             // assert
+             Assert.AreEqual(schedulingEngine.NumberOfThreadsCurrentlyUsedByBillingCompanyId(billingCompanyId), 0);
+             Assert.AreEqual(schedulingEngine.MockGetAllScrapeElementsRunning().Count(), 0);
+             Assert.AreEqual(myScrapingObject.ScheduledDate, DateTime.MaxValue);
+             Assert.AreEqual(myScrapingObject.scrapeStatus, "inactive");
+             ScrapingObject repoObject = schedulingEngine.mockGetScrapeObjectByQueueId(myScrapingObject.queueId);
+             Assert.AreEqual(repoObject, myScrapingObject);
+
+         }
+
+        [TestMethod]
+        public void ScrapeSessionFailedDueToUserErrorTest()
+         {
+             // arrange
+             SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiator>(), container.Resolve<ScrapingErrorRetryConfigurationQuery>(), container.Resolve<ScrapingObjectCreator>(), container.Resolve<BillingCompanyCrossCheckEnabledByIdQuery>(), container.Resolve<BillingCompanyBillingLifeCycleByCompanyIdQuery>());
+             ScrapingObjectCreator scrapingObjectCreator = new ScrapingObjectCreator(container.Resolve<IEventAggregator>());
+             InternalSchedularEventsMock mock = new InternalSchedularEventsMock(container.Resolve<IEventAggregator>());
+             ScrapingObject myScrapingObject = scrapingObjectCreator.GetNewScrapingObject(customerId, billingCompanyId, scrapeSessionTypes);
+
+             schedulingEngine.mockAddBillingCompanyAccountAdded(myScrapingObject);
+             schedulingEngine.IncreaseNumberOfThreadsUsedByCompany(billingCompanyId);
+             schedulingEngine.MockAddScrapingElementtoElementsRunning(myScrapingObject);
+
+             // act
+             // Decrease number of threads being used
+             // Remove from Running List
+             // Add to completed List
+             // Remove from Repo
+
+             mock.getScrapeSessionFailedEvent(myScrapingObject.queueId, ScrapingErrorResponseCodes.InvalidCredentials);
+             // Error code tested: case ScrapingErrorResponseCodes.InvalidCredentials
+             // Error code tested:    case ScrapingErrorResponseCodes.CustomerNotSignedUpForEBilling
+             // Error code tested:    case ScrapingErrorResponseCodes.ActionRequiredbyBillingCompanyWebsite
+
+             // assert
+             Assert.AreEqual(schedulingEngine.NumberOfThreadsCurrentlyUsedByBillingCompanyId(billingCompanyId), 0);
+             Assert.AreEqual(schedulingEngine.MockGetAllScrapeElementsRunning().Count(), 0);
+
+             Assert.AreEqual(schedulingEngine.MockGetCompletedScrapeQueue().Count(), 1);
+
+             ScrapingObject repoObject = schedulingEngine.mockGetScrapeObjectByQueueId(myScrapingObject.queueId);
+             Assert.AreEqual(repoObject, null);
+
+         }
+
+        [TestMethod]
+        public void ScrapeSessionFailedDueToBillingCompanySiteDownErrorTest()
+        {
+            // arrange
+            SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiator>(), container.Resolve<ScrapingErrorRetryConfigurationQuery>(), container.Resolve<ScrapingObjectCreator>(), container.Resolve<BillingCompanyCrossCheckEnabledByIdQuery>(), container.Resolve<BillingCompanyBillingLifeCycleByCompanyIdQuery>());
+            ScrapingObjectCreator scrapingObjectCreator = new ScrapingObjectCreator(container.Resolve<IEventAggregator>());
+            InternalSchedularEventsMock mock = new InternalSchedularEventsMock(container.Resolve<IEventAggregator>());
+            ScrapingObject myScrapingObject = scrapingObjectCreator.GetNewScrapingObject(customerId, billingCompanyId, scrapeSessionTypes);
+            DateTime tempDateTime = myScrapingObject.ScheduledDate;
+
+            schedulingEngine.mockAddBillingCompanyAccountAdded(myScrapingObject);
+            schedulingEngine.IncreaseNumberOfThreadsUsedByCompany(billingCompanyId);
+            schedulingEngine.MockAddScrapingElementtoElementsRunning(myScrapingObject);
+
+            // act
+            // Decrease number of threads being used
+            // Remove from Running List
+            // Reschedule Scrape
+            //mock.getScrapeSessionFailedEvent(myScrapingObject.queueId, ScrapingErrorResponseCodes.InvalidCredentials);
+            mock.getScrapeSessionFailedEvent(myScrapingObject.queueId, ScrapingErrorResponseCodes.BillingCompanySiteDown);
+
+
+            // assert
+            Assert.AreEqual(schedulingEngine.NumberOfThreadsCurrentlyUsedByBillingCompanyId(billingCompanyId), 0);
+            Assert.AreEqual(schedulingEngine.MockGetAllScrapeElementsRunning().Count(), 0);
+            Assert.IsTrue(myScrapingObject.ScheduledDate >= tempDateTime.AddHours(12));
+
+        }
+
+        [TestMethod]
+        public void ScrapeSessionFailedDueToErrorPageEncounteredErrorTest()
+        {
+            // arrange
+            SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiator>(), container.Resolve<ScrapingErrorRetryConfigurationQuery>(), container.Resolve<ScrapingObjectCreator>(), container.Resolve<BillingCompanyCrossCheckEnabledByIdQuery>(), container.Resolve<BillingCompanyBillingLifeCycleByCompanyIdQuery>());
+            ScrapingObjectCreator scrapingObjectCreator = new ScrapingObjectCreator(container.Resolve<IEventAggregator>());
+            InternalSchedularEventsMock mock = new InternalSchedularEventsMock(container.Resolve<IEventAggregator>());
+            ScrapingObject myScrapingObject = scrapingObjectCreator.GetNewScrapingObject(customerId, billingCompanyId, scrapeSessionTypes);
+            DateTime tempDateTime = myScrapingObject.ScheduledDate;
+
+            schedulingEngine.mockAddBillingCompanyAccountAdded(myScrapingObject);
+            schedulingEngine.IncreaseNumberOfThreadsUsedByCompany(billingCompanyId);
+            schedulingEngine.MockAddScrapingElementtoElementsRunning(myScrapingObject);
+
+            // act
+            // Decrease number of threads being used
+            // Remove from Running List
+            // Reschedule Scrape
+            //mock.getScrapeSessionFailedEvent(myScrapingObject.queueId, ScrapingErrorResponseCodes.InvalidCredentials);
+            mock.getScrapeSessionFailedEvent(myScrapingObject.queueId, ScrapingErrorResponseCodes.ErrorPageEncountered);
+
+
+            // assert
+            Assert.AreEqual(schedulingEngine.NumberOfThreadsCurrentlyUsedByBillingCompanyId(billingCompanyId), 0);
+            Assert.AreEqual(schedulingEngine.MockGetAllScrapeElementsRunning().Count(), 0);
+            Assert.IsTrue(myScrapingObject.ScheduledDate >= tempDateTime.AddHours(6));
+        }
 
     }
 }

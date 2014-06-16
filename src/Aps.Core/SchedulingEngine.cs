@@ -215,9 +215,25 @@ namespace Aps.Scheduling.ApplicationService
             //return scrapingObjectRepositoryFake.GetAllScrapingObjects().ToList();
         }
 
+        public List<ScrapingObject> MockGetCompletedScrapeQueue()
+        {
+            return scrapingObjectRepositoryFake.GetCompletedScrapeQueue().ToList();
+        }
+
+        public void MockAddScrapingElementtoElementsRunning(ScrapingObject scrapingObject)
+        {
+            scrapeElementsRunning.Add(scrapingObject);
+        }
+
+        public List<ScrapingObject> MockGetAllScrapeElementsRunning()
+        {
+            return scrapeElementsRunning;
+        }
+
         // Jignesh Event - Internal
         public void Handle(ScrapeSessionFailed message)
         {
+            bool retryDtoFound = true;
             ScrapingErrorRetryConfigurationDto retryDto;
             ScrapingObject scrapingObject = scrapingObjectRepositoryFake.GetScrapingObjectByQueueId(message.QueueId);
             DecreaseNumberOfThreadsUsedByCompany(scrapingObject.billingCompanyId);
@@ -242,20 +258,28 @@ namespace Aps.Scheduling.ApplicationService
 
 
                 case ScrapingErrorResponseCodes.BillingCompanySiteDown:
-                    retryDto = scrapingErrorRetryConfigurationQuery.GetAllScrapingErrorRetryConfigurations(scrapingObject.billingCompanyId).FirstOrDefault(x => (x.ResponseCode == ScrapingErrorResponseCodes.BillingCompanySiteDown));
-                    if (retryDto == null)
+                    try
+                    {
+                        retryDto = scrapingErrorRetryConfigurationQuery.GetAllScrapingErrorRetryConfigurations(scrapingObject.billingCompanyId).FirstOrDefault(x => (x.ResponseCode == ScrapingErrorResponseCodes.BillingCompanySiteDown));
+                        RescheduleItem(scrapingObject, DateTime.UtcNow.AddHours(retryDto.RetryInterval));
+                    }
+                    catch (Exception)
+                    {
                         RescheduleItem(scrapingObject, DateTime.UtcNow.AddHours(12)); // default time added is 12 hours if no dto is found
-                    else
-                    RescheduleItem(scrapingObject, DateTime.UtcNow.AddHours(retryDto.RetryInterval));
-                    break;
+                    }
+                break;
 
                 case ScrapingErrorResponseCodes.ErrorPageEncountered:
+                try
+                {
                     retryDto = scrapingErrorRetryConfigurationQuery.GetAllScrapingErrorRetryConfigurations(scrapingObject.billingCompanyId).FirstOrDefault(x => (x.ResponseCode == ScrapingErrorResponseCodes.ErrorPageEncountered));
-                    if (retryDto == null)
-                        RescheduleItem(scrapingObject, DateTime.UtcNow.AddHours(6)); // default time added is 6 hours if no dto is found
-                    else
                     RescheduleItem(scrapingObject, DateTime.UtcNow.AddHours(retryDto.RetryInterval));
-                    break;
+                }
+                catch (Exception)
+                { 
+                    RescheduleItem(scrapingObject, DateTime.UtcNow.AddHours(6)); // default time added is 6 hours if no dto is found
+                }
+                break;
 
             }
         }
