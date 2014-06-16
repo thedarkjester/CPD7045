@@ -49,6 +49,7 @@
     <Compile Include="CrossCheckScraperFake.cs" />
     <Compile Include="CustomerRepositoryFake.cs" />
     <Compile Include="EventIntegrationRepositoryFake.cs" />
+    <Compile Include="ExternalSchedularEventsFake.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScrapeLoggingRepositoryFake.cs" />
     <Compile Include="ScrapeSessionInitiatorFake.cs" />
