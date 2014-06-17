@@ -227,46 +227,20 @@ namespace Aps.Scheduling.ApplicationService
             return numberOfConcurrentSessionsAllowed;
         }
 
-
-
-        // These methods are only for testing purposes and will be used to access the scrapingObjectRepositoryFake by the tests via this class.
-        // START OF LIST OF TESTING MOCK OBJECTS
-        public void MockAddBillingCompanyAccountAdded(ScrapingObject scrapingObject)
+        public IScrapingObjectRepository GetScrapingObjectRepositoryFake()
         {
-            scrapingObjectRepositoryFake.StoreScrapingObject(scrapingObject);
+            return this.scrapingObjectRepositoryFake;
         }
 
-        public ScrapingObject MockGetScrapeObjectByQueueId(Guid queueId)
-        {
-            return scrapingObjectRepositoryFake.GetScrapingObjectByQueueId(queueId);
-        }
-
-        public List<ScrapingObject> MockGetAllScrapingObjectsScheduledInPast()
-        {
-            return scrapingObjectRepositoryFake.GetAllScrapingObjects().Where(item => item.ScheduledDate <= DateTime.UtcNow).ToList();
-        }
-
-        public List<ScrapingObject> MockGetCompletedScrapeQueue()
-        {
-            return scrapingObjectRepositoryFake.GetCompletedScrapeQueue().ToList();
-        }
-
-        public void MockAddScrapingElementtoElementsRunning(ScrapingObject scrapingObject)
+        public void AddScrapingElementToElementsRunningList(ScrapingObject scrapingObject)
         {
             scrapeElementsRunning.Add(scrapingObject);
         }
 
-        public List<ScrapingObject> MockGetAllScrapeElementsRunning()
+        public List<ScrapingObject> GetAllScrapeElementsRunningList()
         {
             return scrapeElementsRunning;
         }
-
-        public ScrapingObject MockGetScrapingObjectByCustomerAndBillingId(Guid customerId, Guid billingId)
-        {
-            return scrapingObjectRepositoryFake.GetScrapingObjectByCustomerAndBillingCompanyId(customerId, billingId);
-        }
-        // END OF LIST OF TESTING MOCK OBJECTS
-
 
         // Event - Internal
         public void Handle(ScrapeSessionFailed message)

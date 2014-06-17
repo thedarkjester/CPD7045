@@ -63,6 +63,11 @@ namespace Aps.Fakes
             return scrapingMasterQueue;
         }
 
+        public IEnumerable<ScrapingObject> GetAllScrapingObjectsSchedluedInThePast()
+        {
+            return GetAllScrapingObjects().Where(item => item.ScheduledDate <= DateTime.UtcNow);
+        }
+
         public IEnumerable<ScrapingObject> GetCompletedScrapeQueue()
         {
             //scrapingObjects.
