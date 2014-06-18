@@ -42,5 +42,16 @@ namespace Aps.Scheduling.ApplicationService
             eventAggregator.Publish(myEvent);
         }
 
+        public void getMaxServerThreadModificationEvent(int maxThreadCount)
+        {
+            MaxConcurrentServerScrapes myEvent = new MaxConcurrentServerScrapes(maxThreadCount);
+            eventAggregator.Publish(myEvent);
+        }
+
+        public void getScrapingQueueStrategy(IScrapeQueueingStrategy myEvent)
+        {
+            eventAggregator.Publish(myEvent);
+        }
+
     }
 }

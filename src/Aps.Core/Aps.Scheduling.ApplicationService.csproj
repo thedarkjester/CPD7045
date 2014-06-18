@@ -71,9 +71,13 @@
     <Compile Include="Interpreters\ScrapeSessionXMLToDataPairConverter.cs" />
     <Compile Include="Interpreters\ScrapeDataPairsWithNoNameFoundException.cs" />
     <Compile Include="InterpretedScrapeSessionDataPair.cs" />
+    <Compile Include="IScrapeQueueingStrategy.cs" />
+    <Compile Include="MaxConcurrentServerScrapes.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SchedulingEngine.cs" />
     <Compile Include="ScrapeOrchestrators\CrossCheckScrapeOrchestrator.cs" />
+    <Compile Include="ScrapeQueueingStrategyByCreatedDate.cs" />
+    <Compile Include="ScrapeQueueingStrategyByRegistrationScheduledDateCreatedDate.cs" />
     <Compile Include="ScrapeSessionInitiator.cs" />
     <Compile Include="ScrapperException.cs" />
     <Compile Include="ScrapeOrchestrators\ScrapeOrchestrator.cs" />

@@ -212,26 +212,63 @@ namespace Aps.Shared.Tests.CoreTests
 
         
         [TestMethod]
-        public void getNewScrapeQueueWithoutCompletedItemsContainingOneValidObjectIgnoringFutureSchedulesTest()
+        public void getNewScrapeQueueWithDefaultQueueingStrategyTest()
         {
             // arrange
-            List<ScrapingObject> myList;
+            List<ScrapingObject> myList = new List<ScrapingObject>();
+            List<ScrapingObject> myList2 = new List<ScrapingObject>();
+            List<ScrapingObject> dummy = new List<ScrapingObject>();
             SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiator>(), container.Resolve<ScrapingErrorRetryConfigurationQuery>(), container.Resolve<ScrapingObjectCreator>(), container.Resolve<BillingCompanyCrossCheckEnabledByIdQuery>(), container.Resolve<BillingCompanyBillingLifeCycleByCompanyIdQuery>());
             ScrapingObjectCreator scrapingObjectCreator = new ScrapingObjectCreator(container.Resolve<IEventAggregator>());
-            IScrapingObjectRepository repo = schedulingEngine.GetScrapingObjectRepositoryFake();
+           // IScrapingObjectRepository repo = schedulingEngine.GetScrapingObjectRepositoryFake();
             ScrapingObject myScrapingObject = scrapingObjectCreator.GetNewScrapingObject(customerId, billingCompanyId, scrapeSessionTypes);
             ScrapingObject myScrapingObject2 = scrapingObjectCreator.GetNewScrapingObject(customerId, billingCompanyId, scrapeSessionTypes);
+            ScrapingObject myScrapingObject3 = scrapingObjectCreator.GetNewScrapingObject(customerId, billingCompanyId, ScrapeSessionTypes.CrossCheckScrapper);
+            IScrapeQueueingStrategy scrapeQueueingStrategy = schedulingEngine.GetScrapingQueueStrategy();
+
             myScrapingObject2.ScheduledDate = DateTime.UtcNow.AddDays(1);     
 
             // act
-            repo.StoreScrapingObject(myScrapingObject);
-            repo.StoreScrapingObject(myScrapingObject2);
-            myList = schedulingEngine.getNewScrapeQueueWithoutCompletedItems();
+            myList2.Add(myScrapingObject);
+            myList2.Add(myScrapingObject2);
+            myList2.Add(myScrapingObject3);
+            myList = scrapeQueueingStrategy.GetQueue(dummy, dummy, myList2).ToList();
 
             // assert
-            Assert.AreEqual(myList.Count, 1);
-            Assert.AreEqual(myList.ElementAt(0).queueId, myScrapingObject.queueId);
-            Assert.AreNotEqual(myList.ElementAt(0).queueId, myScrapingObject2.queueId);
+            Assert.AreEqual(myList.Count, 2);
+            Assert.AreEqual(myList.ElementAt(0).QueueId, myScrapingObject3.QueueId);
+            Assert.AreEqual(myList.ElementAt(1).QueueId, myScrapingObject.QueueId);
+        }
+
+        [TestMethod]
+        public void getNewScrapeQueueWithOrederByCreatedDateStrategyTest()
+        {
+            // arrange
+            List<ScrapingObject> myList = new List<ScrapingObject>();
+            List<ScrapingObject> myList2 = new List<ScrapingObject>();
+            List<ScrapingObject> dummy = new List<ScrapingObject>();
+            SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiator>(), container.Resolve<ScrapingErrorRetryConfigurationQuery>(), container.Resolve<ScrapingObjectCreator>(), container.Resolve<BillingCompanyCrossCheckEnabledByIdQuery>(), container.Resolve<BillingCompanyBillingLifeCycleByCompanyIdQuery>());
+            ScrapingObjectCreator scrapingObjectCreator = new ScrapingObjectCreator(container.Resolve<IEventAggregator>());
+            InternalSchedularEventsMock mock = new InternalSchedularEventsMock(container.Resolve<IEventAggregator>());
+            ScrapingObject myScrapingObject = scrapingObjectCreator.GetNewScrapingObject(customerId, billingCompanyId, scrapeSessionTypes);
+            ScrapingObject myScrapingObject2 = scrapingObjectCreator.GetNewScrapingObject(customerId, billingCompanyId, scrapeSessionTypes);
+            ScrapingObject myScrapingObject3 = scrapingObjectCreator.GetNewScrapingObject(customerId, billingCompanyId, ScrapeSessionTypes.CrossCheckScrapper);
+            
+
+            myScrapingObject2.ScheduledDate = DateTime.UtcNow.AddDays(1);
+
+            // act
+            myList2.Add(myScrapingObject);
+            myList2.Add(myScrapingObject2);
+            myList2.Add(myScrapingObject3);
+            mock.getScrapingQueueStrategy(new ScrapeQueueingStrategyByCreatedDate());
+            IScrapeQueueingStrategy scrapeQueueingStrategy = schedulingEngine.GetScrapingQueueStrategy();
+            myList = scrapeQueueingStrategy.GetQueue(dummy, dummy, myList2).ToList();
+
+            // assert
+            Assert.AreEqual(myList.Count, 2);
+            Assert.AreEqual(myList.ElementAt(0).QueueId, myScrapingObject.QueueId);
+            Assert.AreEqual(myList.ElementAt(1).QueueId, myScrapingObject3.QueueId);
         }
         
         [TestMethod]
@@ -334,7 +371,7 @@ namespace Aps.Shared.Tests.CoreTests
              // Mothod should sort by:
              // OrderBy(item => item.scrapeSessionTypes).ThenBy(item => item.ScheduledDate).ThenBy(item => item.createdDate)
              // arrange
-             List<ScrapingObject> myList;
+             List<ScrapingObject> myList = new List<ScrapingObject>();
              SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiator>(), container.Resolve<ScrapingErrorRetryConfigurationQuery>(), container.Resolve<ScrapingObjectCreator>(), container.Resolve<BillingCompanyCrossCheckEnabledByIdQuery>(), container.Resolve<BillingCompanyBillingLifeCycleByCompanyIdQuery>());
              IScrapingObjectRepository repo = schedulingEngine.GetScrapingObjectRepositoryFake();
              ScrapingObjectCreator scrapingObjectCreator = new ScrapingObjectCreator(container.Resolve<IEventAggregator>());
@@ -365,13 +402,13 @@ namespace Aps.Shared.Tests.CoreTests
              repo.StoreScrapingObject(myScrapingObject3);
              repo.StoreScrapingObject(myScrapingObject4);
              repo.StoreScrapingObject(myScrapingObject5); 
-             myList = schedulingEngine.getNewScrapeQueueWithoutCompletedItems();
+             //myList = schedulingEngine.getNewScrapeQueueWithoutCompletedItems();
 
              // assert
              Assert.AreEqual(myList.Count, 3);
-             Assert.AreEqual(myList.ElementAt(0).customerId, customerId2);
-             Assert.AreEqual(myList.ElementAt(1).customerId, customerId5);
-             Assert.AreEqual(myList.ElementAt(2).customerId, customerId3);
+             Assert.AreEqual(myList.ElementAt(0).CustomerId, customerId2);
+             Assert.AreEqual(myList.ElementAt(1).CustomerId, customerId5);
+             Assert.AreEqual(myList.ElementAt(2).CustomerId, customerId3);
          }
 
         // TESTS FOR INTERNAL EVENTS VIA EVENTAGGREGATOR
@@ -394,12 +431,12 @@ namespace Aps.Shared.Tests.CoreTests
              // if mock fails - remove from Repo
              // if mock true, change scrapeSessionTypes to StatementScraper
              // either, decrease number of threads used by billing company
-             mock.getCrossCheckCompletedEvent(myScrapingObject.queueId, true);
+             mock.getCrossCheckCompletedEvent(myScrapingObject.QueueId, true);
 
              // assert
              Assert.AreEqual(schedulingEngine.NumberOfThreadsCurrentlyUsedByBillingCompanyId(billingCompanyId), 0);
-             Assert.AreEqual(myScrapingObject.scrapeSessionTypes, ScrapeSessionTypes.StatementScrapper);
-             Assert.AreEqual(repo.GetScrapingObjectByQueueId(myScrapingObject.queueId), myScrapingObject);
+             Assert.AreEqual(myScrapingObject.ScrapeSessionTypes, ScrapeSessionTypes.StatementScrapper);
+             Assert.AreEqual(repo.GetScrapingObjectByQueueId(myScrapingObject.QueueId), myScrapingObject);
          }
         
          [TestMethod]
@@ -420,11 +457,11 @@ namespace Aps.Shared.Tests.CoreTests
              // if mock fails - remove from Repo
              // if mock true, change scrapeSessionTypes to StatementScraper
              // either, decrease number of threads used by billing company
-             mock.getCrossCheckCompletedEvent(myScrapingObject.queueId, false);
+             mock.getCrossCheckCompletedEvent(myScrapingObject.QueueId, false);
 
              // assert
              Assert.AreEqual(schedulingEngine.NumberOfThreadsCurrentlyUsedByBillingCompanyId(billingCompanyId), 0);
-             Assert.AreEqual(repo.GetScrapingObjectByQueueId(myScrapingObject.queueId), null);
+             Assert.AreEqual(repo.GetScrapingObjectByQueueId(myScrapingObject.QueueId), null);
          }
         
          [TestMethod]
@@ -445,12 +482,12 @@ namespace Aps.Shared.Tests.CoreTests
              // reschedule scrape
              // Keep in Repo
              // decrease number of threads used by billing company
-             mock.getScrapeSessionDuplicateStatementEvent(myScrapingObject.queueId);
+             mock.getScrapeSessionDuplicateStatementEvent(myScrapingObject.QueueId);
 
              // assert
              Assert.AreEqual(schedulingEngine.NumberOfThreadsCurrentlyUsedByBillingCompanyId(billingCompanyId), 0);
-             Assert.AreEqual(repo.GetScrapingObjectByQueueId(myScrapingObject.queueId), myScrapingObject);
-             ScrapingObject repoObject = repo.GetScrapingObjectByQueueId(myScrapingObject.queueId);
+             Assert.AreEqual(repo.GetScrapingObjectByQueueId(myScrapingObject.QueueId), myScrapingObject);
+             ScrapingObject repoObject = repo.GetScrapingObjectByQueueId(myScrapingObject.QueueId);
              Assert.AreNotEqual(repoObject.ScheduledDate, temp);
          }
         
@@ -474,12 +511,12 @@ namespace Aps.Shared.Tests.CoreTests
              // reschedule scrape
              // Keep in Repo
              // decrease number of threads used by billing company
-             mock.getScrapeSessionSuccessfullEvent(myScrapingObject.queueId, statementDateTime);
+             mock.getScrapeSessionSuccessfullEvent(myScrapingObject.QueueId, statementDateTime);
 
              // assert
              Assert.AreEqual(schedulingEngine.NumberOfThreadsCurrentlyUsedByBillingCompanyId(billingCompanyId), 0);
-             Assert.AreEqual(repo.GetScrapingObjectByQueueId(myScrapingObject.queueId), myScrapingObject);
-             ScrapingObject repoObject = repo.GetScrapingObjectByQueueId(myScrapingObject.queueId);
+             Assert.AreEqual(repo.GetScrapingObjectByQueueId(myScrapingObject.QueueId), myScrapingObject);
+             ScrapingObject repoObject = repo.GetScrapingObjectByQueueId(myScrapingObject.QueueId);
              Assert.AreNotEqual(repoObject.ScheduledDate, temp);
          }
         
@@ -503,7 +540,7 @@ namespace Aps.Shared.Tests.CoreTests
              // reschedule scrape to DateTime.Max
              // Make scrapeStatus Inactive
              // Keep in Repo
-             mock.getScrapeSessionFailedEvent(myScrapingObject.queueId, ScrapingErrorResponseCodes.Unknown);
+             mock.getScrapeSessionFailedEvent(myScrapingObject.QueueId, ScrapingErrorResponseCodes.Unknown);
              // Error code tested: ScrapingErrorResponseCodes.Unknown
              // Error code tested: ScrapingErrorResponseCodes.UnhandledDataCondition
              // Error code tested: ScrapingErrorResponseCodes.BrokenScript
@@ -512,8 +549,8 @@ namespace Aps.Shared.Tests.CoreTests
              Assert.AreEqual(schedulingEngine.NumberOfThreadsCurrentlyUsedByBillingCompanyId(billingCompanyId), 0);
              Assert.AreEqual(schedulingEngine.GetAllScrapeElementsRunningList().Count(), 0);
              Assert.AreEqual(myScrapingObject.ScheduledDate, DateTime.MaxValue);
-             Assert.AreEqual(myScrapingObject.scrapeStatus, "inactive");
-             ScrapingObject repoObject = repo.GetScrapingObjectByQueueId(myScrapingObject.queueId);
+             Assert.AreEqual(myScrapingObject.ScrapeStatus, "inactive");
+             ScrapingObject repoObject = repo.GetScrapingObjectByQueueId(myScrapingObject.QueueId);
              Assert.AreEqual(repoObject, myScrapingObject);
 
          }
@@ -537,7 +574,7 @@ namespace Aps.Shared.Tests.CoreTests
              // Remove from Running List
              // Add to completed List
              // Remove from Repo
-             mock.getScrapeSessionFailedEvent(myScrapingObject.queueId, ScrapingErrorResponseCodes.InvalidCredentials);
+             mock.getScrapeSessionFailedEvent(myScrapingObject.QueueId, ScrapingErrorResponseCodes.InvalidCredentials);
              // Error code tested: case ScrapingErrorResponseCodes.InvalidCredentials
              // Error code tested:    case ScrapingErrorResponseCodes.CustomerNotSignedUpForEBilling
              // Error code tested:    case ScrapingErrorResponseCodes.ActionRequiredbyBillingCompanyWebsite
@@ -548,7 +585,7 @@ namespace Aps.Shared.Tests.CoreTests
 
              Assert.AreEqual(repo.GetCompletedScrapeQueue().ToList().Count(), 1);
 
-             ScrapingObject repoObject = repo.GetScrapingObjectByQueueId(myScrapingObject.queueId);
+             ScrapingObject repoObject = repo.GetScrapingObjectByQueueId(myScrapingObject.QueueId);
              Assert.AreEqual(repoObject, null);
 
          }
@@ -572,7 +609,7 @@ namespace Aps.Shared.Tests.CoreTests
             // Decrease number of threads being used
             // Remove from Running List
             // Reschedule Scrape
-            mock.getScrapeSessionFailedEvent(myScrapingObject.queueId, ScrapingErrorResponseCodes.BillingCompanySiteDown);
+            mock.getScrapeSessionFailedEvent(myScrapingObject.QueueId, ScrapingErrorResponseCodes.BillingCompanySiteDown);
 
             // assert
             Assert.AreEqual(schedulingEngine.NumberOfThreadsCurrentlyUsedByBillingCompanyId(billingCompanyId), 0);
@@ -600,13 +637,32 @@ namespace Aps.Shared.Tests.CoreTests
             // Decrease number of threads being used
             // Remove from Running List
             // Reschedule Scrape
-            mock.getScrapeSessionFailedEvent(myScrapingObject.queueId, ScrapingErrorResponseCodes.ErrorPageEncountered);
+            mock.getScrapeSessionFailedEvent(myScrapingObject.QueueId, ScrapingErrorResponseCodes.ErrorPageEncountered);
 
 
             // assert
             Assert.AreEqual(schedulingEngine.NumberOfThreadsCurrentlyUsedByBillingCompanyId(billingCompanyId), 0);
             Assert.AreEqual(schedulingEngine.GetAllScrapeElementsRunningList().Count(), 0);
             Assert.IsTrue(myScrapingObject.ScheduledDate >= tempDateTime.AddHours(6));
+        }
+
+        [TestMethod]
+        public void NumberOfServerThreadsAvailableTest()
+        {
+            // arrange
+            SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiator>(), container.Resolve<ScrapingErrorRetryConfigurationQuery>(), container.Resolve<ScrapingObjectCreator>(), container.Resolve<BillingCompanyCrossCheckEnabledByIdQuery>(), container.Resolve<BillingCompanyBillingLifeCycleByCompanyIdQuery>());
+            InternalSchedularEventsMock mock = new InternalSchedularEventsMock(container.Resolve<IEventAggregator>());
+
+            int i = schedulingEngine.GetMaxNumberServerScrapesAllowed();
+
+            // act
+            // Decrease number of max Server Threads allowed via Event
+            mock.getMaxServerThreadModificationEvent(15);
+            int j = schedulingEngine.GetMaxNumberServerScrapesAllowed();
+
+            // assert
+            Assert.AreEqual(i, 20);
+            Assert.AreEqual(j, 15);
         }
 
     }

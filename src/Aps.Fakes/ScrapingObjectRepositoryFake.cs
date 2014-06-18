@@ -46,12 +46,14 @@ namespace Aps.Fakes
 
         public ScrapingObject GetScrapingObjectByCustomerAndBillingCompanyId(Guid customerId, Guid billingCompanyId)
         {
-            return this.scrapingMasterQueue.FirstOrDefault(x => ((x.customerId == customerId) && (x.billingCompanyId == billingCompanyId)));
+            //return this.scrapingMasterQueue.FirstOrDefault(x => ((x.customerId == customerId) && (x.billingCompanyId == billingCompanyId)));
+            return this.scrapingMasterQueue.FirstOrDefault(x => ((x.CustomerId == customerId) && (x.BillingCompanyId == billingCompanyId)));
         }
 
         public ScrapingObject GetScrapingObjectByQueueId(Guid queueId)
         {
-            return this.scrapingMasterQueue.FirstOrDefault(x => (x.queueId == queueId));
+            //return this.scrapingMasterQueue.FirstOrDefault(x => (x.queueId == queueId));
+            return this.scrapingMasterQueue.FirstOrDefault(x => (x.QueueId == queueId));
         }
 
         public IEnumerable<ScrapingObject> GetAllScrapingObjects()
