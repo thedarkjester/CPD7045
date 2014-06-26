@@ -14,11 +14,12 @@ namespace Aps.Scraping
         Guid billingCompanyId;
         string scrapedData;
         bool hasFailed;
+        DateTime dateScraped;
         public Guid ScrapeSessionId { get { return scrapeSessionId; } }
         public Guid CustomerId { get { return customerId; } }
         public Guid BillingCompanyId { get { return billingCompanyId; } }
         public string ScrapedData { get { return scrapedData; } }
-
+        public DateTime DateScraped { get { return dateScraped; } }
 
         public ScrapingLog(Guid scrapeSessionId, Guid customerId, Guid billingCompanyId, bool hasFailed, string scrapedData)
         {
@@ -28,6 +29,7 @@ namespace Aps.Scraping
             this.billingCompanyId = billingCompanyId;
             this.scrapedData = scrapedData;
             this.hasFailed = hasFailed;
+            this.dateScraped = DateTime.Now;
         }
     }
 }
