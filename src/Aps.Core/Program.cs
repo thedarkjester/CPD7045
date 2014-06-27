@@ -18,6 +18,7 @@ using Aps.Scheduling.ApplicationService.Extensions;
 using Aps.Scheduling.ApplicationService.Validation;
 using Aps.AccountStatements;
 using Autofac.Core;
+using Aps.Scheduling.ApplicationService.Interpreters;
 
 namespace Aps.Scheduling.ApplicationService
 {
@@ -50,6 +51,7 @@ namespace Aps.Scheduling.ApplicationService
             builder.RegisterType<BillingCompanyFactory>().As<BillingCompanyFactory>().InstancePerDependency();
             builder.RegisterType<AccountStatementComposer>().As<AccountStatementComposer>().InstancePerDependency();
             builder.RegisterType<ScrapeLoggingRepositoryFake>().As<IScrapeLoggingRepository>().InstancePerDependency();
+            builder.RegisterType<ScrapeSessionXMLToDataPairConverter>().AsSelf().InstancePerDependency();
             builder.RegisterType<WebScraperFake>().As<IWebScraper>().InstancePerDependency();
             builder.RegisterType<CrossCheckScraperFake>().As<ICrossCheckScraper>().InstancePerDependency();
             builder.RegisterType<CrossCheckScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.CrossCheckScrapper);

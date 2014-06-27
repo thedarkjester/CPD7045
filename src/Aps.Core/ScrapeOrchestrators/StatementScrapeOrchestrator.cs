@@ -28,7 +28,8 @@ namespace Aps.Scheduling.ApplicationService.ScrapeOrchestrators
         readonly IWebScraper webScraper;
         readonly ScrapeSessionDataValidator scrapeSessionDataValidator;
         readonly IAccountStatementRepository accountStatementRepository;
-        public StatementScrapeOrchestrator(IEventAggregator eventAggregator, EventIntegrationService eventIntegrationService, AccountStatementComposer accountStatementComposer, FailureHandler failureHandler, IScrapeLoggingRepository scrapeLoggingRepository, IWebScraper webScraper, ScrapeSessionDataValidator scrapeSessionDataValidator, IAccountStatementRepository accountStatementRepository)
+        readonly ScrapeSessionXMLToDataPairConverter scrapeSessionXMLToDataPairConverter;
+        public StatementScrapeOrchestrator(IEventAggregator eventAggregator, EventIntegrationService eventIntegrationService, AccountStatementComposer accountStatementComposer, FailureHandler failureHandler, IScrapeLoggingRepository scrapeLoggingRepository, IWebScraper webScraper, ScrapeSessionDataValidator scrapeSessionDataValidator, IAccountStatementRepository accountStatementRepository, ScrapeSessionXMLToDataPairConverter scrapeSessionXMLToDataPairConverter)
         {
             this.eventAggregator = eventAggregator;
             this.eventIntegrationService = eventIntegrationService;
@@ -38,6 +39,7 @@ namespace Aps.Scheduling.ApplicationService.ScrapeOrchestrators
             this.webScraper = webScraper;
             this.scrapeSessionDataValidator = scrapeSessionDataValidator;
             this.accountStatementRepository = accountStatementRepository;
+            this.scrapeSessionXMLToDataPairConverter = scrapeSessionXMLToDataPairConverter;
         }
 
         public override void Orchestrate(ScrapeOrchestratorEntity scrapeOrchestratorEntity)
@@ -54,7 +56,7 @@ namespace Aps.Scheduling.ApplicationService.ScrapeOrchestrators
                 scrapeSessionData = webScraper.Scrape(scrapeOrchestratorEntity.Url, scrapeOrchestratorEntity.Username, scrapeOrchestratorEntity.Password, scrapeOrchestratorEntity.Pin);
                 eventIntegrationService.Publish(new ScrapeSessionDataRetrievalCompleted(scrapeSessionId, customerId, billingCompanyId));
 
-                var transformedResults = new ScrapeSessionXMLToDataPairConverter().ConvertXmlToScrapeSessionDataPairs(scrapeSessionData);
+                var transformedResults = scrapeSessionXMLToDataPairConverter.ConvertXmlToScrapeSessionDataPairs(scrapeSessionData);
                 eventIntegrationService.Publish(new ScrapeSessionDataInterpretered(scrapeSessionId, customerId, billingCompanyId));
 
                 scrapeSessionDataValidator.ValidateScrapeData(transformedResults, customerId, billingCompanyId);

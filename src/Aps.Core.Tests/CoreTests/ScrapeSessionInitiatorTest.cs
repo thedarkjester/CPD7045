@@ -57,7 +57,7 @@ namespace Aps.Shared.Tests.CoreTests
             
             mockIndex = new Mock<IIndex<ScrapeSessionTypes, ScrapeOrchestrator>>();
 
-            mockStatementScrapeOrchestrator = new Mock<StatementScrapeOrchestrator>(null, null, null, null, null, null, null, null);
+            mockStatementScrapeOrchestrator = new Mock<StatementScrapeOrchestrator>(null, null, null, null, null, null, null, null, null);
             mockCrossCheckScrapeOrchestrator = new Mock<CrossCheckScrapeOrchestrator>(null, null, null);
             mockIndex.Setup(x => x[ScrapeSessionTypes.StatementScrapper]).Returns(mockStatementScrapeOrchestrator.Object);
             mockIndex.Setup(x => x[ScrapeSessionTypes.CrossCheckScrapper]).Returns(mockCrossCheckScrapeOrchestrator.Object);

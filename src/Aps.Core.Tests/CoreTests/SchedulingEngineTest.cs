@@ -25,6 +25,7 @@ using Aps.Scheduling.ApplicationService.Services;
 using Aps.AccountStatements;
 using Aps.Scraping.Scrapers;
 using Aps.Integration.Queries.BillingCompanyQueries.Dtos;
+using Aps.Scheduling.ApplicationService.Interpreters;
 
 namespace Aps.Shared.Tests.CoreTests
 {
@@ -78,6 +79,7 @@ namespace Aps.Shared.Tests.CoreTests
             builder.RegisterType<ScrapeLoggingRepositoryFake>().As<IScrapeLoggingRepository>().InstancePerDependency();
             builder.RegisterType<WebScraperFake>().As<IWebScraper>().InstancePerDependency();
             builder.RegisterType<CrossCheckScraperFake>().As<ICrossCheckScraper>().InstancePerDependency();
+            builder.RegisterType<ScrapeSessionXMLToDataPairConverter>().AsSelf().InstancePerDependency();
             /////////////////////////////////////////////////////////////////////////
             builder.RegisterType<CustomerRepositoryFake>().As<ICustomerRepository>();
             builder.RegisterType<CrossCheckScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.CrossCheckScrapper);
