@@ -12,6 +12,7 @@ namespace Aps.Scraping
         ScrapingObject GetScrapingObjectByQueueId(Guid queueId);
 
         IEnumerable<ScrapingObject> GetAllScrapingObjects();
+        IEnumerable<ScrapingObject> GetAllScrapingObjectsSchedluedInThePast();
         IEnumerable<ScrapingObject> GetCompletedScrapeQueue();
         IEnumerable<ScrapingObject> GetAllScrapingObjectsByBillingCompanyId(Guid billingCompanyId);
 

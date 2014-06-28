@@ -34,11 +34,11 @@ namespace Aps.Scheduling.ApplicationService
 
         public void InitiateNewScrapeSession(ScrapingObject scrapingObject)
         {
-            ScrapeOrchestrator scrapeOrchestrator = scrapeOrchestrators[scrapingObject.scrapeSessionTypes];
-
-            CustomerBillingCompanyAccountDto customerBillingCompanyAccountDto = customerBillingCompanyAccountsById.GetCustomerBillingCompanyAccountByCustomerIdAndBillingCompanyId(scrapingObject.customerId, scrapingObject.billingCompanyId);
-            BillingCompanyScrapingUrlDto billingCompanyScrapingUrlDto = billingCompanyScrapingUrlQuery.GetBillingCompanyScrapingUrlById(scrapingObject.billingCompanyId);
-            ScrapeOrchestratorEntity scrapeOrchestratorEntity = new ScrapeOrchestratorEntity(scrapingObject.queueId, scrapingObject.customerId, scrapingObject.billingCompanyId, billingCompanyScrapingUrlDto.Url, customerBillingCompanyAccountDto.billingCompanyUsername, customerBillingCompanyAccountDto.billingCompanyPassword, customerBillingCompanyAccountDto.billingCompanyPIN, customerBillingCompanyAccountDto.billingCompanyAccountNumber);
+            //ScrapeOrchestrator scrapeOrchestrator = scrapeOrchestrators[scrapingObject.scrapeSessionTypes];
+            ScrapeOrchestrator scrapeOrchestrator = scrapeOrchestrators[scrapingObject.ScrapeSessionTypes];
+            CustomerBillingCompanyAccountDto customerBillingCompanyAccountDto = customerBillingCompanyAccountsById.GetCustomerBillingCompanyAccountByCustomerIdAndBillingCompanyId(scrapingObject.CustomerId, scrapingObject.BillingCompanyId);
+            BillingCompanyScrapingUrlDto billingCompanyScrapingUrlDto = billingCompanyScrapingUrlQuery.GetBillingCompanyScrapingUrlById(scrapingObject.BillingCompanyId);
+            ScrapeOrchestratorEntity scrapeOrchestratorEntity = new ScrapeOrchestratorEntity(scrapingObject.QueueId, scrapingObject.CustomerId, scrapingObject.BillingCompanyId, billingCompanyScrapingUrlDto.Url, customerBillingCompanyAccountDto.billingCompanyUsername, customerBillingCompanyAccountDto.billingCompanyPassword, customerBillingCompanyAccountDto.billingCompanyPIN, customerBillingCompanyAccountDto.billingCompanyAccountNumber);
             Task.Run(() => scrapeOrchestrator.Orchestrate(scrapeOrchestratorEntity));
         }
     }

@@ -51,9 +51,9 @@ namespace Aps.Shared.Tests.CoreTests
             // act
             ScrapingObject scrapingObject = container.Resolve<IScrapingObjectRepository>().BuildNewScrapingObject(customerId, billingCompanyId, scrapeSessionTypes);
 
-            Assert.IsTrue(scrapingObject.billingCompanyId == billingCompanyId);
-            Assert.IsTrue(scrapingObject.customerId == customerId);
-            Assert.IsTrue(scrapingObject.scrapeSessionTypes == scrapeSessionTypes);
+            Assert.IsTrue(scrapingObject.BillingCompanyId == billingCompanyId);
+            Assert.IsTrue(scrapingObject.CustomerId == customerId);
+            Assert.IsTrue(scrapingObject.ScrapeSessionTypes == scrapeSessionTypes);
 
            // Assert.IsTrue(scrapingObject.scrapeType == "Register");
             // Assert.IsTrue(scrapingObject.scrapeStatus == "Active");

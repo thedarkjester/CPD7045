@@ -17,7 +17,7 @@ using Aps.Integration.EnumTypes;
 
 namespace Aps.Scheduling.ApplicationService
 {
-    public class SchedulingEngine : IHandle<ScrapeSessionFailed>, IHandle<CrossCheckCompleted>, IHandle<ScrapeSessionDuplicateStatement>, IHandle<ScrapeSessionSuccessfull>
+    public class SchedulingEngine : IHandle<ScrapeSessionFailed>, IHandle<CrossCheckCompleted>, IHandle<ScrapeSessionDuplicateStatement>, IHandle<ScrapeSessionSuccessfull>, IHandle<MaxConcurrentServerScrapes>, IHandle<IScrapeQueueingStrategy> 
     {
         private readonly IEventAggregator eventAggregator;
         private readonly EventIntegrationService messageSendAndReceiver;
@@ -26,29 +26,25 @@ namespace Aps.Scheduling.ApplicationService
         private BillingCompanyBillingLifeCycleByCompanyIdQuery billingCompanyBillingLifeCycleByCompanyIdQuery;
         private BillingCompanyScrapingLoadManagementConfigurationQuery billingCompanyScrapingLoadManagementConfigurationQuery;
         private BillingCompanyCrossCheckEnabledByIdQuery billingCompanyCrossCheckEnabledByIdQuery;
-        public Dictionary<Guid, int> currentNumberOfThreadsPerBillingCompany;
-        public int maxAllowedServerScrapes;
-        public IEnumerable<ScrapingObject> scrapeElementsQueue;
-        public List<ScrapingObject> scrapeElementsRunning;
-        public CancellationToken cancellationToken;
-        readonly ScrapeSessionInitiator scrapeSessionInitiator; // Add this when Jignesh's stuff is done.
-        //readonly ScrapeSessionInitiatorFake scrapeSessionInitiator;
+        private IEnumerable<ScrapingObject> scrapeElementsQueue;
+        private List<ScrapingObject> scrapeElementsRunning;
+        private ScrapingObjectCreator scrapingObjectCreator;
+        private ScrapeSessionInitiator scrapeSessionInitiator;
+        private ScrapingErrorRetryConfigurationQuery scrapingErrorRetryConfigurationQuery;
+        //private int maxAllowedServerScrapes;
+        private IScrapeQueueingStrategy scrapingQueueStrategy;
+        private MaxConcurrentServerScrapes maxAllowedServerScrapes;
+        private Dictionary<Guid, int> currentNumberOfThreadsPerBillingCompany;
 
-        readonly ScrapingErrorRetryConfigurationQuery scrapingErrorRetryConfigurationQuery;
-        public ScrapingObjectCreator scrapingObjectCreator;
-
-       // public SchedulingEngine(IEventAggregator eventAggregator, EventIntegrationService messageSendAndReceiver, IScrapingObjectRepository scrapingObjectRepositoryFake, BillingCompanyOpenClosedWindowsQuery billingCompanyOpenClosedWindowsQuery, BillingCompanyScrapingLoadManagementConfigurationQuery billingCompanyScrapingLoadManagementConfigurationQuery, ScrapeSessionInitiatorFake scrapeSessionInitiator, ScrapingErrorRetryConfigurationQuery scrapingErrorRetryConfigurationQuery, ScrapingObjectCreator scrapingObjectCreator, BillingCompanyCrossCheckEnabledByIdQuery billingCompanyCrossCheckEnabledByIdQuery, BillingCompanyBillingLifeCycleByCompanyIdQuery billingCompanyBillingLifeCycleByCompanyIdQuery)
         public SchedulingEngine(IEventAggregator eventAggregator, EventIntegrationService messageSendAndReceiver, IScrapingObjectRepository scrapingObjectRepositoryFake, BillingCompanyOpenClosedWindowsQuery billingCompanyOpenClosedWindowsQuery, BillingCompanyScrapingLoadManagementConfigurationQuery billingCompanyScrapingLoadManagementConfigurationQuery, ScrapeSessionInitiator scrapeSessionInitiator, ScrapingErrorRetryConfigurationQuery scrapingErrorRetryConfigurationQuery, ScrapingObjectCreator scrapingObjectCreator, BillingCompanyCrossCheckEnabledByIdQuery billingCompanyCrossCheckEnabledByIdQuery, BillingCompanyBillingLifeCycleByCompanyIdQuery billingCompanyBillingLifeCycleByCompanyIdQuery)  
         {
             this.eventAggregator = eventAggregator;
             this.eventAggregator.Subscribe(this);
-
             this.billingCompanyOpenClosedWindowsQuery = billingCompanyOpenClosedWindowsQuery;
             this.scrapingObjectRepositoryFake = scrapingObjectRepositoryFake;
             this.billingCompanyScrapingLoadManagementConfigurationQuery = billingCompanyScrapingLoadManagementConfigurationQuery;
             this.currentNumberOfThreadsPerBillingCompany = new Dictionary<Guid, int>();
             this.messageSendAndReceiver = messageSendAndReceiver;
-            maxAllowedServerScrapes = 20;
             this.scrapeElementsQueue = new List<ScrapingObject>();
             this.scrapeElementsRunning = new List<ScrapingObject>();
             this.scrapeSessionInitiator = scrapeSessionInitiator;
@@ -56,29 +52,42 @@ namespace Aps.Scheduling.ApplicationService
             this.scrapingObjectCreator = scrapingObjectCreator;
             this.billingCompanyCrossCheckEnabledByIdQuery = billingCompanyCrossCheckEnabledByIdQuery;
             this.billingCompanyBillingLifeCycleByCompanyIdQuery = billingCompanyBillingLifeCycleByCompanyIdQuery;
+            //maxAllowedServerScrapes = 20;
+            maxAllowedServerScrapes = new MaxConcurrentServerScrapes(20);
+            scrapingQueueStrategy = new ScrapeQueueingStrategyByRegistrationScheduledDateCreatedDate();
         }
 
 
         public void Start()
         {
-            messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(CustomerBillingAccountAdded).FullName);
-            messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(ScrapingScriptUpdated).FullName);
-            messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(BillingAccountDeletedFromCustomer).FullName);
-            
+            registerExternalEventsListeners();
             Scrape();
         }
 
+        private void registerExternalEventsListeners()
+        {
+            messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(CustomerBillingAccountAdded).FullName);
+            messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(ScrapingScriptUpdated).FullName);
+            messageSendAndReceiver.SubscribeToEventByNameSpace(typeof(BillingAccountDeletedFromCustomer).FullName);
+        }
 
 
         private void Scrape()
         {
             OpenClosedWindowDto openClosedWindowDto;
             int maxAllowedThreadsForSpecificBillingCompany = 0;
+            List<ScrapingObject> entireScrapeQueue;
+            List<ScrapingObject> completedScrapingQueue;
 
             while (true)
             {
                 Console.WriteLine("Accepting EventAggregator Events");
-                scrapeElementsQueue = getNewScrapeQueueWithoutCompletedItems();
+                entireScrapeQueue = scrapingObjectRepositoryFake.GetAllScrapingObjects().ToList();//.Where(item => item.ScheduledDate <= DateTime.UtcNow).ToList();
+                completedScrapingQueue = scrapingObjectRepositoryFake.GetCompletedScrapeQueue().ToList();
+                //scrapeElementsQueue = getNewScrapeQueueWithoutCompletedItems();
+                scrapeElementsQueue = scrapingQueueStrategy.GetQueue(scrapeElementsRunning, completedScrapingQueue, entireScrapeQueue).ToList();
+                
+                scrapingObjectRepositoryFake.ClearCompletedScrapeList();
                 if (scrapeElementsQueue == null)
                 {
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -91,25 +100,26 @@ namespace Aps.Scheduling.ApplicationService
                     if (getNumberOfThreadsAvailableOnServer() == 0)
                         break;
 
-                    openClosedWindowDto = GetCurrentOpenClosedWindowDtoByBillingCompany(scrapingQueueElement.billingCompanyId);
-                    maxAllowedThreadsForSpecificBillingCompany = getMaxAllowedThreadsForSpecificBillingCompany(openClosedWindowDto, scrapingQueueElement.billingCompanyId);
+                    openClosedWindowDto = GetCurrentOpenClosedWindowDtoByBillingCompany(scrapingQueueElement.BillingCompanyId);
+                    maxAllowedThreadsForSpecificBillingCompany = getMaxAllowedThreadsForSpecificBillingCompany(openClosedWindowDto, scrapingQueueElement.BillingCompanyId);
 
                     if (maxAllowedThreadsForSpecificBillingCompany == 0)
                         RescheduleItem(scrapingQueueElement, openClosedWindowDto.EndDate);
 
-                    else if (maxAllowedThreadsForSpecificBillingCompany - NumberOfThreadsCurrentlyUsedByBillingCompanyId(scrapingQueueElement.billingCompanyId) > 0)
+                    else if (maxAllowedThreadsForSpecificBillingCompany - NumberOfThreadsCurrentlyUsedByBillingCompanyId(scrapingQueueElement.BillingCompanyId) > 0)
                     {
-                        IncreaseNumberOfThreadsUsedByCompany(scrapingQueueElement.billingCompanyId);
+                        IncreaseNumberOfThreadsUsedByCompany(scrapingQueueElement.BillingCompanyId);
                         scrapeElementsRunning.Add(scrapingQueueElement);
-                        scrapeSessionInitiator.InitiateNewScrapeSession(scrapingQueueElement); // This is where I pass the work to Jignesh! Once it exists, add it. 
-
+                        scrapeSessionInitiator.InitiateNewScrapeSession(scrapingQueueElement); // Give ScrapeElement to ScrapeInitiator to start Scrape
                     }
                 }
                 Thread.Sleep(6000); // Entire QueueProcessed or threads full, sleep a while and then start with a new Queue
             }
         }
 
+        /*
         public List<ScrapingObject> getNewScrapeQueueWithoutCompletedItems()
+        //private List<ScrapingObject> getNewScrapeQueueWithoutCompletedItems()
         {
             List<ScrapingObject> sortedScrapingQueueItemsWithoutCompletedScrapes = scrapingObjectRepositoryFake.GetAllScrapingObjects().Where(item => item.ScheduledDate <= DateTime.UtcNow).ToList();
             List<ScrapingObject> completedScrapingQueue = scrapingObjectRepositoryFake.GetCompletedScrapeQueue().ToList();
@@ -117,10 +127,10 @@ namespace Aps.Scheduling.ApplicationService
             if (sortedScrapingQueueItemsWithoutCompletedScrapes.Count() == 0)
                 return new List<ScrapingObject>();
 
-            sortedScrapingQueueItemsWithoutCompletedScrapes.RemoveAll(x => completedScrapingQueue.Any(y => y.queueId == x.queueId));
-            sortedScrapingQueueItemsWithoutCompletedScrapes.RemoveAll(x => scrapeElementsRunning.Any(y => y.queueId == x.queueId));
-            scrapingObjectRepositoryFake.ClearCompletedScrapeList();
-            sortedScrapingQueueItemsWithoutCompletedScrapes = sortedScrapingQueueItemsWithoutCompletedScrapes.OrderBy(item => item.scrapeSessionTypes).ThenBy(item => item.ScheduledDate).ThenBy(item => item.createdDate).ToList();
+            sortedScrapingQueueItemsWithoutCompletedScrapes.RemoveAll(x => completedScrapingQueue.Any(y => y.QueueId == x.QueueId));
+            sortedScrapingQueueItemsWithoutCompletedScrapes.RemoveAll(x => scrapeElementsRunning.Any(y => y.QueueId == x.QueueId));
+            //scrapingObjectRepositoryFake.ClearCompletedScrapeList();
+            sortedScrapingQueueItemsWithoutCompletedScrapes = sortedScrapingQueueItemsWithoutCompletedScrapes.OrderBy(item => item.ScrapeSessionTypes).ThenBy(item => item.ScheduledDate).ThenBy(item => item.CreatedDate).ToList();
  
 
             if (sortedScrapingQueueItemsWithoutCompletedScrapes.Count() == 0)
@@ -129,22 +139,39 @@ namespace Aps.Scheduling.ApplicationService
             return sortedScrapingQueueItemsWithoutCompletedScrapes;
         }
 
-        public int getNumberOfThreadsAvailableOnServer()
-        {
-            //return maxAllowedServerScrapes - currentNumberOfThreadsPerBillingCompany.Skip(1).Sum(v => v.Value);
-            return maxAllowedServerScrapes - currentNumberOfThreadsPerBillingCompany.Sum(v => v.Value);
+        */
 
+        public int GetMaxNumberServerScrapesAllowed()
+        //private int GetMaxNumberServerScrapesAllowed()
+        {   
+            return maxAllowedServerScrapes.GetMaxAllowedServerScrapes();
+        }
+
+        public int getNumberOfThreadsAvailableOnServer()
+        //private int getNumberOfThreadsAvailableOnServer()
+        {
+            return maxAllowedServerScrapes.GetMaxAllowedServerScrapes() - currentNumberOfThreadsPerBillingCompany.Sum(v => v.Value);
         }
 
         public OpenClosedWindowDto GetCurrentOpenClosedWindowDtoByBillingCompany(Guid billingCompanyId)
+        //private OpenClosedWindowDto GetCurrentOpenClosedWindowDtoByBillingCompany(Guid billingCompanyId)
         {
-            OpenClosedWindowDto currentOpenClosedWindowDto = billingCompanyOpenClosedWindowsQuery.GetCurrentOpenClosedWindow(billingCompanyId);
-            if (currentOpenClosedWindowDto == null)
-                return null;
-            else return currentOpenClosedWindowDto;
+            OpenClosedWindowDto currentOpenClosedWindowDto;
+            //OpenClosedWindowDto tempCurrentOpenClosedWindowDto = null;
+            try
+            {
+                currentOpenClosedWindowDto = billingCompanyOpenClosedWindowsQuery.GetCurrentOpenClosedWindow(billingCompanyId);
+            }
+            catch (Exception)
+            {
+                currentOpenClosedWindowDto = null;
+            }
+
+            return currentOpenClosedWindowDto;
         }
 
         public int getMaxAllowedThreadsForSpecificBillingCompany(OpenClosedWindowDto openClosedWindowDto, Guid billingCompanyId)
+        //private int getMaxAllowedThreadsForSpecificBillingCompany(OpenClosedWindowDto openClosedWindowDto, Guid billingCompanyId)
         {
             if (openClosedWindowDto != null)
             {
@@ -159,7 +186,9 @@ namespace Aps.Scheduling.ApplicationService
                 return getMaximumConcurrentThreadsAllowedForBillingCompanyAsDefinedByTheScrapingLoadManagementConfiguration(billingCompanyId);
         }
 
+
         public int NumberOfThreadsCurrentlyUsedByBillingCompanyId(Guid billingCompanyId)
+        //private int NumberOfThreadsCurrentlyUsedByBillingCompanyId(Guid billingCompanyId)
         {
             int ThreadsCurrentlyUsedByBillingCompany = 0;
 
@@ -172,7 +201,9 @@ namespace Aps.Scheduling.ApplicationService
 
         }
 
+
         public void IncreaseNumberOfThreadsUsedByCompany(Guid billingCompanyId)
+        //private void IncreaseNumberOfThreadsUsedByCompany(Guid billingCompanyId)
         {
             if (currentNumberOfThreadsPerBillingCompany.ContainsKey(billingCompanyId))
                 currentNumberOfThreadsPerBillingCompany[billingCompanyId] += 1;
@@ -181,6 +212,7 @@ namespace Aps.Scheduling.ApplicationService
         }
 
         public void DecreaseNumberOfThreadsUsedByCompany(Guid billingCompanyId)
+        //private void DecreaseNumberOfThreadsUsedByCompany(Guid billingCompanyId)
         {
             if (currentNumberOfThreadsPerBillingCompany.ContainsKey(billingCompanyId))
                 currentNumberOfThreadsPerBillingCompany[billingCompanyId] -= 1;
@@ -189,38 +221,54 @@ namespace Aps.Scheduling.ApplicationService
         }
 
         public void RescheduleItem(ScrapingObject scrapingQueueElement, DateTime EndDate)
+        //private void RescheduleItem(ScrapingObject scrapingQueueElement, DateTime EndDate)
         {
             scrapingQueueElement.ScheduledDate = EndDate;
         }
 
         public int getMaximumConcurrentThreadsAllowedForBillingCompanyAsDefinedByTheScrapingLoadManagementConfiguration(Guid billingCompanyId)
+        //private int getMaximumConcurrentThreadsAllowedForBillingCompanyAsDefinedByTheScrapingLoadManagementConfiguration(Guid billingCompanyId)
         {
-            BillingCompanyScrapingLoadManagementConfigurationDto billingCompanyScrapingLoadManagementConfigurationDto = billingCompanyScrapingLoadManagementConfigurationQuery.GetBillingCompanyScrapingLoadManagementConfigurationById(billingCompanyId);
-            return billingCompanyScrapingLoadManagementConfigurationDto.ConcurrentScrapes;
+            BillingCompanyScrapingLoadManagementConfigurationDto billingCompanyScrapingLoadManagementConfigurationDto;
+            int numberOfConcurrentSessionsAllowed = 0;
+            try
+            {
+                billingCompanyScrapingLoadManagementConfigurationDto = billingCompanyScrapingLoadManagementConfigurationQuery.GetBillingCompanyScrapingLoadManagementConfigurationById(billingCompanyId);
+                numberOfConcurrentSessionsAllowed = billingCompanyScrapingLoadManagementConfigurationDto.ConcurrentScrapes;
+            }
+            catch (Exception)
+            {
+                numberOfConcurrentSessionsAllowed = 5; // Default value for number of ConcurrentScrapes allowed per billing Company is 5.
+            }
+            return numberOfConcurrentSessionsAllowed;
         }
 
-        public void mockAddBillingCompanyAccountAdded(ScrapingObject scrapingObject)
+        public IScrapingObjectRepository GetScrapingObjectRepositoryFake()
         {
-            scrapingObjectRepositoryFake.StoreScrapingObject(scrapingObject);
+            return this.scrapingObjectRepositoryFake;
         }
 
-        public ScrapingObject mockGetScrapeObjectByQueueId(Guid queueId)
+        public void AddScrapingElementToElementsRunningList(ScrapingObject scrapingObject)
         {
-            return scrapingObjectRepositoryFake.GetScrapingObjectByQueueId(queueId);
+            scrapeElementsRunning.Add(scrapingObject);
         }
 
-        public List<ScrapingObject> MockGetAllScrapingObjectsScheduledInPast()
+        public List<ScrapingObject> GetAllScrapeElementsRunningList()
         {
-            return scrapingObjectRepositoryFake.GetAllScrapingObjects().Where(item => item.ScheduledDate <= DateTime.UtcNow).ToList();
-            //return scrapingObjectRepositoryFake.GetAllScrapingObjects().ToList();
+            return scrapeElementsRunning;
         }
 
-        // Jignesh Event - Internal
+        public IScrapeQueueingStrategy GetScrapingQueueStrategy()
+        {
+            return scrapingQueueStrategy;
+        }
+
+        // Event - Internal
         public void Handle(ScrapeSessionFailed message)
         {
             ScrapingErrorRetryConfigurationDto retryDto;
             ScrapingObject scrapingObject = scrapingObjectRepositoryFake.GetScrapingObjectByQueueId(message.QueueId);
-            DecreaseNumberOfThreadsUsedByCompany(scrapingObject.billingCompanyId);
+            DecreaseNumberOfThreadsUsedByCompany(scrapingObject.BillingCompanyId);
             scrapeElementsRunning.Remove(scrapingObject);
 
             switch (message.ScrapingErrorResponseCode)
@@ -229,7 +277,7 @@ namespace Aps.Scheduling.ApplicationService
                 case ScrapingErrorResponseCodes.Unknown:
                 case ScrapingErrorResponseCodes.UnhandledDataCondition:
                 case ScrapingErrorResponseCodes.BrokenScript:
-                    scrapingObject.scrapeStatus = "inactive";
+                    scrapingObject.ScrapeStatus = "inactive";
                     RescheduleItem(scrapingObject, DateTime.MaxValue);
                     break;
 
@@ -242,34 +290,42 @@ namespace Aps.Scheduling.ApplicationService
 
 
                 case ScrapingErrorResponseCodes.BillingCompanySiteDown:
-                    retryDto = scrapingErrorRetryConfigurationQuery.GetAllScrapingErrorRetryConfigurations(scrapingObject.billingCompanyId).FirstOrDefault(x => (x.ResponseCode == ScrapingErrorResponseCodes.BillingCompanySiteDown));
-                    if (retryDto == null)
+                    try
+                    {
+                        retryDto = scrapingErrorRetryConfigurationQuery.GetAllScrapingErrorRetryConfigurations(scrapingObject.BillingCompanyId).FirstOrDefault(x => (x.ResponseCode == ScrapingErrorResponseCodes.BillingCompanySiteDown));
+                        RescheduleItem(scrapingObject, DateTime.UtcNow.AddHours(retryDto.RetryInterval));
+                    }
+                    catch (Exception)
+                    {
                         RescheduleItem(scrapingObject, DateTime.UtcNow.AddHours(12)); // default time added is 12 hours if no dto is found
-                    else
-                    RescheduleItem(scrapingObject, DateTime.UtcNow.AddHours(retryDto.RetryInterval));
-                    break;
+                    }
+                break;
 
                 case ScrapingErrorResponseCodes.ErrorPageEncountered:
-                    retryDto = scrapingErrorRetryConfigurationQuery.GetAllScrapingErrorRetryConfigurations(scrapingObject.billingCompanyId).FirstOrDefault(x => (x.ResponseCode == ScrapingErrorResponseCodes.ErrorPageEncountered));
-                    if (retryDto == null)
-                        RescheduleItem(scrapingObject, DateTime.UtcNow.AddHours(6)); // default time added is 6 hours if no dto is found
-                    else
+                try
+                {
+                    retryDto = scrapingErrorRetryConfigurationQuery.GetAllScrapingErrorRetryConfigurations(scrapingObject.BillingCompanyId).FirstOrDefault(x => (x.ResponseCode == ScrapingErrorResponseCodes.ErrorPageEncountered));
                     RescheduleItem(scrapingObject, DateTime.UtcNow.AddHours(retryDto.RetryInterval));
-                    break;
+                }
+                catch (Exception)
+                { 
+                    RescheduleItem(scrapingObject, DateTime.UtcNow.AddHours(6)); // default time added is 6 hours if no dto is found
+                }
+                break;
 
             }
         }
 
-        // Jignesh Event - Internal
+        // Event - Internal
         public void Handle(CrossCheckCompleted message)
         {
             ScrapingObject scrapingObject = scrapingObjectRepositoryFake.GetScrapingObjectByQueueId(message.QueueId);
-            DecreaseNumberOfThreadsUsedByCompany(scrapingObject.billingCompanyId);
+            DecreaseNumberOfThreadsUsedByCompany(scrapingObject.BillingCompanyId);
             scrapeElementsRunning.Remove(scrapingObject);
 
             if (message.Successful)
             {
-                scrapingObject.scrapeSessionTypes = ScrapeSessionTypes.StatementScrapper;
+                scrapingObject.ScrapeSessionTypes = ScrapeSessionTypes.StatementScrapper;
                 RescheduleItem(scrapingObject, DateTime.UtcNow);
             }
             else
@@ -278,15 +334,15 @@ namespace Aps.Scheduling.ApplicationService
             }
         }
 
-        // Jignesh Event - Internal
+        // Event - Internal
         public void Handle(ScrapeSessionSuccessfull message)
         {
             ScrapingObject scrapingObject = scrapingObjectRepositoryFake.GetScrapingObjectByQueueId(message.QueueId);
-            DecreaseNumberOfThreadsUsedByCompany(scrapingObject.billingCompanyId);
+            DecreaseNumberOfThreadsUsedByCompany(scrapingObject.BillingCompanyId);
             scrapeElementsRunning.Remove(scrapingObject);
             scrapingObjectRepositoryFake.AddScrapingItemToCompletedQueue(scrapingObject);
 
-            BillingCompanyBillingLifeCycleDto dto = billingCompanyBillingLifeCycleByCompanyIdQuery.GetBillingCompanyBillingLifeCycleByCompanyId(scrapingObject.billingCompanyId);
+            BillingCompanyBillingLifeCycleDto dto = billingCompanyBillingLifeCycleByCompanyIdQuery.GetBillingCompanyBillingLifeCycleByCompanyId(scrapingObject.BillingCompanyId);
             DateTime dateTime;
 
             if (dto == null)
@@ -298,15 +354,15 @@ namespace Aps.Scheduling.ApplicationService
             
         }
 
-        // Jignesh Event - Internal
+        // Event - Internal
         public void Handle(ScrapeSessionDuplicateStatement message)
         {
             ScrapingObject scrapingObject = scrapingObjectRepositoryFake.GetScrapingObjectByQueueId(message.QueueId);
-            DecreaseNumberOfThreadsUsedByCompany(scrapingObject.billingCompanyId);
+            DecreaseNumberOfThreadsUsedByCompany(scrapingObject.BillingCompanyId);
             scrapeElementsRunning.Remove(scrapingObject);
             scrapingObjectRepositoryFake.AddScrapingItemToCompletedQueue(scrapingObject);
 
-            BillingCompanyBillingLifeCycleDto dto = billingCompanyBillingLifeCycleByCompanyIdQuery.GetBillingCompanyBillingLifeCycleByCompanyId(scrapingObject.billingCompanyId);
+            BillingCompanyBillingLifeCycleDto dto = billingCompanyBillingLifeCycleByCompanyIdQuery.GetBillingCompanyBillingLifeCycleByCompanyId(scrapingObject.BillingCompanyId);
             DateTime dateTime;
 
             if (dto == null)
@@ -317,39 +373,62 @@ namespace Aps.Scheduling.ApplicationService
             RescheduleItem(scrapingObject, dateTime);
         }
 
-        // Carlos Events - - External;     
+        // Event - Internal
+        public void Handle(MaxConcurrentServerScrapes message)
+        {
+            maxAllowedServerScrapes.SetMaxAllowedServerScrapes(message.GetMaxAllowedServerScrapes());
+        }
+        
+        // Event - Internal
+        public void Handle(IScrapeQueueingStrategy message)
+        {
+            scrapingQueueStrategy = message;
+        }
+
+        // Events - External;     
         public void Handle(BillingAccountDeletedFromCustomer message)
         {
             ScrapingObject scrapingObject = scrapingObjectRepositoryFake.GetScrapingObjectByCustomerAndBillingCompanyId(message.CustomerId, message.BillingCompanyId);
             scrapingObjectRepositoryFake.RemoveScrapingItemFromRepo(scrapingObject);
         }  
          
-
-        // Carlos Event - External
-         public void Handle(CustomerBillingAccountAdded message)
+        // Event - External
+        public void Handle(CustomerBillingAccountAdded message)
          {
              ScrapeSessionTypes crossCheckEnabled;
-             BillingCompanyCrossCheckDto dto = billingCompanyCrossCheckEnabledByIdQuery.GetBillingCompanyCrossCheckEnabledById(message.billingCompanyId);
-             bool crossCheckEnabledFlag = dto.crossCheckScrapeEnabled;
+             BillingCompanyCrossCheckDto dto;
+             try
+             {
+                 dto = billingCompanyCrossCheckEnabledByIdQuery.GetBillingCompanyCrossCheckEnabledById(message.billingCompanyId);
+                 bool crossCheckEnabledFlag = dto.crossCheckScrapeEnabled;
 
-             if (crossCheckEnabledFlag)
-                 crossCheckEnabled = ScrapeSessionTypes.CrossCheckScrapper;
-             else
+                 if (crossCheckEnabledFlag)
+                     crossCheckEnabled = ScrapeSessionTypes.CrossCheckScrapper;
+                 else
+                     crossCheckEnabled = ScrapeSessionTypes.StatementScrapper;
+             }
+             catch (Exception)
+             {
                  crossCheckEnabled = ScrapeSessionTypes.StatementScrapper;
+             }
 
              ScrapingObject scrapingObject = scrapingObjectCreator.GetNewScrapingObject(message.customerId, message.billingCompanyId, crossCheckEnabled);
              scrapingObjectRepositoryFake.StoreScrapingObject(scrapingObject);
          }
 
-         // External Event
-         public void Handle(ScrapingScriptUpdated message)
+        // External Event
+        public void Handle(ScrapingScriptUpdated message)
          {
              List<ScrapingObject> myList = scrapingObjectRepositoryFake.GetAllScrapingObjectsByBillingCompanyId(message.BillingId).ToList();
              foreach (var item in myList)
              {
-                 if (item.scrapeStatus == "inactive")
+                 if (item.ScrapeStatus == "inactive")
                      RescheduleItem(item, DateTime.UtcNow);
              }
          }
+
+        
+    
+    
     }
 }

@@ -50,6 +50,7 @@
     <Compile Include="EnumTypes\ScrapingErrorResponseCodes.cs" />
     <Compile Include="EnumTypes\ServiceProviderTypes.cs" />
     <Compile Include="Events\BillingAccountDeletedFromCustomer.cs" />
+    <Compile Include="Events\ScrapingScriptUpdated.cs" />
     <Compile Include="IEventIntegrationRepository.cs" />
     <Compile Include="Events\CrossCheckSessionCompletedSuccesfully.cs" />
     <Compile Include="Events\CrossCheckSessionCompletedWithErrors.cs" />
