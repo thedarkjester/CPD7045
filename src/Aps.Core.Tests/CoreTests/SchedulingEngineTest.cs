@@ -14,6 +14,13 @@ using System.Collections.Generic;
 using Aps.Integration.EnumTypes;
 using Aps.Customers;
 using System.Linq;
+using Moq;
+using Aps.Scheduling.ApplicationService.Validation;
+using Autofac.Core;
+using Aps.Integration.Queries.Events;
+using Aps.Integration.Queries.CustomerQueries.Dtos;
+using Aps.Scraping.Scrapers;
+using Aps.Scheduling.ApplicationService.Services;
 
 namespace Aps.Shared.Tests.CoreTests
 {
@@ -41,27 +48,42 @@ namespace Aps.Shared.Tests.CoreTests
             builder.RegisterType<EventIntegrationService>().As<EventIntegrationService>();
             builder.RegisterType<ScrapingObjectRepositoryFake>().As<IScrapingObjectRepository>().SingleInstance();
             builder.RegisterType<ScrapingObjectCreator>().As<ScrapingObjectCreator>();
-
             builder.RegisterType<BinaryEventSerializer>().As<BinaryEventSerializer>();
             builder.RegisterType<BinaryEventDeSerializer>().As<BinaryEventDeSerializer>();
-
             builder.RegisterType<EventIntegrationRepositoryFake>().As<IEventIntegrationRepository>();
-
             builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>();
             builder.RegisterType<BillingCompanyFactory>().As<BillingCompanyFactory>();
 
+            ////////////////////////////////////////////////////////////////////////////////////////////
             builder.RegisterType<ScrapeSessionInitiator>().As<ScrapeSessionInitiator>(); // Jignesh's stuff that doesn't yet exist
             //builder.RegisterType<ScrapeSessionInitiatorFake>().As<ScrapeSessionInitiatorFake>(); // Mock object for testing
-
-            builder.RegisterType<CustomerRepositoryFake>().As<ICustomerRepository>();
+            builder.RegisterType<InvalidCredentialsValidator>().As<IValidator>();
+            builder.RegisterType<DuplicateStatementValidator>().As<IValidator>();
+           /* builder.RegisterType<ScrapeSessionDataValidator>().As<ScrapeSessionDataValidator>()
+                .WithParameter(new ResolvedParameter((info, context) => true, (info, context) => context.ResolveOrdered<IValidator>()));
+            builder.RegisterType<GetLatestEventsBySubScribedEventTypeQuery>()
+                   .As<GetLatestEventsBySubScribedEventTypeQuery>()
+                   .InstancePerDependency();
+            * */
+            builder.RegisterType<BillingCompanyByIdQuery>().As<BillingCompanyByIdQuery>();
+            builder.RegisterType<BillingCompanyScrapingUrlQuery>().As<BillingCompanyScrapingUrlQuery>();
+            builder.RegisterType<AllBillingCompaniesQuery>().As<AllBillingCompaniesQuery>();
+            builder.RegisterType<CustomerBillingCompanyAccountsById>().As<CustomerBillingCompanyAccountsById>();
+            builder.RegisterType<CustomerRepositoryFake>().As<ICustomerRepository>().InstancePerDependency();
+            builder.RegisterType<CustomerCreator>().As<CustomerCreator>().InstancePerDependency();
+            builder.RegisterType<AccountStatementComposer>().As<AccountStatementComposer>().InstancePerDependency();
+            builder.RegisterType<ScrapeLoggingRepositoryFake>().As<IScrapeLoggingRepository>().InstancePerDependency();
+            builder.RegisterType<WebScraperFake>().As<IWebScraper>().InstancePerDependency();
+            builder.RegisterType<CrossCheckScraperFake>().As<ICrossCheckScraper>().InstancePerDependency();
+            ////////////////////////////////////////////////////////////////////////////////////////////
 
             builder.RegisterType<CrossCheckScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.CrossCheckScrapper);
             builder.RegisterType<StatementScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.StatementScrapper);
-
             builder.RegisterType<ScrapingErrorRetryConfigurationQuery>().As<ScrapingErrorRetryConfigurationQuery>();
             builder.RegisterType<ScrapingObjectCreator>().As<ScrapingObjectCreator>();
             builder.RegisterType<BillingCompanyCrossCheckEnabledByIdQuery>().As<BillingCompanyCrossCheckEnabledByIdQuery>();
             builder.RegisterType<BillingCompanyBillingLifeCycleByCompanyIdQuery>().As<BillingCompanyBillingLifeCycleByCompanyIdQuery>();
+
 
             container = builder.Build();
 
