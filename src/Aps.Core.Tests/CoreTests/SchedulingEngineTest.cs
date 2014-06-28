@@ -21,11 +21,14 @@ using Aps.Scheduling.ApplicationService.Validation;
 using Autofac.Core;
 using Aps.Integration.Queries.Events;
 using Aps.Integration.Queries.CustomerQueries.Dtos;
+using Aps.Scraping.Scrapers;
+using Aps.Scheduling.ApplicationService.Services;
 using Aps.Scheduling.ApplicationService.Services;
 using Aps.AccountStatements;
 using Aps.Scraping.Scrapers;
 using Aps.Integration.Queries.BillingCompanyQueries.Dtos;
 using Aps.Scheduling.ApplicationService.Interpreters;
+
 
 namespace Aps.Shared.Tests.CoreTests
 {
@@ -58,6 +61,15 @@ namespace Aps.Shared.Tests.CoreTests
             builder.RegisterType<EventIntegrationRepositoryFake>().As<IEventIntegrationRepository>();
             builder.RegisterType<BillingCompanyRepositoryFake>().As<IBillingCompanyRepository>();
             builder.RegisterType<BillingCompanyFactory>().As<BillingCompanyFactory>();
+
+
+            ////////////////////////////////////////////////////////////////////////////////////////////
+            builder.RegisterType<ScrapeSessionInitiator>().As<ScrapeSessionInitiator>(); // Jignesh's stuff that doesn't yet exist
+            //builder.RegisterType<ScrapeSessionInitiatorFake>().As<ScrapeSessionInitiatorFake>(); // Mock object for testing
+            builder.RegisterType<InvalidCredentialsValidator>().As<IValidator>();
+            builder.RegisterType<DuplicateStatementValidator>().As<IValidator>();
+            builder.RegisterType<ScrapeSessionDataValidator>().As<ScrapeSessionDataValidator>();
+
             
             ////////////////////////////////////////////////////////////////////////////////////////////
             builder.RegisterType<ScrapeSessionInitiator>().As<ScrapeSessionInitiator>();
@@ -65,10 +77,13 @@ namespace Aps.Shared.Tests.CoreTests
             builder.RegisterType<InvalidCredentialsValidator>().As<IValidator>().WithOrder();
             builder.RegisterType<DuplicateStatementValidator>().As<IValidator>().WithOrder();
             builder.RegisterType<ScrapeSessionDataValidator>().As<ScrapeSessionDataValidator>()
+
                 .WithParameter(new ResolvedParameter((info, context) => true, (info, context) => context.ResolveOrdered<IValidator>()));
             builder.RegisterType<GetLatestEventsBySubScribedEventTypeQuery>()
                    .As<GetLatestEventsBySubScribedEventTypeQuery>()
                    .InstancePerDependency();
+
+
             builder.RegisterType<BillingCompanyByIdQuery>().As<BillingCompanyByIdQuery>();
             builder.RegisterType<BillingCompanyScrapingUrlQuery>().As<BillingCompanyScrapingUrlQuery>();
             builder.RegisterType<AllBillingCompaniesQuery>().As<AllBillingCompaniesQuery>();
@@ -80,14 +95,21 @@ namespace Aps.Shared.Tests.CoreTests
             builder.RegisterType<WebScraperFake>().As<IWebScraper>().InstancePerDependency();
             builder.RegisterType<CrossCheckScraperFake>().As<ICrossCheckScraper>().InstancePerDependency();
             builder.RegisterType<ScrapeSessionXMLToDataPairConverter>().AsSelf().InstancePerDependency();
+
+
+            ////////////////////////////////////////////////////////////////////////////////////////////
+
+
             /////////////////////////////////////////////////////////////////////////
             builder.RegisterType<CustomerRepositoryFake>().As<ICustomerRepository>();
+
             builder.RegisterType<CrossCheckScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.CrossCheckScrapper);
             builder.RegisterType<StatementScrapeOrchestrator>().Keyed<ScrapeOrchestrator>(ScrapeSessionTypes.StatementScrapper);
             builder.RegisterType<ScrapingErrorRetryConfigurationQuery>().As<ScrapingErrorRetryConfigurationQuery>();
             builder.RegisterType<ScrapingObjectCreator>().As<ScrapingObjectCreator>();
             builder.RegisterType<BillingCompanyCrossCheckEnabledByIdQuery>().As<BillingCompanyCrossCheckEnabledByIdQuery>();
             builder.RegisterType<BillingCompanyBillingLifeCycleByCompanyIdQuery>().As<BillingCompanyBillingLifeCycleByCompanyIdQuery>();
+
 
             container = builder.Build();
         }
@@ -374,9 +396,11 @@ namespace Aps.Shared.Tests.CoreTests
              // OrderBy(item => item.scrapeSessionTypes).ThenBy(item => item.ScheduledDate).ThenBy(item => item.createdDate)
              // arrange
              List<ScrapingObject> myList = new List<ScrapingObject>();
+             List<ScrapingObject> dummy = new List<ScrapingObject>();
              SchedulingEngine schedulingEngine = new SchedulingEngine(container.Resolve<IEventAggregator>(), container.Resolve<EventIntegrationService>(), container.Resolve<IScrapingObjectRepository>(), container.Resolve<BillingCompanyOpenClosedWindowsQuery>(), container.Resolve<BillingCompanyScrapingLoadManagementConfigurationQuery>(), container.Resolve<ScrapeSessionInitiator>(), container.Resolve<ScrapingErrorRetryConfigurationQuery>(), container.Resolve<ScrapingObjectCreator>(), container.Resolve<BillingCompanyCrossCheckEnabledByIdQuery>(), container.Resolve<BillingCompanyBillingLifeCycleByCompanyIdQuery>());
              IScrapingObjectRepository repo = schedulingEngine.GetScrapingObjectRepositoryFake();
              ScrapingObjectCreator scrapingObjectCreator = new ScrapingObjectCreator(container.Resolve<IEventAggregator>());
+             IScrapeQueueingStrategy scrapeQueueingStrategy = schedulingEngine.GetScrapingQueueStrategy();
              Guid customerId1 = Guid.NewGuid();
              Guid customerId2 = Guid.NewGuid();
              Guid customerId3 = Guid.NewGuid();
@@ -404,7 +428,8 @@ namespace Aps.Shared.Tests.CoreTests
              repo.StoreScrapingObject(myScrapingObject3);
              repo.StoreScrapingObject(myScrapingObject4);
              repo.StoreScrapingObject(myScrapingObject5); 
-             //myList = schedulingEngine.getNewScrapeQueueWithoutCompletedItems();
+             myList = repo.GetAllScrapingObjects().ToList();
+             myList = scrapeQueueingStrategy.GetQueue(dummy, dummy, myList).ToList();
 
              // assert
              Assert.AreEqual(myList.Count, 3);
