@@ -23,9 +23,6 @@ using Aps.Integration.Queries.Events;
 using Aps.Integration.Queries.CustomerQueries.Dtos;
 using Aps.Scraping.Scrapers;
 using Aps.Scheduling.ApplicationService.Services;
-using Aps.Scheduling.ApplicationService.Services;
-using Aps.AccountStatements;
-using Aps.Scraping.Scrapers;
 using Aps.Integration.Queries.BillingCompanyQueries.Dtos;
 using Aps.Scheduling.ApplicationService.Interpreters;
 

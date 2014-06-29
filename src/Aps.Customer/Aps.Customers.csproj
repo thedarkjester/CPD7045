@@ -63,6 +63,7 @@
     <Compile Include="ValueObjects\CustomerTelephone.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="CustomerClasses.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

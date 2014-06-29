@@ -1,11 +1,12 @@
 ﻿using System;
+using Aps.DomainBase;
 using Seterlund.CodeGuard;
 using Aps.Customers.ValueObjects;
 
 
 namespace Aps.Customers.Entities
 {
-    public class CustomerBillingCompanyAccount
+    public class CustomerBillingCompanyAccount : Entity
     {
         public readonly Guid BillingCompanyId;
         public readonly string BillingCompanyUsername;

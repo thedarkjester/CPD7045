@@ -58,8 +58,8 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
 
             // assert
-            Assert.IsTrue(billingCompany.OpenClosedWindows != null);
-            Assert.IsTrue(!billingCompany.OpenClosedWindows.Any());
+            Assert.IsTrue(billingCompany.OpenClosedScrapingWindows != null);
+            Assert.IsTrue(!billingCompany.OpenClosedScrapingWindows.Any());
         }
 
         [ExpectedException(typeof (ArgumentNullException))]

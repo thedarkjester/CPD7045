@@ -34,7 +34,7 @@ namespace Aps.Integration.Queries.BillingCompanyQueries
                 {
                     Id = billingCompany.Id,
                     Url = billingCompany.BillingCompanyScrapingUrl.ScrapingUrl,
-                    CrossCheckScrapeEnabled = billingCompany.CrossCheckScrapeEnabled
+                    CrossCheckScrapeEnabled = billingCompany.CrossCheckScrapeEnabled.CrossCheckScrapeEnabled
                 };
 
             return billingCompanyDto;

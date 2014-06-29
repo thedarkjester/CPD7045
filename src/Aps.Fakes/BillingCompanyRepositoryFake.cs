@@ -29,7 +29,7 @@ namespace Aps.Fakes
             this.billingCompanies.Add(billingCompany);
         }
 
-        public BillingCompany BuildNewBillingCompany(BillingCompanyName billingCompanyName, BillingCompanyType billingCompanyType, BillingCompanyScrapingUrl billingCompanyScrapingUrl, bool crossCheckScrapeEnabled = false)
+        public BillingCompany BuildNewBillingCompany(BillingCompanyName billingCompanyName, BillingCompanyType billingCompanyType, BillingCompanyScrapingUrl billingCompanyScrapingUrl, BillingCompanyCrossCheckScrapeEnabled crossCheckScrapeEnabled = null)
         {
             Guard.That(billingCompanyName).IsNotNull();
             Guard.That(billingCompanyType).IsNotNull();

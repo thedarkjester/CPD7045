@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Aps.Customers.ValueObjects;
 using Aps.Customers.Entities;
 using Aps.DomainBase;
@@ -9,7 +8,7 @@ using Aps.Customers.Events;
 
 namespace Aps.Customers.Aggregates
 {
-    public class Customer : Aggregate
+    public class Customer : Entity
     {
         private readonly IEventAggregator eventAggregator;
         

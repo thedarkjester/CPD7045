@@ -17,14 +17,14 @@ namespace Aps.Integration.Queries.BillingCompanyQueries
             this.billingCompanyRepository = billingCompanyRepository;
         }
 
-        private OpenClosedWindowDto MapOpenClosedWindowAggregateToOpenClosedWindowDto(OpenClosedWindow openClosedWindow)
+        private OpenClosedWindowDto MapOpenClosedWindowAggregateToOpenClosedWindowDto(OpenClosedScrapingWindow openClosedScrapingWindow)
         {
             var openClosedWindowDto = new OpenClosedWindowDto
                 {
-                    StartDate = openClosedWindow.StartDate,
-                    EndDate = openClosedWindow.EndDate,
-                    ConcurrentScrapingLimit = openClosedWindow.ConcurrentScrapingLimit,
-                    IsOpen = openClosedWindow.IsOpen
+                    StartDate = openClosedScrapingWindow.StartDate,
+                    EndDate = openClosedScrapingWindow.EndDate,
+                    ConcurrentScrapingLimit = openClosedScrapingWindow.ConcurrentScrapingLimit,
+                    IsOpen = openClosedScrapingWindow.IsOpen
                 };
 
             return openClosedWindowDto;
@@ -36,7 +36,7 @@ namespace Aps.Integration.Queries.BillingCompanyQueries
 
             BillingCompany billingCompany = billingCompanyRepository.GetBillingCompanyById(billingCompanyId);
 
-            foreach (OpenClosedWindow openClosedWindow in billingCompany.OpenClosedWindows)
+            foreach (OpenClosedScrapingWindow openClosedWindow in billingCompany.OpenClosedScrapingWindows)
             {
                 billingCompanyDtos.Add(MapOpenClosedWindowAggregateToOpenClosedWindowDto(openClosedWindow));
             }
@@ -50,9 +50,9 @@ namespace Aps.Integration.Queries.BillingCompanyQueries
 
             BillingCompany billingCompany = billingCompanyRepository.GetBillingCompanyById(billingCompanyId);
 
-            OpenClosedWindow openClosedWindow = billingCompany.OpenClosedWindows.FirstOrDefault(x => x.StartDate <= currentTime && x.EndDate <= currentTime);
+            OpenClosedScrapingWindow openClosedScrapingWindow = billingCompany.OpenClosedScrapingWindows.FirstOrDefault(x => x.StartDate <= currentTime && x.EndDate <= currentTime);
 
-            return MapOpenClosedWindowAggregateToOpenClosedWindowDto(openClosedWindow);
+            return MapOpenClosedWindowAggregateToOpenClosedWindowDto(openClosedScrapingWindow);
         }
     }
 }

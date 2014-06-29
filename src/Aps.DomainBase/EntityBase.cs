@@ -2,7 +2,7 @@
 
 namespace Aps.DomainBase
 {
-    public abstract class EntityBase : IIdentifiable
+    public abstract class EntityBase
     {
         protected EntityBase()
         {

@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Aps.Customers.Aggregates.Customer">
+    <Position X="7.75" Y="0.5" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>QgIBAAABAAEACQKECAkCAAgIAICCACAAAwKAAAAQEAA=</HashCode>
+      <FileName>Aggregates\Customer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aps.Customers.CustomerCreator" Collapsed="true">
+    <Position X="4" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>CustomerCreator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aps.Customers.Entities.CustomerBillingCompanyAccount">
+    <Position X="7.75" Y="4" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAACAAIABAAAAAIQAAAAAIAAAAAAAAAAAAQAAAAIBAA=</HashCode>
+      <FileName>Entities\CustomerBillingCompanyAccount.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aps.Customers.Events.BillingAccountAddedToCustomer" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAQAAAAAAAA=</HashCode>
+      <FileName>Events\BillingAccountAddedToCustomer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aps.Customers.Events.CustomerBillingCompanyAccountDeleted" Collapsed="true">
+    <Position X="2.25" Y="1.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAQAAAAAAAA=</HashCode>
+      <FileName>Events\CustomerBillingCompanyAccountDeleted.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aps.Customers.ValueObjects.CustomerAPSPassword" Collapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAEAAAAAAAAAAAAAAACAAAAAgAAAAA=</HashCode>
+      <FileName>ValueObjects\CustomerAPSPassword.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aps.Customers.ValueObjects.CustomerAPSUsername" Collapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAEAAAAAAEAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>ValueObjects\CustomerAPSUsername.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aps.Customers.ValueObjects.CustomerEmailAddress" Collapsed="true">
+    <Position X="5.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAAEAAAAAAAAAAAAAAACAAAAAgAAAAA=</HashCode>
+      <FileName>ValueObjects\CustomerEmailAddress.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aps.Customers.ValueObjects.CustomerFirstName" Collapsed="true">
+    <Position X="0.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQEAAAABAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ValueObjects\CustomerFirstName.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aps.Customers.ValueObjects.CustomerLastName" Collapsed="true">
+    <Position X="2.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAACAgAAAg=</HashCode>
+      <FileName>ValueObjects\CustomerLastName.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aps.Customers.ValueObjects.CustomerStatement" Collapsed="true">
+    <Position X="4" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAA=</HashCode>
+      <FileName>ValueObjects\CustomerStatement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Aps.Customers.ValueObjects.CustomerTelephone" Collapsed="true">
+    <Position X="5.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAACAAAIAAAACAAAA=</HashCode>
+      <FileName>ValueObjects\CustomerTelephone.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Aps.Customers.ICustomerRepository" Collapsed="true">
+    <Position X="0.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAEAAAAAAA=</HashCode>
+      <FileName>ICustomerRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

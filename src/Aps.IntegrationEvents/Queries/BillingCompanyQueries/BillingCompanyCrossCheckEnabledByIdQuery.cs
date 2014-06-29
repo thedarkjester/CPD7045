@@ -32,7 +32,7 @@ namespace Aps.Integration.Queries.BillingCompanyQueries
         {
             var billingCompanyCrossCheckDto = new BillingCompanyCrossCheckDto
                 {
-                    crossCheckScrapeEnabled = billingCompany.CrossCheckScrapeEnabled
+                    crossCheckScrapeEnabled = billingCompany.CrossCheckScrapeEnabled.CrossCheckScrapeEnabled
                 };
 
             return billingCompanyCrossCheckDto;

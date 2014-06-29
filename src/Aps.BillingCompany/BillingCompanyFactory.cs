@@ -14,13 +14,19 @@ namespace Aps.BillingCompanies
             this.eventAggregator = eventAggregator;
         }
 
-        public BillingCompany ConstructBillingCompanyWithGivenValues(BillingCompanyName billingCompanyName, BillingCompanyType billingCompanyType, BillingCompanyScrapingUrl billingCompanyScrapingUrl,bool crossCheckScrapeEnabled=false)
+        public BillingCompany ConstructBillingCompanyWithGivenValues(BillingCompanyName billingCompanyName, BillingCompanyType billingCompanyType, BillingCompanyScrapingUrl billingCompanyScrapingUrl, BillingCompanyCrossCheckScrapeEnabled crossCheckScrapeEnabled = null)
         {
             Guard.That(billingCompanyName).IsNotNull();
             Guard.That(billingCompanyType).IsNotNull();
             Guard.That(billingCompanyScrapingUrl).IsNotNull();
 
-            return new BillingCompany(eventAggregator, billingCompanyName, billingCompanyType, billingCompanyScrapingUrl, crossCheckScrapeEnabled);
+            var validCrossCheckScrapeEnabled = crossCheckScrapeEnabled;
+            if (validCrossCheckScrapeEnabled == null)
+            {
+                validCrossCheckScrapeEnabled = new BillingCompanyCrossCheckScrapeEnabled(false);
+            }
+
+            return new BillingCompany(eventAggregator, billingCompanyName, billingCompanyType, billingCompanyScrapingUrl, validCrossCheckScrapeEnabled);
         }
     }
 }

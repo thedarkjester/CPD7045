@@ -1,4 +1,5 @@
 ﻿using System;
+using Aps.BillingCompanies.ValueObjects;
 using Aps.Scheduling.ApplicationService;
 using Aps.Scheduling.ApplicationService.ScrapeOrchestrators;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -49,7 +50,7 @@ namespace Aps.Shared.Tests.CoreTests
             customerBillingCompanyAccountsByIdMock.SetReturnsDefault<CustomerBillingCompanyAccountDto>(new CustomerBillingCompanyAccountDto());
             
             var billingCompanyRepository = new Mock<IBillingCompanyRepository>();
-            billingCompanyRepository.Setup(x => x.GetBillingCompanyById(billingCompanyId)).Returns(new BillingCompanies.Aggregates.BillingCompany(eventAggregator.Object, new BillingCompanies.ValueObjects.BillingCompanyName("Telkom"), new BillingCompanies.ValueObjects.BillingCompanyType(1), new BillingCompanies.ValueObjects.BillingCompanyScrapingUrl("https://www.telkom.co.za"), false));
+            billingCompanyRepository.Setup(x => x.GetBillingCompanyById(billingCompanyId)).Returns(new BillingCompanies.Aggregates.BillingCompany(eventAggregator.Object, new BillingCompanies.ValueObjects.BillingCompanyName("Telkom"), new BillingCompanies.ValueObjects.BillingCompanyType(1), new BillingCompanies.ValueObjects.BillingCompanyScrapingUrl("https://www.telkom.co.za"), new BillingCompanyCrossCheckScrapeEnabled(false)));
             
             billingCompanyScrapingUrlQueryMock = new Mock<BillingCompanyScrapingUrlQuery>(billingCompanyRepository.Object);
             billingCompanyScrapingUrlQueryMock.SetReturnsDefault<BillingCompanyScrapingUrlDto>(new BillingCompanyScrapingUrlDto());

@@ -4,30 +4,33 @@ using System.Linq;
 using Aps.BillingCompanies.ValueObjects;
 using Aps.DomainBase;
 using Caliburn.Micro;
+using Seterlund.CodeGuard;
 
 namespace Aps.BillingCompanies.Aggregates
 {
-    public class BillingCompany : Aggregate
+    public class BillingCompany : Entity
     {
         private readonly IEventAggregator eventAggregator;
 
-        private readonly List<OpenClosedWindow> openClosedWindows;
+        private readonly List<OpenClosedScrapingWindow> openClosedScrapingWindows;
         private readonly List<ScrapingErrorRetryConfiguration> scrapingErrorRetryConfigurations;
+        
         private BillingLifeCycle billingLifeCycle;
         private ScrapingLoadManagementConfiguration scrapingLoadManagementConfiguration;
         private BillingCompanyType billingCompanyType;
         private BillingCompanyScrapingUrl billingCompanyScrapingUrl;
         private BillingCompanyName billingCompanyName;
-        private bool crossCheckScrapeEnabled;
+        private BillingCompanyCrossCheckScrapeEnabled crossCheckScrapeEnabled;
 
-        public IEnumerable<OpenClosedWindow> OpenClosedWindows { get { return openClosedWindows; } }
+        public IEnumerable<OpenClosedScrapingWindow> OpenClosedScrapingWindows { get { return openClosedScrapingWindows; } }
         public IEnumerable<ScrapingErrorRetryConfiguration> ScrapingErrorRetryConfigurations { get { return scrapingErrorRetryConfigurations; } }
 
         public BillingLifeCycle BillingLifeCycle
         {
             get { return this.billingLifeCycle; }
         }
-        public bool CrossCheckScrapeEnabled
+
+        public BillingCompanyCrossCheckScrapeEnabled CrossCheckScrapeEnabled
         {
             get { return this.crossCheckScrapeEnabled; }
         }
@@ -57,88 +60,101 @@ namespace Aps.BillingCompanies.Aggregates
 
         }
 
-        public BillingCompany(IEventAggregator eventAggregator, BillingCompanyName companyName, BillingCompanyType companyType, BillingCompanyScrapingUrl companyScrapingUrl, bool crossCheckScrapeEnabled)
+        public BillingCompany(IEventAggregator eventAggregator, BillingCompanyName companyName, BillingCompanyType companyType, BillingCompanyScrapingUrl companyScrapingUrl, BillingCompanyCrossCheckScrapeEnabled crossCheckScrapeEnabled)
         {
-            this.billingCompanyName = companyName;
-            this.billingCompanyType = companyType;
-            this.billingCompanyScrapingUrl = companyScrapingUrl;
-            this.crossCheckScrapeEnabled = crossCheckScrapeEnabled;
+            Guard.That(eventAggregator).IsNotNull();
+            Guard.That(companyName).IsNotNull();
+            Guard.That(companyType).IsNotNull();
+            Guard.That(companyScrapingUrl).IsNotNull();
+            Guard.That(crossCheckScrapeEnabled).IsNotNull();
 
             this.eventAggregator = eventAggregator;
             this.eventAggregator.Subscribe(this);
 
-            this.openClosedWindows = new List<OpenClosedWindow>();
+            this.billingCompanyName = companyName;
+            this.billingCompanyType = companyType;
+            this.billingCompanyScrapingUrl = companyScrapingUrl;
+            this.crossCheckScrapeEnabled = crossCheckScrapeEnabled;
+            this.openClosedScrapingWindows = new List<OpenClosedScrapingWindow>();
             this.scrapingErrorRetryConfigurations = new List<ScrapingErrorRetryConfiguration>();
+        }
+
+        public void SetBillingCompanyCrossCheckScrapeEnabled(BillingCompanyCrossCheckScrapeEnabled billingCompanyCrossCheckScrapeEnabled)
+        {
+            Guard.That(billingCompanyCrossCheckScrapeEnabled).IsNotNull();
+            this.crossCheckScrapeEnabled = billingCompanyCrossCheckScrapeEnabled;
         }
 
         public void SetBillingLifeCycle(BillingLifeCycle lifeCycle)
         {
-            // validation of action
-
+            Guard.That(lifeCycle).IsNotNull();
             this.billingLifeCycle = lifeCycle;
         }
 
         public void SetScrapingLoadManagementConfiguration(ScrapingLoadManagementConfiguration loadManagementConfiguration)
         {
-            // validation of action
-
+            Guard.That(loadManagementConfiguration).IsNotNull();
             this.scrapingLoadManagementConfiguration = loadManagementConfiguration;
         }
 
         public void SetBillingCompanyType(BillingCompanyType companyType)
         {
-            // validation of action
-
+            Guard.That(companyType).IsNotNull();
             this.billingCompanyType = companyType;
         }
 
         public void SetBillingCompanyName(BillingCompanyName companyName)
         {
-            // validation of action
-
+            Guard.That(companyName).IsNotNull();
             this.billingCompanyName = companyName;
         }
 
         public void SetBillingCompanyUrl(BillingCompanyScrapingUrl scrapingUrl)
         {
-            // validation of action
+            Guard.That(scrapingUrl).IsNotNull();
             this.billingCompanyScrapingUrl = scrapingUrl;
         }
 
-        public void AddOpenClosedWindow(OpenClosedWindow openClosedWindow)
+        public void AddOpenClosedScrapingWindow
+            (OpenClosedScrapingWindow openClosedScrapingWindow)
         {
-            GuardAgainstOverlappingOpenClosedWindows(openClosedWindow);
-            // validation of action
+            Guard.That(openClosedScrapingWindow).IsNotNull();
 
-            this.openClosedWindows.Add(openClosedWindow);
+            GuardAgainstOverlappingOpenClosedWindows(openClosedScrapingWindow);
+           
+            this.openClosedScrapingWindows.Add(openClosedScrapingWindow);
         }
 
-        private void GuardAgainstOverlappingOpenClosedWindows(OpenClosedWindow openClosedWindow)
+        private void GuardAgainstOverlappingOpenClosedWindows
+            (OpenClosedScrapingWindow openClosedScrapingWindow)
         {
-            foreach (var existingWindow in openClosedWindows)
+            foreach (var existingWindow in openClosedScrapingWindows)
             {
-                if (openClosedWindow.StartDate.Between(existingWindow.StartDate, existingWindow.EndDate))
+                if (openClosedScrapingWindow.StartDate.Between
+                    (existingWindow.StartDate, existingWindow.EndDate))
                 {
                     throw new ArgumentOutOfRangeException();
                 }
 
-                if (openClosedWindow.EndDate.Between(existingWindow.StartDate, existingWindow.EndDate))
+                if (openClosedScrapingWindow.EndDate.
+                    Between(existingWindow.StartDate, existingWindow.EndDate))
                 {
                     throw new ArgumentOutOfRangeException();
                 }  
             }
         }
 
-        public void RemoveOpenClosedWindow(OpenClosedWindow openClosedWindow)
+        public void RemoveOpenClosedWindow(OpenClosedScrapingWindow openClosedScrapingWindow)
         {
             // validation of action
 
-            this.openClosedWindows.Remove(openClosedWindow);
+            this.openClosedScrapingWindows.Remove(openClosedScrapingWindow);
         }
 
         public void AddScrapingErrorRetryConfiguration(ScrapingErrorRetryConfiguration scrapingErrorRetryConfiguration)
         {
-            // validation of action
+            Guard.That(scrapingErrorRetryConfiguration).IsNotNull();
+
             if (scrapingErrorRetryConfigurations.Any(x => x.ResponseCode == scrapingErrorRetryConfiguration.ResponseCode))
             {
                 throw new InvalidOperationException("Duplicate Error Code Configuration Exists");
@@ -149,7 +165,8 @@ namespace Aps.BillingCompanies.Aggregates
 
         public void RemoveScrapingErrorRetryConfiguration(ScrapingErrorRetryConfiguration scrapingErrorRetryConfiguration)
         {
-            // validation of action
+            Guard.That(scrapingErrorRetryConfiguration).IsNotNull();
+
             if (scrapingErrorRetryConfigurations.Contains(scrapingErrorRetryConfiguration))
             {
                 this.scrapingErrorRetryConfigurations.Remove(scrapingErrorRetryConfiguration);

@@ -42,12 +42,12 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
             BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
 
-            var openClosedWindow = new OpenClosedWindow(DateTime.Now.AddHours(1), DateTime.Now.AddHours(2), true, 2);
+            var openClosedWindow = new OpenClosedScrapingWindow(DateTime.Now.AddHours(1), DateTime.Now.AddHours(2), true, 2);
             //act
-            billingCompany.AddOpenClosedWindow(openClosedWindow);
+            billingCompany.AddOpenClosedScrapingWindow(openClosedWindow);
 
             //assert
-            Assert.IsTrue(billingCompany.OpenClosedWindows.Count() == 1);
+            Assert.IsTrue(billingCompany.OpenClosedScrapingWindows.Count() == 1);
         }
 
         [TestMethod]
@@ -57,15 +57,15 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
             BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
 
-            var openClosedWindow = new OpenClosedWindow(DateTime.Now.AddHours(1), DateTime.Now.AddHours(2), true, 2);
-            var openClosedWindow2 = new OpenClosedWindow(DateTime.Now.AddHours(3), DateTime.Now.AddHours(4), true, 2);
+            var openClosedWindow = new OpenClosedScrapingWindow(DateTime.Now.AddHours(1), DateTime.Now.AddHours(2), true, 2);
+            var openClosedWindow2 = new OpenClosedScrapingWindow(DateTime.Now.AddHours(3), DateTime.Now.AddHours(4), true, 2);
 
             //act
-            billingCompany.AddOpenClosedWindow(openClosedWindow);
-            billingCompany.AddOpenClosedWindow(openClosedWindow2);
+            billingCompany.AddOpenClosedScrapingWindow(openClosedWindow);
+            billingCompany.AddOpenClosedScrapingWindow(openClosedWindow2);
 
             //assert
-            Assert.IsTrue(billingCompany.OpenClosedWindows.Count() == 2);
+            Assert.IsTrue(billingCompany.OpenClosedScrapingWindows.Count() == 2);
         }
 
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
@@ -76,15 +76,15 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
             BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
           
-            var openClosedWindow = new OpenClosedWindow(DateTime.Now.AddHours(2), DateTime.Now.AddHours(4), true, 2);
-            var openClosedWindow2 = new OpenClosedWindow(DateTime.Now.AddHours(1), DateTime.Now.AddHours(3), true, 2);
+            var openClosedWindow = new OpenClosedScrapingWindow(DateTime.Now.AddHours(2), DateTime.Now.AddHours(4), true, 2);
+            var openClosedWindow2 = new OpenClosedScrapingWindow(DateTime.Now.AddHours(1), DateTime.Now.AddHours(3), true, 2);
 
             //act
-            billingCompany.AddOpenClosedWindow(openClosedWindow);
-            billingCompany.AddOpenClosedWindow(openClosedWindow2);
+            billingCompany.AddOpenClosedScrapingWindow(openClosedWindow);
+            billingCompany.AddOpenClosedScrapingWindow(openClosedWindow2);
 
             //assert
-            Assert.IsTrue(billingCompany.OpenClosedWindows.Count() == 2);
+            Assert.IsTrue(billingCompany.OpenClosedScrapingWindows.Count() == 2);
         }
 
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
@@ -95,15 +95,15 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
             BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
 
-            var openClosedWindow = new OpenClosedWindow(DateTime.Now.AddHours(2), DateTime.Now.AddHours(4), true, 2);
-            var openClosedWindow2 = new OpenClosedWindow(DateTime.Now.AddHours(3), DateTime.Now.AddHours(5), true, 2);
+            var openClosedWindow = new OpenClosedScrapingWindow(DateTime.Now.AddHours(2), DateTime.Now.AddHours(4), true, 2);
+            var openClosedWindow2 = new OpenClosedScrapingWindow(DateTime.Now.AddHours(3), DateTime.Now.AddHours(5), true, 2);
 
             //act
-            billingCompany.AddOpenClosedWindow(openClosedWindow);
-            billingCompany.AddOpenClosedWindow(openClosedWindow2);
+            billingCompany.AddOpenClosedScrapingWindow(openClosedWindow);
+            billingCompany.AddOpenClosedScrapingWindow(openClosedWindow2);
 
             //assert
-            Assert.IsTrue(billingCompany.OpenClosedWindows.Count() == 2);
+            Assert.IsTrue(billingCompany.OpenClosedScrapingWindows.Count() == 2);
         }
 
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
@@ -114,15 +114,15 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
             BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
 
-            var openClosedWindow = new OpenClosedWindow(DateTime.Now.AddHours(2), DateTime.Now.AddHours(5), true, 2);
-            var openClosedWindow2 = new OpenClosedWindow(DateTime.Now.AddHours(3), DateTime.Now.AddHours(4), true, 2);
+            var openClosedWindow = new OpenClosedScrapingWindow(DateTime.Now.AddHours(2), DateTime.Now.AddHours(5), true, 2);
+            var openClosedWindow2 = new OpenClosedScrapingWindow(DateTime.Now.AddHours(3), DateTime.Now.AddHours(4), true, 2);
 
             //act
-            billingCompany.AddOpenClosedWindow(openClosedWindow);
-            billingCompany.AddOpenClosedWindow(openClosedWindow2);
+            billingCompany.AddOpenClosedScrapingWindow(openClosedWindow);
+            billingCompany.AddOpenClosedScrapingWindow(openClosedWindow2);
 
             //assert
-            Assert.IsTrue(billingCompany.OpenClosedWindows.Count() == 2);
+            Assert.IsTrue(billingCompany.OpenClosedScrapingWindows.Count() == 2);
         }
 
         [TestMethod]
@@ -132,16 +132,16 @@ namespace Aps.Shared.Tests.BillingCompanyTests
             BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
             BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
 
-            var openClosedWindow = new OpenClosedWindow(DateTime.Now.AddHours(1), DateTime.Now.AddHours(2), true, 2);
-            var openClosedWindow2 = new OpenClosedWindow(DateTime.Now.AddHours(3), DateTime.Now.AddHours(4), true, 2);
-            billingCompany.AddOpenClosedWindow(openClosedWindow);
-            billingCompany.AddOpenClosedWindow(openClosedWindow2);
+            var openClosedWindow = new OpenClosedScrapingWindow(DateTime.Now.AddHours(1), DateTime.Now.AddHours(2), true, 2);
+            var openClosedWindow2 = new OpenClosedScrapingWindow(DateTime.Now.AddHours(3), DateTime.Now.AddHours(4), true, 2);
+            billingCompany.AddOpenClosedScrapingWindow(openClosedWindow);
+            billingCompany.AddOpenClosedScrapingWindow(openClosedWindow2);
 
             //act
             billingCompany.RemoveOpenClosedWindow(openClosedWindow);
 
             //assert
-            Assert.IsTrue(billingCompany.OpenClosedWindows.Count() == 1);
+            Assert.IsTrue(billingCompany.OpenClosedScrapingWindows.Count() == 1);
         }
 
     }
