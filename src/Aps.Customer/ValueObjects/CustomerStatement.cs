@@ -14,7 +14,6 @@ namespace Aps.Customers.ValueObjects
 
         protected CustomerStatement()
         {
-
         }
 
         public CustomerStatement(Guid statementId, DateTime statementDate)
@@ -23,6 +22,5 @@ namespace Aps.Customers.ValueObjects
             this.statementId = statementId;
             this.statementDate = statementDate;
         }
-
     }
 }
