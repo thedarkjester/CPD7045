@@ -18,8 +18,6 @@ namespace Aps.BillingCompanies.ValueObjects
 
         public BillingCompanyCrossCheckScrapeEnabled(bool crossCheckScrapeEnabled)
         {
-            Guard.That(crossCheckScrapeEnabled).IsValidValue();
-
             this.crossCheckScrapeEnabled = crossCheckScrapeEnabled;
         }
 
