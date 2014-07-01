@@ -42,14 +42,17 @@ namespace Aps.Shared.Tests.BillingCompanyTests
         [TestMethod]
         public void Given_Two_OpenClosedWindowsInstancesWithEqualData_When_Compared_Then_They_Are_Equal()
         {
+            //Arrange
             isOpen = true;
             concurrentScrapingLimit = 10;
             startDate = startDate.AddDays(2);
             endDate = startDate.AddDays(3);
 
             //act
-            var openClosedWindow1 = new OpenClosedScrapingWindow(startDate, endDate, isOpen, concurrentScrapingLimit);
-            var openClosedWindow2 = new OpenClosedScrapingWindow(startDate, endDate, isOpen, concurrentScrapingLimit);
+            var openClosedWindow1 = new OpenClosedScrapingWindow(
+                startDate, endDate, isOpen, concurrentScrapingLimit);
+            var openClosedWindow2 = new OpenClosedScrapingWindow(
+                startDate, endDate, isOpen, concurrentScrapingLimit);
 
             //assert
             Assert.IsTrue(openClosedWindow1 == openClosedWindow2);
@@ -59,17 +62,20 @@ namespace Aps.Shared.Tests.BillingCompanyTests
         [TestMethod]
         public void Given_Two_OpenClosedWindowsInstancesWithDifferentData_When_Compared_Then_They_Are_NotEqual()
         {
+            //Arrange
             isOpen = true;
             concurrentScrapingLimit = 10;
             startDate = startDate.AddDays(2);
             endDate = startDate.AddDays(3);
 
             //act
-            var openClosedWindow1 = new OpenClosedScrapingWindow(startDate, endDate, isOpen, concurrentScrapingLimit);
+            var openClosedWindow1 = new OpenClosedScrapingWindow(
+                startDate, endDate, isOpen, concurrentScrapingLimit);
 
             endDate = startDate.AddDays(4);
 
-            var openClosedWindow2 = new OpenClosedScrapingWindow(startDate, endDate, isOpen, concurrentScrapingLimit);
+            var openClosedWindow2 = new OpenClosedScrapingWindow(
+                startDate, endDate, isOpen, concurrentScrapingLimit);
 
             //assert
             Assert.IsTrue(openClosedWindow1 != openClosedWindow2);

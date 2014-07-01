@@ -62,7 +62,7 @@ namespace Aps.Scheduling.ApplicationService.ScrapeOrchestrators
                 scrapeSessionDataValidator.ValidateScrapeData(transformedResults, customerId, billingCompanyId);
                 eventIntegrationService.Publish(new ScrapeSessionDataValidated(scrapeSessionId, customerId, billingCompanyId));
 
-                AccountStatement accountStatement = accountStatementComposer.BuildAccountStatement(customerId, billingCompanyId, transformedResults.Select(x => x.keyValuePair).ToList());
+                AccountStatement accountStatement = accountStatementComposer.ComposeAccountStatement(customerId, billingCompanyId, transformedResults.Select(x => x.keyValuePair).ToList());
                 accountStatementRepository.StoreAccountStatement(accountStatement);
                 eventIntegrationService.Publish(new ScrapeSessionStatementComposed(scrapeSessionId, customerId, billingCompanyId, accountStatement.Id, accountStatement.StatementDate.DateOfStatement));
 

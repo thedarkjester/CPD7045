@@ -29,15 +29,6 @@ namespace Aps.Fakes
             this.billingCompanies.Add(billingCompany);
         }
 
-        public BillingCompany BuildNewBillingCompany(BillingCompanyName billingCompanyName, BillingCompanyType billingCompanyType, BillingCompanyScrapingUrl billingCompanyScrapingUrl, BillingCompanyCrossCheckScrapeEnabled crossCheckScrapeEnabled = null)
-        {
-            Guard.That(billingCompanyName).IsNotNull();
-            Guard.That(billingCompanyType).IsNotNull();
-            Guard.That(billingCompanyScrapingUrl).IsNotNull();
-
-            return this.billingCompanyFactory.ConstructBillingCompanyWithGivenValues(billingCompanyName, billingCompanyType, billingCompanyScrapingUrl, crossCheckScrapeEnabled);
-        }
-
         public BillingCompany GetBillingCompanyById(Guid id)
         {
             return this.billingCompanies.FirstOrDefault(x => x.Id == id);

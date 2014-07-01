@@ -29,7 +29,7 @@ namespace Aps.Scheduling.ApplicationService.Services
             this.billingCompanyByIdQuery = billingCompanyByIdQuery;
         }
 
-        public AccountStatement BuildAccountStatement(Guid customerId, Guid billingCompanyId, List<KeyValuePair<string, object>> fieldValues)
+        public AccountStatement ComposeAccountStatement(Guid customerId, Guid billingCompanyId, List<KeyValuePair<string, object>> fieldValues)
         {
             CustomerDetails customerDetails = GetCustomerDetails(customerId);
             BillingCompanyDetails billingCompanyDetails = GetBillingCompanyDetails(billingCompanyId);
@@ -70,19 +70,9 @@ namespace Aps.Scheduling.ApplicationService.Services
 
         private bool KeyIsLineDetail(string key)
         {
-            if (StatementFields.TransactionFields.ToList().Contains(key))
+            if (StatementFields.ConsumptionFields.ToList().Contains(key))
             {
-                return false;
-            }
-
-            if (StatementFields.HeaderFields.ToList().Contains(key))
-            {
-                return false;
-            }
-
-            if (StatementFields.HeaderFields.ToList().Contains(key))
-            {
-                return false;
+                return true;
             }
 
             return false;
