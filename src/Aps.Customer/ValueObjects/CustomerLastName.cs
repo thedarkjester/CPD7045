@@ -32,5 +32,46 @@ namespace Aps.Customers.ValueObjects
         {
             return lastName;
         }
+
+        public override bool Equals(System.Object obj)
+        {
+            CustomerLastName name = obj as CustomerLastName;
+            if ((object)name == null)
+            {
+                return false;
+            }
+
+            return LastName == name.LastName;
+        }
+
+        public bool Equals(CustomerLastName name)
+        {
+            return LastName == name.LastName;
+        }
+
+        public override int GetHashCode()
+        {
+            return LastName.GetHashCode();
+        }
+
+        public static bool operator ==(CustomerLastName a, CustomerLastName b)
+        {
+            if (System.Object.ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            if (((object)a == null) || ((object)b == null))
+            {
+                return false;
+            }
+
+            return a.LastName == b.LastName;
+        }
+
+        public static bool operator !=(CustomerLastName a, CustomerLastName b)
+        {
+            return !(a == b);
+        }
     }
 }
