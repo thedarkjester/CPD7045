@@ -4,27 +4,22 @@ using System.Globalization;
 using System.Linq;
 using Aps.AccountStatements.Entities;
 using Aps.AccountStatements.ValueObjects;
-using Aps.Integration;
 using Aps.Integration.Queries.BillingCompanyQueries;
 using Aps.Integration.Queries.BillingCompanyQueries.Dtos;
 using Aps.Integration.Queries.CustomerQueries;
 using Aps.Integration.Queries.CustomerQueries.Dtos;
 using Aps.Scheduling.ApplicationService.Constants;
-using Caliburn.Micro;
 
 namespace Aps.Scheduling.ApplicationService.Services
 {
     public class AccountStatementComposer
     {
-        private readonly IEventAggregator eventAggregator;
-        private readonly EventIntegrationService eventIntegrationService;
         private readonly CustomerByIdQuery customerByIdQuery;
         private readonly BillingCompanyByIdQuery billingCompanyByIdQuery;
-
-        public AccountStatementComposer(IEventAggregator eventAggregator, EventIntegrationService eventIntegrationService, CustomerByIdQuery customerByIdQuery, BillingCompanyByIdQuery billingCompanyByIdQuery)
+       
+        public AccountStatementComposer(CustomerByIdQuery customerByIdQuery, 
+            BillingCompanyByIdQuery billingCompanyByIdQuery)
         {
-            this.eventAggregator = eventAggregator;
-            this.eventIntegrationService = eventIntegrationService;
             this.customerByIdQuery = customerByIdQuery;
             this.billingCompanyByIdQuery = billingCompanyByIdQuery;
         }

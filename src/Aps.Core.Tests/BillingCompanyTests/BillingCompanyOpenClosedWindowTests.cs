@@ -74,7 +74,8 @@ namespace Aps.Shared.Tests.BillingCompanyTests
         {
             //arrange
             BillingCompanyFactory billingCompanyFactory = container.Resolve<BillingCompanyFactory>();
-            BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues(companyName, companyType, companyUrl);
+            BillingCompany billingCompany = billingCompanyFactory.ConstructBillingCompanyWithGivenValues
+                (companyName, companyType, companyUrl);
           
             var openClosedWindow = new OpenClosedScrapingWindow(DateTime.Now.AddHours(2), DateTime.Now.AddHours(4), true, 2);
             var openClosedWindow2 = new OpenClosedScrapingWindow(DateTime.Now.AddHours(1), DateTime.Now.AddHours(3), true, 2);

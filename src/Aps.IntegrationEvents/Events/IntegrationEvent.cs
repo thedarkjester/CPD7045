@@ -47,9 +47,7 @@ namespace Aps.Integration.Events
             this.serializedEvent = serializedEvent;
             occuredDate = DateTime.UtcNow;
         }
-
-   
-
+        
         public void SetRowVersion(int version)
         {
             this.rowVersion = version;

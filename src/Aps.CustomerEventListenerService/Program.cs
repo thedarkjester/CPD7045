@@ -1,4 +1,5 @@
-﻿using Aps.Customers;
+﻿using Aps.Customer.ApplicationService;
+using Aps.Customers;
 using Aps.Fakes;
 using Aps.Integration;
 using Aps.Integration.Queries.Events;
@@ -9,7 +10,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Aps.Customer.ApplicationService
+namespace Aps.Scheduling.ApplicationService
 {
     class Program
     {

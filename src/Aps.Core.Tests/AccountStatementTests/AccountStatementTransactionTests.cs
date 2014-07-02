@@ -48,7 +48,8 @@ namespace Aps.Shared.Tests.AccountStatementTests
             //testinitialize values
 
             //act
-            AccountStatementTransaction accountStatementTransaction = new AccountStatementTransaction(TransactionTotal, vatAmount, transactionDescription, transactionAmount);
+            AccountStatementTransaction accountStatementTransaction = 
+                new AccountStatementTransaction(TransactionTotal, vatAmount, transactionDescription, transactionAmount);
 
             //assert
             Assert.IsTrue(accountStatementTransaction.TransactionAmount == transactionAmount);
@@ -58,13 +59,15 @@ namespace Aps.Shared.Tests.AccountStatementTests
         }
 
         [TestMethod]
-        public void Given_NoVatAmountValuesWhenConstructingTransaction_ValuesAreCalculated()
+        public void Given_NoVatAmountValues_WhenConstructingTransaction_ValuesAreCalculated()
         {
             //arrange
             vatAmount = 0;
 
             //act
-            AccountStatementTransaction accountStatementTransaction = new AccountStatementTransaction(TransactionTotal, vatAmount, transactionDescription, transactionAmount);
+            AccountStatementTransaction accountStatementTransaction = 
+                new AccountStatementTransaction(TransactionTotal, vatAmount, 
+                    transactionDescription, transactionAmount);
 
             //assert
             Assert.IsTrue(accountStatementTransaction.TransactionAmount == transactionAmount);
