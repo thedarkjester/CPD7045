@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Aps.Scheduling.ApplicationService.ScrapeOrchestrators
+﻿namespace Aps.Scheduling.ApplicationService.ScrapeOrchestrators
 {
     public abstract class ScrapeOrchestrator
     {
-        public abstract void Orchestrate(Aps.Scheduling.ApplicationService.Entities.ScrapeOrchestratorEntity scrapeOrchestratorEntity);        
+        public abstract void Orchestrate(Entities.ScrapeOrchestratorEntity scrapeOrchestratorEntity);        
     }
 }
