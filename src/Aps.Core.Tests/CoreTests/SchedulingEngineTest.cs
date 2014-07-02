@@ -27,7 +27,7 @@ using Aps.Integration.Queries.BillingCompanyQueries.Dtos;
 using Aps.Scheduling.ApplicationService.Interpreters;
 
 
-namespace Aps.Shared.Tests.CoreTests
+namespace Aps.Domain.Tests.CoreTests
 {
     [TestClass]
     public class SchedulingEngineTest

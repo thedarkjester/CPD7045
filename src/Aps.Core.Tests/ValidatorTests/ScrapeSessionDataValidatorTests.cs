@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 
-namespace Aps.Shared.Tests.ValidatorTests
+namespace Aps.Domain.Tests.ValidatorTests
 {
     [TestClass]
     public class ScrapeSessionDataValidatorTests

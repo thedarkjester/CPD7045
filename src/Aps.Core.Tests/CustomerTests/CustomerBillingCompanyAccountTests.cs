@@ -9,7 +9,7 @@ using Autofac;
 using Caliburn.Micro;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Aps.Shared.Tests.CustomerTests
+namespace Aps.Domain.Tests.CustomerTests
 {
     [TestClass]
     public class CustomerBillingCompanyAccountTests

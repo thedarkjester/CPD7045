@@ -6,7 +6,7 @@ using Aps.Scraping;
 using Aps.Fakes;
 using Aps.Integration.EnumTypes;
 
-namespace Aps.Shared.Tests.CoreTests
+namespace Aps.Domain.Tests.CoreTests
 {
     [TestClass]
     public class ScrapingObjectTest

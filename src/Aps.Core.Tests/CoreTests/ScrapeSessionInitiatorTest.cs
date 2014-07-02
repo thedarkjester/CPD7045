@@ -14,7 +14,7 @@ using Aps.Integration.Queries.BillingCompanyQueries;
 using Aps.Integration.Queries.CustomerQueries.Dtos;
 using Aps.Integration.Queries.BillingCompanyQueries.Dtos;
 
-namespace Aps.Shared.Tests.CoreTests
+namespace Aps.Domain.Tests.CoreTests
 {
     [TestClass]
     public class ScrapeSessionInitiatorTest

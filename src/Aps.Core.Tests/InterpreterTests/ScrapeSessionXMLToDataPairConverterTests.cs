@@ -3,7 +3,7 @@ using Aps.Scheduling.ApplicationService.Interpreters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
-namespace Aps.Shared.Tests.InterpreterTests
+namespace Aps.Domain.Tests.InterpreterTests
 {
     [TestClass]
     public class ScrapeSessionXMLToDataPairConverterTests

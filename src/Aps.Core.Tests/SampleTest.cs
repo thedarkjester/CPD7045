@@ -2,7 +2,7 @@
 using Aps.Scheduling.ApplicationService;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Aps.Shared.Tests
+namespace Aps.Domain.Tests
 {
     [TestClass]
     public class SampleTest

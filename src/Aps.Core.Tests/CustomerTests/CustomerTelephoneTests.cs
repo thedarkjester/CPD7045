@@ -3,7 +3,7 @@ using Aps.Customers.ValueObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
-namespace Aps.Shared.Tests.CustomerTests
+namespace Aps.Domain.Tests.CustomerTests
 {
     [TestClass]
     public class CustomerTelephoneTests

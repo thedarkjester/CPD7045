@@ -2,7 +2,7 @@
 using Aps.BillingCompanies.ValueObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Aps.Shared.Tests.BillingCompanyTests
+namespace Aps.Domain.Tests.BillingCompanyTests
 {
     [TestClass]
     public class ScrapingLoadManagementConfigurationTests

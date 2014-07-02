@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Aps.AccountStatements.ValueObjects;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Aps.Shared.Tests.AccountStatementTests
+namespace Aps.Domain.Tests.AccountStatementTests
 {
     [TestClass]
     public class BillingCompanyDetailsConstructionTests

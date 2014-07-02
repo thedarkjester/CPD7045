@@ -6,7 +6,7 @@ using Aps.Scheduling.ApplicationService.Validation;
 using Aps.Scheduling.ApplicationService;
 using System.Collections.Generic;
 
-namespace Aps.Shared.Tests.ValidatorTests
+namespace Aps.Domain.Tests.ValidatorTests
 {
     [TestClass]
     public class DuplicateStatementValidatorTest

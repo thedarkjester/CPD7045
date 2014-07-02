@@ -11,7 +11,7 @@ using Caliburn.Micro;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
-namespace Aps.Shared.Tests.BillingCompanyTests
+namespace Aps.Domain.Tests.BillingCompanyTests
 {
     [TestClass]
     public class BillingCompanyDeletedTests
